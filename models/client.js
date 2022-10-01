@@ -10,7 +10,7 @@ const clientSchema = new mongoose.Schema({
         required: true,
         maxlength: 32,
     },
-    family_name: {
+    last_name: {
         type: String,
         trim: true,
         required: true,
@@ -27,7 +27,15 @@ const clientSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    birth_date: {
+        type: Date,
+        required: true
+    },
     city: {
+        type: String,
+        required: true
+    },
+    commune: {
         type: String,
         required: true
     },

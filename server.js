@@ -10,9 +10,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 //import routes
-//const patientRoutes = require("./routes/patient")
-
-
+const clientRoutes = require("./routes/client")
 
 
 //app
@@ -33,7 +31,7 @@ app.use(expressValidator())
 
 
 //routes middlware
-//app.use("/api/patient", patientRoutes);
+app.use("/api/client", clientRoutes);
 
 
 
