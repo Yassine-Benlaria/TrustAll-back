@@ -2,6 +2,22 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
+
+//Client status schema
+const agentStatusSchema = new mongoose.Schema({
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    active: {
+        type: Boolean,
+        default: true
+    },
+    online: {
+        type: Boolean,
+    }
+})
+
 //Agent schema
 const agentSchema = new mongoose.Schema({
     auth_agent_ID: {
@@ -14,7 +30,7 @@ const agentSchema = new mongoose.Schema({
         required: true,
         maxlength: 32,
     },
-    family_name: {
+    last_name: {
         type: String,
         trim: true,
         required: true,
@@ -31,8 +47,16 @@ const agentSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    birth_date: {
+        type: Date,
+        required: true
+    },
     city: {
         type: String,
+        required: true
+    },
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     //identity_document: {},
@@ -43,10 +67,13 @@ const agentSchema = new mongoose.Schema({
     // confirmation_code: {
     //     type: String,
     // },
-    // verified: {
-    //     type: Boolean,
-    //     default: false
-    // },
+    status: {
+        type: agentStatusSchema,
+        default: {
+            verified: false,
+            active: true,
+        }
+    },
     salt: { type: String },
     hashed_password: {
         type: String,

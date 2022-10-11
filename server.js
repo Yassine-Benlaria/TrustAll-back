@@ -11,6 +11,7 @@ require("dotenv").config();
 
 //import routes
 const clientRoutes = require("./routes/client")
+const adminRoutes = require("./routes/admin")
 
 
 //app
@@ -32,6 +33,7 @@ app.use(expressValidator())
 
 //routes middlware
 app.use("/api/client", clientRoutes);
+app.use("/api/admin", adminRoutes)
 
 
 

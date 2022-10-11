@@ -1,6 +1,23 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
+const { truncate } = require("fs");
+
+//Client status schema
+const clientStatusSchema = new mongoose.Schema({
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    active: {
+        type: Boolean,
+        default: true
+    },
+    online: {
+        type: Boolean,
+    }
+})
+
 
 //Client schema
 const clientSchema = new mongoose.Schema({
@@ -35,6 +52,10 @@ const clientSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    daira: {
+        type: String,
+        required: true
+    },
     commune: {
         type: String,
         required: true
@@ -43,13 +64,17 @@ const clientSchema = new mongoose.Schema({
     //     data: Buffer,
     //     contentType: String
     // },
-    // confirmation_code: {
-    //     type: String,
-    // },
-    // verified: {
-    //     type: Boolean,
-    //     default: false
-    // },
+    confirmation_code: {
+        type: String,
+    },
+    status: {
+        type: clientStatusSchema,
+        required: true,
+        default: {
+            verified: false,
+            active: true,
+        }
+    },
     salt: { type: String },
     hashed_password: {
         type: String,

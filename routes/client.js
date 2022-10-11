@@ -1,12 +1,15 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { signup } = require("../controllers/client")
+const { signup, confirmEmail } = require("../controllers/client")
 const { clientSignUpValidator } = require("../validators")
 router.use(cors())
 
-router.get("/signup", clientSignUpValidator, signup)
+//signup route
+router.post("/signup", clientSignUpValidator, signup)
 
+//email confirmation route
+router.post("/confirm/:id", confirmEmail)
 
 
 module.exports = router;
