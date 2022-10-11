@@ -19,7 +19,7 @@ exports.createAgent = (req, res) => {
         }
 
         //sending email to agent
-        sendConfirmationMail("benlariay@gmail.com", json.password)
+        sendConfirmationMail(json.email, json.password)
 
         ////saving to DB
         res.json(projectObject(createdAgent, {

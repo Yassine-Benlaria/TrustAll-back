@@ -19,7 +19,8 @@ var transporter = nodemailer.createTransport({
     auth: {
         user: 'ehealth.company@yahoo.com',
         pass: 'xuffgztyealbmeri'
-    }
+    },
+    logger: true
 });
 
 //confirmation email
