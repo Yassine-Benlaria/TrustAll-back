@@ -59,7 +59,10 @@ const agentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    //identity_document: {},
+    identity_document: {
+        type: String,
+        default: "None"
+    },
     // img: {
     //     data: Buffer,
     //     contentType: String

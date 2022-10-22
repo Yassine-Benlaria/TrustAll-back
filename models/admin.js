@@ -10,7 +10,7 @@ const adminSchema = new mongoose.Schema({
         required: true,
         maxlength: 32,
     },
-    family_name: {
+    last_name: {
         type: String,
         trim: true,
         required: true,
@@ -29,6 +29,10 @@ const adminSchema = new mongoose.Schema({
     },
     city: {
         type: String,
+        required: true
+    },
+    birth_date: {
+        type: Date,
         required: true
     },
     //identity_document: {},

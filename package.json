@@ -22,9 +22,12 @@
         "kickbox": "^2.0.4",
         "mongoose": "^6.6.2",
         "morgan": "^1.10.0",
+        "multer": "^1.4.4",
+        "multer-gridfs-storage": "^5.0.2",
         "node-fetch": "^3.2.10",
         "nodemailer": "^6.8.0",
         "nodemon": "^2.0.20",
+        "sharp": "^0.31.1",
         "uuid": "^9.0.0"
     }
 }

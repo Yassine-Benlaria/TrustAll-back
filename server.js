@@ -12,7 +12,7 @@ require("dotenv").config();
 //import routes
 const clientRoutes = require("./routes/client")
 const adminRoutes = require("./routes/admin")
-
+const agentRoutes = require("./routes/agent")
 
 //app
 const app = express();
@@ -32,8 +32,9 @@ app.use(expressValidator())
 
 
 //routes middlware
-app.use("/api/client", clientRoutes);
+app.use("/api/client", clientRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/api/agent", agentRoutes)
 
 
 

@@ -2,6 +2,15 @@ const Client = require("../models/client")
 
 const { generateConfirmationCode, sendConfirmationMail, projectObject } = require("../helpers");
 
+var projection = {
+    salt: false,
+    hashed_password: false,
+    updatedAt: false,
+    __v: false,
+    confirmation_code: false
+};
+
+//signup
 exports.signup = (req, res) => {
     //generating confirmation code
     const code = generateConfirmationCode()
@@ -32,6 +41,7 @@ exports.signup = (req, res) => {
     });
 }
 
+//email confirmation
 exports.confirmEmail = (req, res) => {
     let id = req.params.id
     let code = req.body.code
@@ -46,5 +56,28 @@ exports.confirmEmail = (req, res) => {
                     return res.status(400).json({ err: "undefined error!!" })
                 return res.json({ response: "Your account is verified!!" })
             })
+    })
+}
+
+//clientById
+exports.clientByID = (req, res, next, id) => {
+
+    Client.findById(id, projection).exec((err, client) => {
+        if (err) {
+            return res.status(400).json({ err: "Client not found" })
+        }
+        req.profile = client;
+        next();
+    })
+}
+
+//get clients list (with filter)
+exports.getClientsList = (req, res) => {
+
+    Client.find(req.body, projection, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json(err)
+        }
+        return res.json(result)
     })
 }
