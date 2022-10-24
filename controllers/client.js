@@ -1,6 +1,7 @@
 const Client = require("../models/client")
 
 const { generateConfirmationCode, sendConfirmationMail, projectObject } = require("../helpers");
+const { profilePicUpload } = require("../helpers/uploader");
 
 var projection = {
     salt: false,
@@ -79,5 +80,43 @@ exports.getClientsList = (req, res) => {
             return res.status(400).json(err)
         }
         return res.json(result)
+    })
+}
+
+//update client info (first_name, last_name or birth_date)
+exports.updateClient = (req, res) => {
+    let json = {}
+
+    if (req.body.first_name) json.first_name = req.body.first_name
+    if (req.body.last_name) json.last_name = req.body.last_name
+    if (req.body.birth_date) json.birth_date = req.body.birth_date
+    if (req.body.city) {
+        json.city = req.body.city
+        if (req.body.daira) {
+            json.daira = req.body.daira
+            if (req.body.commune) json.commune = req.body.commune
+        }
+    }
+
+
+    Client.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err })
+        }
+        return res.json({ response: "Client updated successfully!" })
+    })
+}
+
+//uploading profile picture
+exports.uploadProfilePicture = (req, res) => {
+    profilePicUpload(req, res, (err) => {
+        if (err) return res.status(400).json({ err })
+    });
+    Client.updateOne({ _id: req.params.id }, { $set: { img: true } }, (err, result) => {
+        if (err) {
+            return res.status(400).json({ err: "Error occured while uploading picture!" })
+        } else {
+            return res.json({ response: "Picture uploaded succussfully!" })
+        }
     })
 }

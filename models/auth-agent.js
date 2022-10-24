@@ -16,6 +16,10 @@ const authAgentSchema = new mongoose.Schema({
         required: true,
         maxlength: 32,
     },
+    birth_date: {
+        type: Date,
+        required: true
+    },
     email: {
         type: String,
         trim: true,
@@ -32,10 +36,10 @@ const authAgentSchema = new mongoose.Schema({
         required: true
     },
     //identity_document: {},
-    // img: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
+    img: {
+        type: Boolean,
+        default: false
+    },
     // confirmation_code: {
     //     type: String,
     // },

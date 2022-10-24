@@ -63,10 +63,10 @@ const agentSchema = new mongoose.Schema({
         type: String,
         default: "None"
     },
-    // img: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
+    img: {
+        type: Boolean,
+        default: false
+    },
     // confirmation_code: {
     //     type: String,
     // },

@@ -60,10 +60,10 @@ const clientSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // img: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
+    img: {
+        type: Boolean,
+        default: false
+    },
     confirmation_code: {
         type: String,
     },
