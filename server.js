@@ -13,6 +13,7 @@ require("dotenv").config();
 const clientRoutes = require("./routes/client")
 const adminRoutes = require("./routes/admin")
 const agentRoutes = require("./routes/agent")
+const authRoutes = require("./routes/auth")
 
 //app
 const app = express();
@@ -35,6 +36,7 @@ app.use(expressValidator())
 app.use("/api/client", clientRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/agent", agentRoutes)
+app.use("/api", authRoutes)
 
 
 

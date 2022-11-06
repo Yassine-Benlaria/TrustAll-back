@@ -66,6 +66,7 @@ const clientSchema = new mongoose.Schema({
     },
     confirmation_code: {
         type: String,
+        
     },
     status: {
         type: clientStatusSchema,
