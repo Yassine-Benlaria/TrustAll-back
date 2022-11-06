@@ -12,7 +12,7 @@ exports.authAgentByID = (req, res, next, id) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        req.profile = result;
+        req.profile = {...result._doc, type: "auth-agent" }
         next();
     })
 }

@@ -127,3 +127,28 @@ exports.isAdmin = (req, res) => {
         })
     }
 }
+
+//Admin check
+exports.isAgent = (req, res) => {
+        if (req.profile.type != "agent") {
+            return res.status(403).json({
+                error: "Access denied!! you are not an agent!!"
+            })
+        }
+    }
+    //Admin check
+exports.isAuthAgent = (req, res) => {
+        if (req.profile.type != "auth-agent") {
+            return res.status(403).json({
+                error: "Access denied!! you are not an autorized agent!!"
+            })
+        }
+    }
+    //Admin check
+exports.isClient = (req, res) => {
+    if (req.profile.type != "client") {
+        return res.status(403).json({
+            error: "Access denied!! you are not a client!!"
+        })
+    }
+}

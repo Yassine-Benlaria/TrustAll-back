@@ -67,7 +67,7 @@ exports.clientByID = (req, res, next, id) => {
         if (err) {
             return res.status(400).json({ err: "Client not found" })
         }
-        req.profile = client;
+        req.profile = {...client._doc, type: "client" }
         next();
     })
 }

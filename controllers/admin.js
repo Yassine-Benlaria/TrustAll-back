@@ -24,7 +24,8 @@ exports.createAdmin = (req, res) => {
             email: 1,
             phone: 1,
             city: 1,
-            birth_date: 1
+            birth_date: 1,
+
         }))
     })
 }
@@ -100,7 +101,7 @@ exports.adminByID = (req, res, next, id) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        req.profile = result
+        req.profile = {...result._doc, type: "admin" }
         next();
     })
 }

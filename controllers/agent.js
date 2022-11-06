@@ -44,10 +44,10 @@ exports.agentByID = (req, res, next, id) => {
 
 
     Agent.findById(id, projection).exec((err, agent) => {
-        if (err) {
+        if (err || !agent) {
             return res.status(400).json({ err: "Agent not found" })
         }
-        req.profile = agent;
+        req.profile = {...agent._doc, type: "agent" };
         next();
     })
 }

@@ -40,14 +40,17 @@ exports.validator = async(req, res, next) => {
     if (req.body.city) {
         req.check("city").isIn(getCitiesList(req.body.lang)).withMessage(msg.city)
 
-        //checking daira
-        let dairas = getDirasList(req.body.city, req.body.lang)
-        req.check("daira").isIn(dairas.map((daira) => { return daira.daira_name })).withMessage(msg.daira)
-
-        //checiing commune
-        req.check("commune").isIn(dairas.find(daira => {
-            return daira.daira_name == req.body.daira
-        }).communes).withMessage(msg.commune)
+        if (req.body.daira) {
+            //checking daira
+            let dairas = getDirasList(req.body.city, req.body.lang)
+            req.check("daira").isIn(dairas.map((daira) => { return daira.daira_name })).withMessage(msg.daira)
+            if (req.body.commune) {
+                //checiing commune
+                req.check("commune").isIn(dairas.find(daira => {
+                    return daira.daira_name == req.body.daira
+                }).communes).withMessage(msg.commune)
+            }
+        }
     }
 
     //returning error
