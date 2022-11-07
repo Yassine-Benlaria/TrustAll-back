@@ -22,7 +22,7 @@ router.get("/:id", (req, res) => {
     return res.json(req.profile)
 })
 
-//admin by id middlware
-router.param("id", adminByID)
+// //admin by id middlware
+// router.param("id", adminByID)
 
 module.exports = router;
