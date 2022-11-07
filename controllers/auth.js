@@ -6,6 +6,7 @@ const Admin = require("../models/admin")
 const { expressjwt: express_jwt } = require("express-jwt");
 
 exports.signIn = (req, res) => {
+    console.log(req.body);
     let { email, password } = req.body
 
     //!admin
