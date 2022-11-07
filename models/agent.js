@@ -20,7 +20,7 @@ const agentStatusSchema = new mongoose.Schema({
 
 //Agent schema
 const agentSchema = new mongoose.Schema({
-    auth_agent_ID: {
+    created_by: {
         type: String,
         required: true
     },

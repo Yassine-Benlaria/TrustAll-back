@@ -105,3 +105,18 @@ exports.adminByID = (req, res, next, id) => {
         next();
     })
 }
+
+exports.updateAdmin = (req, res) => {
+    let json = {}
+
+    if (req.body.first_name) json.first_name = req.body.first_name
+    if (req.body.last_name) json.last_name = req.body.last_name
+    if (req.body.birth_date) json.birth_date = req.body.birth_date
+
+    Admin.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err })
+        }
+        return res.json({ response: "Admin updated successfully!" })
+    })
+}

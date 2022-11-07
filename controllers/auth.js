@@ -24,7 +24,7 @@ exports.signIn = (req, res) => {
                             let { email, password } = req.body
                             AuthAgent.findOne({ email }, (err, authAgent) => {
                                 if (err || !authAgent) {
-                                    res.status(400).json({ err: "can't find any account with this email!" })
+                                    return res.status(400).json({ err: "can't find any account with this email!" })
                                 }
                                 //: if authorized-agent exists
                                 if (!authAgent.authenticate(password)) {
@@ -43,54 +43,60 @@ exports.signIn = (req, res) => {
                         }
 
                         //: if agent exists
-                        if (!agent.authenticate(password)) {
-                            return res.status(401).json({ err: "email and password doesn't match!" })
+                        else {
+                            if (!agent.authenticate(password)) {
+                                return res.status(401).json({ err: "email and password doesn't match!" })
+                            }
+                            //generate signin token
+                            const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
+
+                            //token in cookie with expiry date
+                            res.cookie("token", token, { expire: new Date() + 9999 });
+
+                            //return response
+                            const { _id, first_name, last_name, email } = agent;
+                            return res.json({ token, user: { _id, first_name, last_name, email, type: "agent" } })
+
                         }
-                        //generate signin token
-                        const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
-
-                        //token in cookie with expiry date
-                        res.cookie("token", token, { expire: new Date() + 9999 });
-
-                        //return response
-                        const { _id, first_name, last_name, email } = agent;
-                        return res.json({ token, user: { _id, first_name, last_name, email, type: "agent" } })
-
                     })
 
                 }
 
                 //: if client exists
-                if (!client.authenticate(password)) {
-                    return res.status(401).json({ err: "email and password doesn't match!" })
+                else {
+                    if (!client.authenticate(password)) {
+                        return res.status(401).json({ err: "email and password doesn't match!" })
+                    }
+                    //generate signin token
+                    const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
+
+                    //token in cookie with expiry date
+                    res.cookie("token", token, { expire: new Date() + 9999 });
+
+                    //return response
+                    const { _id, first_name, last_name, email } = client;
+                    return res.json({ token, user: { _id, first_name, last_name, email, type: "client" } })
+
                 }
-                //generate signin token
-                const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
-
-                //token in cookie with expiry date
-                res.cookie("token", token, { expire: new Date() + 9999 });
-
-                //return response
-                const { _id, first_name, last_name, email } = client;
-                return res.json({ token, user: { _id, first_name, last_name, email, type: "client" } })
-
             })
 
         }
 
         //: if admin exists
-        if (!admin.authenticate(password)) {
-            return res.status(401).json({ err: "email and password doesn't match!" })
+        else {
+            if (!admin.authenticate(password)) {
+                return res.status(401).json({ err: "email and password doesn't match!" })
+            }
+            //generate signin token
+            const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
+
+            //token in cookie with expiry date
+            res.cookie("token", token, { expire: new Date() + 9999 });
+
+            //return response
+            const { _id, first_name, last_name, email } = admin;
+            return res.json({ token, user: { _id, first_name, last_name, email, type: "admin" } })
         }
-        //generate signin token
-        const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
-
-        //token in cookie with expiry date
-        res.cookie("token", token, { expire: new Date() + 9999 });
-
-        //return response
-        const { _id, first_name, last_name, email } = admin;
-        return res.json({ token, user: { _id, first_name, last_name, email, type: "admin" } })
     })
 }
 
