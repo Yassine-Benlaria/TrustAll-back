@@ -38,8 +38,8 @@ exports.signIn = (req, res) => {
                                 res.cookie("token", token, { expire: new Date() + 9999 });
 
                                 //return response
-                                const { _id, first_name, last_name, email } = authAgent;
-                                return res.json({ token, user: { _id, first_name, last_name, email, type: "auth_agent" } })
+                                const { _id, first_name, last_name, status, email } = authAgent;
+                                return res.json({ token, user: { _id, first_name, last_name, status, email, type: "auth_agent" } })
                             })
                         }
 
@@ -55,8 +55,8 @@ exports.signIn = (req, res) => {
                             res.cookie("token", token, { expire: new Date() + 9999 });
 
                             //return response
-                            const { _id, first_name, last_name, email } = agent;
-                            return res.json({ token, user: { _id, first_name, last_name, email, type: "agent" } })
+                            const { _id, first_name, last_name, status, email } = agent;
+                            return res.json({ token, user: { _id, first_name, last_name, status, email, type: "agent" } })
 
                         }
                     })
@@ -75,8 +75,8 @@ exports.signIn = (req, res) => {
                     res.cookie("token", token, { expire: new Date() + 9999 });
 
                     //return response
-                    const { _id, first_name, last_name, email } = client;
-                    return res.json({ token, user: { _id, first_name, last_name, email, type: "client" } })
+                    const { _id, first_name, last_name, status, email } = client;
+                    return res.json({ token, user: { _id, first_name, last_name, status, email, type: "client" } })
 
                 }
             })
