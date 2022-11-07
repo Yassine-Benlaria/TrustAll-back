@@ -97,13 +97,14 @@ exports.createAuthAgent = (req, res) => {
 //Admin by id
 exports.adminByID = (req, res, next, id) => {
 
-    Admin.findById(req.params.id, projection, (err, result) => {
-        if (err || !result) {
-            return res.status(400).json({ err })
-        }
-        req.profile = {...result._doc, type: "admin" }
-        next();
-    })
+    // Admin.findById(req.params.id, projection, (err, result) => {
+    //     if (err || !result) {
+    //         return res.status(400).json({ err })
+    //     }
+    //     req.profile = {...result._doc, type: "admin" }
+    //     next();
+    // })
+    next();
 }
 
 exports.updateAdmin = (req, res) => {
