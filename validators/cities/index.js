@@ -19,7 +19,7 @@ exports.getCitiesList = (language = "en") => {
     let cities = readCitiesJson(language)
     let cities_list = []
     Object.keys(cities).forEach(function(key) {
-        cities_list.push(cities[key].wilaya_name)
+        cities_list.push({ key, value: cities[key].wilaya_name })
     });
     return cities_list
 }

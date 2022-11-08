@@ -11,13 +11,23 @@ router.post("/signout", signout)
 
 
 router.get("/cities/:lang", (req, res) => {
-    return res.json({ cities: getCitiesList(req.params.lang).sort() })
+    return res.json({
+        cities: getCitiesList(req.params.lang).sort(compare)
+    })
 })
 
 router.get("/dairas/:city/:lang", (req, res) => {
     return res.json({ dairas: getDirasList(req.params.city, req.params.lang).sort() })
 })
 
-
+function compare(a, b) {
+    if (a.key < b.key) {
+        return -1;
+    }
+    if (a.key > b.key) {
+        return 1;
+    }
+    return 0;
+}
 
 module.exports = router;
