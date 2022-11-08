@@ -11,11 +11,11 @@ router.post("/signout", signout)
 
 
 router.get("/cities/:lang", (req, res) => {
-    return res.json(getCitiesList(req.params.lang).sort())
+    return res.json({ cities: getCitiesList(req.params.lang).sort() })
 })
 
 router.get("/dairas/:city/:lang", (req, res) => {
-    return res.json(getDirasList(req.params.city, req.params.lang).sort())
+    return res.json({ dairas: getDirasList(req.params.city, req.params.lang).sort() })
 })
 
 
