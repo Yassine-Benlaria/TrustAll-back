@@ -15,6 +15,7 @@ var projection = {
 //signup
 exports.signup = (req, res) => {
     //generating confirmation code
+    console.log(req.body)
     const code = generateConfirmationCode()
 
     //get address info
