@@ -1,7 +1,9 @@
 const edc = require("email-domain-check");
-const { getCitiesList, getDirasList } = require("./cities");
+const { getAllCommunes } = require("./cities");
 
 exports.validator = async(req, res, next) => {
+
+
     var msg
         //importing messages file
     if (req.body.lang == "ar") {
@@ -16,42 +18,41 @@ exports.validator = async(req, res, next) => {
     //checking first name
     if (req.body.first_name) req.check("first_name").isLength({ min: 3, max: 32 }).withMessage(msg.firstName);
 
-    //checking last name
+    console.log("here", 1)
+        //checking last name
     if (req.body.last_name) req.check("last_name").isLength({ min: 3, max: 32 }).withMessage(msg.lastName);
+
+    console.log("here", 2)
 
     //checking email
     if (req.body.email) {
         req.check("email").isEmail().withMessage(msg.email)
 
-        await edc(req.body.email).then(result => {
-            if (!result) return res.status(400).json({ err: msg.emailNotExist })
-        })
+        // await edc(req.body.email).then(result => {
+        //     if (!result) return res.status(400).json({ err: msg.emailNotExist })
+        // })
     }
+    console.log("here", 3)
+
     //checking phone
     if (req.body.phone) req.check("phone").isMobilePhone().isLength({ min: 10, max: 10 }).withMessage(msg.phone)
+
+    console.log("here")
 
     //checking birth date
     if (req.body.birth_date) req.check("birth_date").isISO8601().withMessage(msg.date)
 
+    console.log("here")
+
     //checking password
     if (req.body.password) req.check("password").isLength({ min: 8 }).withMessage(msg.password)
 
-    //checkingcity
-    if (req.body.city) {
-        req.check("city").isIn(getCitiesList(req.body.lang)).withMessage(msg.city)
-
-        if (req.body.daira) {
-            //checking daira
-            let dairas = getDirasList(req.body.city, req.body.lang)
-            req.check("daira").isIn(dairas.map((daira) => { return daira.daira_name })).withMessage(msg.daira)
-            if (req.body.commune) {
-                //checiing commune
-                req.check("commune").isIn(dairas.find(daira => {
-                    return daira.daira_name == req.body.daira
-                }).communes).withMessage(msg.commune)
-            }
-        }
+    console.log("here")
+        //checkingcity
+    if (req.body.commune_id) {
+        req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(msg.commune)
     }
+    console.log("here")
 
     //returning error
     const errors = req.validationErrors();

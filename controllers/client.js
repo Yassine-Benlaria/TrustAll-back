@@ -2,6 +2,7 @@ const Client = require("../models/client")
 
 const { generateConfirmationCode, sendConfirmationMail, projectObject } = require("../helpers");
 const { profilePicUpload } = require("../helpers/uploader");
+const { getCommuneByID } = require("../validators/cities");
 
 var projection = {
     salt: false,
@@ -16,8 +17,14 @@ exports.signup = (req, res) => {
     //generating confirmation code
     const code = generateConfirmationCode()
 
-    //saving client to database
-    let json = req.body
+    //get address info
+    let address = getCommuneByID(req.body.commune_id)
+    let commune = address.commune_name_ascii,
+        daira = address.daira_name_ascii,
+        city = address.wilaya_name_ascii
+        //saving client to database
+    let json = {...req.body, commune, daira, city }
+    console.log(json)
     json.confirmation_code = code
     const client = new Client(json)
     client.save((err, createdClient) => {

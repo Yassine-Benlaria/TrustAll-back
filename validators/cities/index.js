@@ -50,7 +50,7 @@ exports.getDirasList = (wilaya_code, language = "en") => {
     return result
 }
 
-//get diras list by city
+//get communes list by daira
 exports.getCommunesList = (daira, language = "en") => {
 
     let communes = readCitiesJson("communes");
@@ -71,4 +71,14 @@ exports.getCommunesList = (daira, language = "en") => {
 
 
     return result
+}
+
+//get list of all communes
+exports.getAllCommunes = () => {
+    return readCitiesJson("communes");
+}
+
+//get commune by ID
+exports.getCommuneByID = (id) => {
+    return readCitiesJson("communes").find(o => o.id == id);
 }
