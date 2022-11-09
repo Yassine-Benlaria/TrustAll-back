@@ -12,22 +12,16 @@ router.post("/signout", signout)
 
 router.get("/cities/:lang", (req, res) => {
     return res.json({
-        cities: getCitiesList(req.params.lang).sort(compare)
+        cities: getCitiesList(req.params.lang) //.sort(compare)
     })
 })
 
-router.get("/dairas/:city/:lang", (req, res) => {
-    return res.json({ dairas: getDirasList(req.params.city, req.params.lang).sort() })
-})
+router.get("/dairas/:wilaya_code/:lang", (req, res) => {
+    let dairas = getDirasList(req.params.wilaya_code, req.params.lang)
+    return res.json({
+        dairas
+    })
+});
 
-function compare(a, b) {
-    if (a.key < b.key) {
-        return -1;
-    }
-    if (a.key > b.key) {
-        return 1;
-    }
-    return 0;
-}
 
 module.exports = router;

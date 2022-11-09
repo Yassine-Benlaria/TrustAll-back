@@ -1,11 +1,9 @@
 const fs = require("fs")
 const path = require("path")
 
-//importing json file
-function readCitiesJson(language = "ar") {
+function readCitiesJson() {
     let file
-    if (language == "ar") file = "./cities_ar.json"
-    else file = "./cities_fr.json"
+    file = "./algeria_cities.json"
 
     let bufferData = fs.readFileSync(path.resolve(__dirname, file))
     let stData = bufferData.toString()
@@ -14,17 +12,23 @@ function readCitiesJson(language = "ar") {
     return data
 }
 
-const cities = readCitiesJson("ar")
-const cities_en = readCitiesJson("en")
+const cities = readCitiesJson()
 
-var new_json = {}
-for (var key of Object.keys(cities)) {
-    new_json[cities_en[key].wilaya_name] = cities[key]
-}
-console.log(new_json)
+var dairas = []
 
-const data = JSON.stringify(new_json)
-fs.writeFile('cities_ar.json', data, err => {
+cities.map((o => {
+    if (dairas.findIndex(item => (item.wilaya_code == o.wilaya_code) && (item.daira_name == o.daira_name_ascii)) == -1) {
+        dairas.push({
+            wilaya_code: o.wilaya_code,
+            daira_name: o.daira_name_ascii,
+            daira_name_ar: o.daira_name
+        })
+    }
+}))
+console.log(dairas.length)
+
+const data = JSON.stringify(dairas)
+fs.writeFile('dairas.json', data, err => {
     if (err) {
         throw err
     }
