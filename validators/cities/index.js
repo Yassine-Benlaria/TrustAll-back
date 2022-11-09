@@ -32,13 +32,22 @@ exports.getCitiesList = (language = "en") => {
 //get diras list by city
 exports.getDirasList = (wilaya_code, language = "en") => {
 
-    let dairas = readCitiesJson("dairas")
+    let dairas = readCitiesJson("dairas");
     let dairas_list = dairas.filter((o) =>
         o.wilaya_code == wilaya_code
     )
-    console.log(dairas_list)
+    let result = []
+    if (language == "ar")
+        dairas_list.map(o => {
+            result.push({ wilaya_code: o.wilaya_code, daira_name: o.daira_name_ar, value: o.daira_name })
+        })
+    else dairas_list.map(o => {
+        result.push({ wilaya_code: o.wilaya_code, daira_name: o.daira_name, value: o.daira_name })
+    })
 
-    return dairas_list
+
+
+    return result
 }
 
 // //get diras list by city
