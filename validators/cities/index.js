@@ -6,7 +6,7 @@ function readCitiesJson(f) {
     let file
     if (f == "wilayas") file = "./wilayas.json"
     else if (f == "dairas") file = "./dairas.json"
-    else file = "./communes.js"
+    else file = "./communes.json"
 
     let bufferData = fs.readFileSync(path.resolve(__dirname, file))
     let stData = bufferData.toString()
@@ -50,14 +50,25 @@ exports.getDirasList = (wilaya_code, language = "en") => {
     return result
 }
 
-// //get diras list by city
-// exports.getDirasList = (wilaya_code, language = "en") => {
+//get diras list by city
+exports.getCommunesList = (daira, language = "en") => {
 
-//     let dairas = readCitiesJson("dairas")
-//     let dairas_list = dairas.filter((o) =>
-//         o.wilaya_code == wilaya_code
-//     )
-//     console.log(dairas_list)
+    let communes = readCitiesJson("communes");
+    console.log(communes)
+    let communes_list = communes.filter((o) =>
+        o.daira_name_ascii == daira
+    )
 
-//     return dairas_list
-// }
+    let result = []
+    if (language == "ar")
+        communes_list.map(o => {
+            result.push({ id: o.id, commune_name: o.commune_name })
+        })
+    else communes_list.map(o => {
+        result.push({ id: o.id, commune_name: o.commune_name_ascii })
+    })
+
+
+
+    return result
+}
