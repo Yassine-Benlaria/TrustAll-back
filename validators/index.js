@@ -3,7 +3,7 @@ const { getAllCommunes } = require("./cities");
 
 exports.validator = async(req, res, next) => {
 
-
+    console.log("from validator", req.body)
     var msg
         //importing messages file
     if (req.body.lang == "ar") {
