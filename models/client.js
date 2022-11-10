@@ -66,7 +66,7 @@ const clientSchema = new mongoose.Schema({
     },
     confirmation_code: {
         type: String,
-        
+
     },
     status: {
         type: clientStatusSchema,
@@ -76,6 +76,8 @@ const clientSchema = new mongoose.Schema({
             active: true,
         }
     },
+    resetToken: String,
+    restTokenExpiration: Date,
     salt: { type: String },
     hashed_password: {
         type: String,
