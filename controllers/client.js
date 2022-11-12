@@ -15,7 +15,6 @@ var projection = {
 //signup
 exports.signup = (req, res) => {
     //generating confirmation code
-    console.log(req.body)
     const code = generateConfirmationCode()
 
     //get address info
@@ -25,7 +24,6 @@ exports.signup = (req, res) => {
         city = address.wilaya_name_ascii
         //saving client to database
     let json = {...req.body, commune, daira, city }
-    console.log(json)
     json.confirmation_code = code
     const client = new Client(json)
     client.save((err, createdClient) => {
@@ -44,16 +42,17 @@ exports.signup = (req, res) => {
 exports.confirmEmail = (req, res) => {
     let id = req.params.id
     let code = req.body.code
+    let msg = requireMessages(req.body.lang)
     Client.findById(id, (err, client) => {
         if (err || !client)
             return res.status(400).json({ err: "client not found!!" })
         if (client.confirmation_code != code)
-            return res.status(400).json({ err: "Confirmation code is not correct!!" })
+            return res.status(400).json({ err: msg.confirmCodeUncorrect })
         Client.updateOne({ _id: id }, { $set: { "status.verified": true } },
             (err, result) => {
                 if (err || !result)
                     return res.status(400).json({ err: "undefined error!!" })
-                return res.json({ response: "Your account is verified!!" })
+                return res.json({ msg: "Your account is verified!!" })
             })
     })
 }

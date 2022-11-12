@@ -13,5 +13,6 @@ msg.password = "يجب أن تتكون كلمة السر من 8 أحرف أو أ
 msg.registerSuccess = "لقد تم إنشاء حسابك بنجاح، تفحص بريدك الإلكتروني!"
 msg.emailAlreadyExist = "البريد الإلكتروني مستعمل سابقا!"
 msg.loginFailed = "خطأ في البريد/الهاتف أو كلمة السر!"
+msg.confirmCodeUncorrect = "رمز التأكيد غير صحيح!"
 
 module.exports = msg

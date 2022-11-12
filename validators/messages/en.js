@@ -13,5 +13,6 @@ msg.password = "Password must contain at least 8 characters!"
 msg.registerSuccess = "Your account have been created successfully, check your email!"
 msg.emailAlreadyExist = "This email is already used!"
 msg.loginFailed = "Your email/phone or password is not correct!"
+msg.confirmCodeUncorrect = "Confirmation code is not correct!"
 
 module.exports = msg

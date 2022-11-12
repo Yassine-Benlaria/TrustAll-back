@@ -54,7 +54,6 @@ exports.getDirasList = (wilaya_code, language = "en") => {
 exports.getCommunesList = (daira, language = "en") => {
 
     let communes = readCitiesJson("communes");
-    console.log(communes)
     let communes_list = communes.filter((o) =>
         o.daira_name_ascii == daira
     )
