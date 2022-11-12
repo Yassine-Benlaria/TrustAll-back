@@ -10,5 +10,8 @@ msg.city = "Invalid city!"
 msg.commune = "Invalid commune!"
 msg.daira = "Invalid daira!"
 msg.password = "Password must contain at least 8 characters!"
+msg.registerSuccess = "Your account have been created successfully, check your email!"
+msg.emailAlreadyExist = "This email is already used!"
+msg.loginFailed = "Your email/phone or password is not correct!"
 
 module.exports = msg

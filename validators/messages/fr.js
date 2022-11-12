@@ -10,5 +10,7 @@ msg.city = "La wilaya n'est pas valide"
 msg.commune = "La commune n'est pas valide!"
 msg.daira = "La daira n'est pas valide!"
 msg.password = "Le mot de passe doit contenir au moins 8 caractères!"
-
+msg.registerSuccess = "Votre compte a été créé avec succés, vérifier votre email!"
+msg.emailAlreadyExist = "Cet addresse email est déja utilisé!"
+msg.loginFailed = "Votre email/telephone ou mot de passe n'est pas correct!"
 module.exports = msg

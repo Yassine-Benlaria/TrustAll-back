@@ -4,10 +4,15 @@ const Agent = require("../models/agent")
 const AuthAgent = require("../models/auth-agent")
 const Admin = require("../models/admin")
 const { expressjwt: express_jwt } = require("express-jwt");
+const crypto = require("crypto")
+const { requireMessages } = require("../helpers")
 
+
+//signin
 exports.signIn = (req, res) => {
-    console.log(req.body);
-    let { email, password } = req.body
+
+    const msg = requireMessages(req.body.lang);
+    let { email, password } = req.body;
 
     //!admin
     Admin.findOne({ email }, (err, admin) => {
@@ -25,11 +30,11 @@ exports.signIn = (req, res) => {
                             let { email, password } = req.body
                             AuthAgent.findOne({ email }, (err, authAgent) => {
                                 if (err || !authAgent) {
-                                    return res.status(400).json({ err: "can't find any account with this email!" })
+                                    return res.status(400).json({ err: msg.loginFailed })
                                 }
                                 //: if authorized-agent exists
                                 if (!authAgent.authenticate(password)) {
-                                    return res.status(401).json({ err: "email and password doesn't match!" })
+                                    return res.status(401).json({ err: msg.loginFailed })
                                 }
                                 //generate signin token
                                 const token = jwt.sign({ _id: authAgent._id }, process.env.JWT_SECRET);
@@ -46,7 +51,7 @@ exports.signIn = (req, res) => {
                         //: if agent exists
                         else {
                             if (!agent.authenticate(password)) {
-                                return res.status(401).json({ err: "email and password doesn't match!" })
+                                return res.status(401).json({ err: msg.loginFailed })
                             }
                             //generate signin token
                             const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
@@ -66,7 +71,7 @@ exports.signIn = (req, res) => {
                 //: if client exists
                 else {
                     if (!client.authenticate(password)) {
-                        return res.status(401).json({ err: "email and password doesn't match!" })
+                        return res.status(401).json({ err: msg.loginFailed })
                     }
                     //generate signin token
                     const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
@@ -86,7 +91,7 @@ exports.signIn = (req, res) => {
         //: if admin exists
         else {
             if (!admin.authenticate(password)) {
-                return res.status(401).json({ err: "email and password doesn't match!" })
+                return res.status(401).json({ err: msg.loginFailed })
             }
             //generate signin token
             const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
@@ -100,7 +105,6 @@ exports.signIn = (req, res) => {
         }
     })
 }
-
 
 //signout
 exports.signout = (req, res) => {

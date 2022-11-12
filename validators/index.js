@@ -6,12 +6,12 @@ exports.validator = async(req, res, next) => {
     console.log("from validator", req.body)
     var msg
         //importing messages file
-    if (req.body.lang == "ar") {
-        msg = require("./messages/ar")
+    if (req.body.lang == "en") {
+        msg = require("./messages/en")
     } else if (req.body.lang == "fr") {
         msg = require("./messages/fr")
     } else {
-        msg = require("./messages/en")
+        msg = require("./messages/ar")
     }
 
 

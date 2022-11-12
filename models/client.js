@@ -76,8 +76,10 @@ const clientSchema = new mongoose.Schema({
             active: true,
         }
     },
+    //token for password resetting
     resetToken: String,
-    restTokenExpiration: Date,
+    resetTokenExpiration: Date,
+    //
     salt: { type: String },
     hashed_password: {
         type: String,

@@ -1,6 +1,6 @@
 const Client = require("../models/client")
-
-const { generateConfirmationCode, sendConfirmationMail, projectObject } = require("../helpers");
+const crypto = require("crypto")
+const { generateConfirmationCode, sendConfirmationMail, projectObject, sendResetPasswordEmail, requireMessages } = require("../helpers");
 const { profilePicUpload } = require("../helpers/uploader");
 const { getCommuneByID } = require("../validators/cities");
 
@@ -29,24 +29,14 @@ exports.signup = (req, res) => {
     json.confirmation_code = code
     const client = new Client(json)
     client.save((err, createdClient) => {
-        if (err) {
+        if (err || !createdClient) {
             return res.status(400).json({
-                err: "Email already exists!"
+                err: requireMessages(req.body.lang).emailAlreadyExist
             })
         }
         //sending confirmation email
         sendConfirmationMail(json.email, code)
-        res.json(projectObject(createdClient, {
-            _id: 1,
-            first_name: 1,
-            last_name: 1,
-            email: 1,
-            phone: 1,
-            city: 1,
-            daira: 1,
-            commune: 1,
-            birth_date: 1
-        }))
+        res.json({ msg: requireMessages(req.body.lang).registerSuccess })
     });
 }
 
@@ -126,5 +116,23 @@ exports.uploadProfilePicture = (req, res) => {
         } else {
             return res.json({ response: "Picture uploaded succussfully!" })
         }
+    })
+}
+
+//requesting to reset password
+exports.postReset = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) res.status(400).json({ err });
+        let token = buffer.toString("hex");
+        Client.findOne({ email: req.body.email })
+            .then(user => {
+                if (!user) return res.status(400).json({ err: "No user found with this email!" });
+                user.postResetToken = token;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                return user.save();
+            }).then(result => {
+                //sending email to the user
+                sendResetPasswordEmail(req.body.email, token);
+            }).catch(err => res.status(400).json({ err }))
     })
 }

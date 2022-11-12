@@ -233,8 +233,32 @@ exports.sendConfirmationMail = (receiver, code) => {
     return response
 }
 
+//confirmation email
+exports.sendResetPasswordEmail = (receiver, token) => {
 
-//object projection
+
+        var mailOptions = {
+            from: 'ehealth.company@yahoo.com',
+            to: receiver,
+            subject: "Password Reset",
+            html: `
+            <p>Here's the link to reset your password</p>
+            <p>Click <a href="https://trust-all.vercel.app/reset/${token}">here</a></p>
+        `
+        };
+
+        let response = false
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log("error:---------" + error);
+            } else {
+                response = true
+                console.log('Email sent: ' + info.response);
+            }
+        });
+        return response
+    }
+    //object projection
 exports.projectObject = (o, p) => {
     return Object.keys(p).reduce((r, k) => {
         r[k] = o[k] || '';
@@ -251,4 +275,18 @@ exports.generateRandomPassword = () => {
         randomString += letter.substring(randomStringNumber, randomStringNumber + 1);
     }
     return randomString
+}
+
+//require messages
+exports.requireMessages = (lang) => {
+    var msg;
+    //importing messages file
+    if (lang == "en") {
+        msg = require("../validators/messages/en")
+    } else if (lang == "fr") {
+        msg = require("../validators/messages/fr")
+    } else {
+        msg = require("../validators/messages/ar")
+    }
+    return msg
 }
