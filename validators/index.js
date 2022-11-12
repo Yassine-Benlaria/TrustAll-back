@@ -28,7 +28,8 @@ exports.validator = async(req, res, next) => {
     req.check("phone").isMobilePhone().isLength({ min: 10, max: 10 }).withMessage(msg.phone)
 
     //checking birth date
-    req.check("birth_date").isISO8601().withMessage(msg.date)
+    if (req.body.birth_date)
+        req.check("birth_date").isISO8601().withMessage(msg.date)
 
     //checking password
     req.check("password").isLength({ min: 8 }).withMessage(msg.password)

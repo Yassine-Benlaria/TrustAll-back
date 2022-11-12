@@ -46,7 +46,6 @@ const clientSchema = new mongoose.Schema({
     },
     birth_date: {
         type: Date,
-        required: true
     },
     city: {
         type: String,
