@@ -14,5 +14,9 @@ msg.registerSuccess = "Your account have been created successfully, check your e
 msg.emailAlreadyExist = "This email is already used!"
 msg.loginFailed = "Your email/phone or password is not correct!"
 msg.confirmCodeUncorrect = "Confirmation code is not correct!"
+msg.confirmEmail = {
+    welcome: "Welcome!",
+    message: "Enter this code to confirm your email"
+}
 
 module.exports = msg

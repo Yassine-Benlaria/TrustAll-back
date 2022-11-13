@@ -35,5 +35,9 @@ router.get("/communes/:daira/:lang", (req, res) => {
     })
 });
 
-//get communes list
+router.get("/logo", (req, res) => {
+        let path = require('path');
+        res.sendFile(path.resolve('public/logo.png'))
+    })
+    //get communes list
 module.exports = router;

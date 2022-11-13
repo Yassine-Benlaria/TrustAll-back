@@ -33,7 +33,7 @@ exports.signup = (req, res) => {
             })
         }
         //sending confirmation email
-        sendConfirmationMail(json.email, code)
+        sendConfirmationMail(json.email, code, req.body.lang)
         res.json({ msg: requireMessages(req.body.lang).registerSuccess })
     });
 }
