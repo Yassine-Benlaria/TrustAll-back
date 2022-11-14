@@ -18,5 +18,7 @@ msg.confirmEmail = {
     welcome: "Welcome!",
     message: "Enter this code to confirm your email"
 }
+msg.resetEmailSent = "Cliquez sur le lien dans votre e-mail pour réinitialiser votre mot de passe!"
+msg.noAccountFound = "No account found with this email!"
 
 module.exports = msg

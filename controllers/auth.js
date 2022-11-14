@@ -166,7 +166,8 @@ exports.isClient = (req, res) => {
 
 
 //requesting to reset password
-exports.postReset = (req, res, next) => {
+exports.postReset = (req, res) => {
+    let messages = requireMessages(req.body.lang);
     crypto.randomBytes(32, (err, buffer) => {
         if (err) res.status(400).json({ err });
         let token = buffer.toString("hex");
@@ -178,14 +179,14 @@ exports.postReset = (req, res, next) => {
                             if (err || !user) {
                                 Admin.findOne({ email: req.body.email }, (err, user) => {
                                     if (err || !user) {
-                                        return res.status(400).json({ err: "No user found with this email!" });
+                                        return res.status(400).json({ err: messages.noAccountFound });
                                     } else {
                                         user.resetToken = token;
                                         user.resetTokenExpiration = Date.now() + 3600000;
                                         user.save();
                                         //sending email to the user
                                         sendResetPasswordEmail(req.body.email, token);
-                                        return res.json({ msg: "reset link sent to email!" })
+                                        return res.json({ msg: messages.resetEmailSent })
                                     }
                                 })
                             } else {
@@ -194,7 +195,7 @@ exports.postReset = (req, res, next) => {
                                 user.save();
                                 //sending email to the user
                                 sendResetPasswordEmail(req.body.email, token);
-                                return res.json({ msg: "reset link sent to email!" })
+                                return res.json({ msg: messages.resetEmailSent })
                             }
                         })
                     } else {
@@ -203,7 +204,7 @@ exports.postReset = (req, res, next) => {
                         user.save();
                         //sending email to the user
                         sendResetPasswordEmail(req.body.email, token);
-                        return res.json({ msg: "reset link sent to email!" })
+                        return res.json({ msg: messages.resetEmailSent })
                     }
                 })
 
@@ -213,7 +214,7 @@ exports.postReset = (req, res, next) => {
                 user.save();
                 //sending email to the user
                 sendResetPasswordEmail(req.body.email, token);
-                return res.json({ msg: "reset link sent to email!" })
+                return res.json({ msg: messages.resetEmailSent })
             }
         })
     })

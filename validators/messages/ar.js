@@ -18,4 +18,6 @@ msg.confirmEmail = {
     welcome: "مرحبا",
     message: "أدخل هذا الرمز لتأكيد حسابك"
 }
+msg.resetEmailSent = "انقر على الرابط المرسل في بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك!"
+msg.noAccountFound = "لا يوجد حساب بهذا البريد الإلكتروني!"
 module.exports = msg
