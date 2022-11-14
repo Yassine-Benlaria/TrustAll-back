@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router()
 const cors = require("cors");
-const { signIn, signout, postReset, setNewPassword } = require("../controllers/auth");
+const { signIn, signout, postReset, checkPasswordToken, resetPassword } = require("../controllers/auth");
 router.use(cors());
 const { getCitiesList, getDirasList, getCommunesList } = require("../validators/cities")
 
@@ -31,8 +31,11 @@ router.get("/dairas/:wilaya_code/:lang", (req, res) => {
 //post reset password
 router.post("/reset", postReset)
 
-//reset password
-router.get("/reset-password/:token", setNewPassword);
+//check reset password token
+router.get("/check-token/:token", checkPasswordToken);
+
+//set new password
+router.post("/reset-password", resetPassword)
 
 //get communes by daira
 router.get("/communes/:daira/:lang", (req, res) => {

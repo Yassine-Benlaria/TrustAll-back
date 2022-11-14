@@ -220,13 +220,40 @@ exports.postReset = (req, res) => {
     })
 }
 
-//setting new password
-exports.setNewPassword = (req, res) => {
+//checking password token
+exports.checkPasswordToken = (req, res) => {
     let token = req.params.token;
-    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
-        .then(client => {
-            if (!client) return res.json({ msg: "not found" })
-            else return res.json({ msg: "true" })
-        })
-        .catch(err => console.log(err));
+    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
+        (err, user) => {
+            if (err || !user) {
+                Agent.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
+                    (err, user) => {
+                        if (err || !user) {
+                            AuthAgent.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
+                                (err, user) => {
+                                    if (err || !user) {
+                                        Admin.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
+                                            (err, user) => {
+                                                if (err || !user) {
+                                                    return res.json({ msg: "false" })
+                                                } else return res.json({ msg: "true" })
+                                            });
+                                    } else return res.json({ msg: "true" })
+                                });
+                        } else return res.json({ msg: "true" })
+                    });
+            } else return res.json({ msg: "true" })
+        });
+
+}
+
+//reset password
+exports.resetPassword = (req, res) => {
+    let token = req.body.token;
+    Client.updateOne({ resetToken: token }, { $set: { password: req.body.password } }, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err })
+        }
+        return res.json({ response: "password modified successfully!" })
+    })
 }
