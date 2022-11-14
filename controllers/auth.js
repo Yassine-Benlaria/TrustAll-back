@@ -3,6 +3,7 @@ const Client = require("../models/client")
 const Agent = require("../models/agent")
 const AuthAgent = require("../models/auth-agent")
 const Admin = require("../models/admin")
+const { v1: uuidv1 } = require("uuid");
 const { expressjwt: express_jwt } = require("express-jwt");
 const crypto = require("crypto")
 const { requireMessages, sendResetPasswordEmail } = require("../helpers")
@@ -249,11 +250,56 @@ exports.checkPasswordToken = (req, res) => {
 
 //reset password
 exports.resetPassword = (req, res) => {
-    let token = req.body.token;
-    Client.updateOne({ resetToken: token }, { $set: { password: req.body.password } }, (err, result) => {
-        if (err || !result) {
-            return res.status(400).json({ err })
+    let token = req.body.token,
+        salt = uuidv1(),
+        hashed_password = crypto
+        .createHmac('sha1', salt)
+        .update(req.body.password)
+        .digest("hex");
+
+    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
+        if (err || !user) {
+            Agent.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
+                if (err || !user) {
+                    AuthAgent.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
+                        if (err || !user) {
+                            Admin.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
+                                if (err || !user) {
+                                    res.status(400).json({ err: "error occured while updating password!" })
+                                } else {
+                                    user.salt = salt;
+                                    user.hashed_password = hashed_password;
+                                    user.resetToken = undefined;
+                                    user.resetTokenExpiration = undefined;
+                                    user.save();
+                                    return res.json({ msg: "user password have been updated successfully!" })
+                                }
+                            });
+                        } else {
+                            user.salt = salt;
+                            user.hashed_password = hashed_password;
+                            user.resetToken = undefined;
+                            user.resetTokenExpiration = undefined;
+                            user.save();
+                            return res.json({ msg: "user password have been updated successfully!" })
+                        }
+                    });
+                } else {
+                    user.salt = salt;
+                    user.hashed_password = hashed_password;
+                    user.resetToken = undefined;
+                    user.resetTokenExpiration = undefined;
+                    user.save();
+                    return res.json({ msg: "user password have been updated successfully!" })
+                }
+            });
+        } else {
+            user.salt = salt;
+            user.hashed_password = hashed_password;
+            user.resetToken = undefined;
+            user.resetTokenExpiration = undefined;
+            user.save();
+            return res.json({ msg: "user password have been updated successfully!" })
         }
-        return res.json({ response: "password modified successfully!" })
-    })
+    });
 }
