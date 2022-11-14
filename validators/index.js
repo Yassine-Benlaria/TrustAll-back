@@ -1,9 +1,9 @@
 const edc = require("email-domain-check");
+const { requireMessages } = require("../helpers");
 const { getAllCommunes } = require("./cities");
 
 exports.validator = async(req, res, next) => {
 
-    console.log("from validator", req.body)
     var msg
         //importing messages file
     if (req.body.lang == "en") {
@@ -36,6 +36,22 @@ exports.validator = async(req, res, next) => {
 
     //checkingcity
     req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(msg.commune)
+
+    //returning error
+    const errors = req.validationErrors();
+    if (errors) {
+        const firstError = errors.map(error => error.msg)[0];
+        return res.status(400).json({ err: firstError })
+    }
+    next()
+}
+
+exports.passwordValidator = async(req, res, next) => {
+
+    const msg = requireMessages(req.body.lang).password
+
+    //checking password
+    req.check("password").isLength({ min: 8 }).withMessage(msg)
 
     //returning error
     const errors = req.validationErrors();

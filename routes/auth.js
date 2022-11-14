@@ -3,7 +3,8 @@ const router = express.Router()
 const cors = require("cors");
 const { signIn, signout, postReset, checkPasswordToken, resetPassword } = require("../controllers/auth");
 router.use(cors());
-const { getCitiesList, getDirasList, getCommunesList } = require("../validators/cities")
+const { getCitiesList, getDirasList, getCommunesList } = require("../validators/cities");
+const { passwordValidator } = require("../validators");
 
 
 //SignIn api
@@ -35,7 +36,7 @@ router.post("/reset", postReset)
 router.get("/check-token/:token", checkPasswordToken);
 
 //set new password
-router.post("/reset-password", resetPassword)
+router.post("/reset-password", passwordValidator, resetPassword)
 
 //get communes by daira
 router.get("/communes/:daira/:lang", (req, res) => {
