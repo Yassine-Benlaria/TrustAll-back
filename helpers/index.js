@@ -242,7 +242,7 @@ exports.sendResetPasswordEmail = (receiver, token) => {
             subject: "Password Reset",
             html: `
             <p>Here's the link to reset your password</p>
-            <p>Click <a href="https://trust-all.vercel.app/reset/${token}">here</a></p>
+            <p>Click <a href="https://trust-all.vercel.app/newpassword/${token}">here</a></p>
         `
         };
 
