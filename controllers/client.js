@@ -126,12 +126,24 @@ exports.postReset = (req, res, next) => {
         Client.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) return res.status(400).json({ err: "No user found with this email!" });
-                user.postResetToken = token;
+                user.resetToken = token;
                 user.resetTokenExpiration = Date.now() + 3600000;
                 return user.save();
             }).then(result => {
                 //sending email to the user
                 sendResetPasswordEmail(req.body.email, token);
+                return res.json({ msg: "reset link sent to email!" })
             }).catch(err => res.status(400).json({ err }))
     })
+}
+
+//setting new password
+exports.setNewPassword = (req, res) => {
+    let token = req.params.token;
+    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+        .then(client => {
+            if (!client) return res.json({ msg: "not found" })
+            else return res.json({ msg: "true" })
+        })
+        .catch(err => console.log(err));
 }

@@ -5,7 +5,7 @@ const AuthAgent = require("../models/auth-agent")
 const Admin = require("../models/admin")
 const { expressjwt: express_jwt } = require("express-jwt");
 const crypto = require("crypto")
-const { requireMessages } = require("../helpers")
+const { requireMessages, sendResetPasswordEmail } = require("../helpers")
 
 
 //signin
@@ -162,4 +162,70 @@ exports.isClient = (req, res) => {
             error: "Access denied!! you are not a client!!"
         })
     }
+}
+
+
+//requesting to reset password
+exports.postReset = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) res.status(400).json({ err });
+        let token = buffer.toString("hex");
+        Client.findOne({ email: req.body.email }, (err, user) => {
+            if (err || !user) {
+                Agent.findOne({ email: req.body.email }, (err, user) => {
+                    if (err || !user) {
+                        AuthAgent.findOne({ email: req.body.email }, (err, user) => {
+                            if (err || !user) {
+                                Admin.findOne({ email: req.body.email }, (err, user) => {
+                                    if (err || !user) {
+                                        return res.status(400).json({ err: "No user found with this email!" });
+                                    } else {
+                                        user.resetToken = token;
+                                        user.resetTokenExpiration = Date.now() + 3600000;
+                                        user.save();
+                                        //sending email to the user
+                                        sendResetPasswordEmail(req.body.email, token);
+                                        return res.json({ msg: "reset link sent to email!" })
+                                    }
+                                })
+                            } else {
+                                user.resetToken = token;
+                                user.resetTokenExpiration = Date.now() + 3600000;
+                                user.save();
+                                //sending email to the user
+                                sendResetPasswordEmail(req.body.email, token);
+                                return res.json({ msg: "reset link sent to email!" })
+                            }
+                        })
+                    } else {
+                        user.resetToken = token;
+                        user.resetTokenExpiration = Date.now() + 3600000;
+                        user.save();
+                        //sending email to the user
+                        sendResetPasswordEmail(req.body.email, token);
+                        return res.json({ msg: "reset link sent to email!" })
+                    }
+                })
+
+            } else {
+                user.resetToken = token;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                user.save();
+                //sending email to the user
+                sendResetPasswordEmail(req.body.email, token);
+                return res.json({ msg: "reset link sent to email!" })
+            }
+        })
+    })
+}
+
+//setting new password
+exports.setNewPassword = (req, res) => {
+    let token = req.params.token;
+    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+        .then(client => {
+            if (!client) return res.json({ msg: "not found" })
+            else return res.json({ msg: "true" })
+        })
+        .catch(err => console.log(err));
 }

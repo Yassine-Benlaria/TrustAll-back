@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { signup, confirmEmail, clientByID, getClientsList, postReset, updateClient, uploadProfilePicture } = require("../controllers/client")
+const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture } = require("../controllers/client")
 const { validator } = require("../validators")
 router.use(cors())
 
@@ -11,8 +11,7 @@ router.post("/signup", validator, signup)
 //email confirmation route
 router.post("/confirm/:id", confirmEmail)
 
-//post reset password
-router.post("/reset", postReset)
+
 
 //get clients list
 router.get("/all", getClientsList)
