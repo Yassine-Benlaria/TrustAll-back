@@ -125,7 +125,7 @@ exports.isAuth = (req, res, next) => {
 
     if (!user) {
         return res.status(403).json({
-            error: "Access denied!!"
+            error: "Access denied, authentication required!!"
         })
     }
     next();
