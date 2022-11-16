@@ -47,8 +47,7 @@ exports.validator = async(req, res, next) => {
     if (errors) {
         let errList = [];
         errors.map(error => errList.push(error.msg));
-        return res.status(400).json({ err: errList.join(`
-        `) })
+        return res.status(400).json({ err: errList })
     }
     next()
 }
