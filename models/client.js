@@ -18,7 +18,6 @@ const clientStatusSchema = new mongoose.Schema({
     }
 })
 
-
 //Client schema
 const clientSchema = new mongoose.Schema({
     first_name: {
@@ -47,15 +46,7 @@ const clientSchema = new mongoose.Schema({
     birth_date: {
         type: Date,
     },
-    city: {
-        type: String,
-        required: true
-    },
-    daira: {
-        type: String,
-        required: true
-    },
-    commune: {
+    commune_id: {
         type: String,
         required: true
     },
@@ -85,7 +76,6 @@ const clientSchema = new mongoose.Schema({
         required: true
     }
 }, { timestamps: true });
-
 
 // virtual field
 clientSchema

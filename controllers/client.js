@@ -17,13 +17,8 @@ exports.signup = (req, res) => {
     //generating confirmation code
     const code = generateConfirmationCode()
 
-    //get address info
-    let address = getCommuneByID(req.body.commune_id)
-    let commune = address.commune_name_ascii,
-        daira = address.daira_name_ascii,
-        city = address.wilaya_name_ascii
-        //saving client to database
-    let json = {...req.body, commune, daira, city }
+    //saving client to database
+    let json = req.body
     json.confirmation_code = code
     const client = new Client(json)
     client.save((err, createdClient) => {
@@ -61,10 +56,23 @@ exports.confirmEmail = (req, res) => {
 exports.clientByID = (req, res, next, id) => {
 
     Client.findById(id, projection).exec((err, client) => {
-        if (err) {
+        if (err || !client) {
             return res.status(400).json({ err: "Client not found" })
         }
-        req.profile = {...client._doc, type: "client" }
+
+        //get address info
+        let address = getCommuneByID(client.commune_id)
+        let commune, daira, city;
+        if (req.body.lang == "fr" || req.body.lang == "en") {
+            commune = address.commune_name_ascii;
+            daira = address.daira_name_ascii;
+            city = address.wilaya_name_ascii;
+        } else {
+            commune = address.commune_name;
+            daira = address.daira_name;
+            city = address.wilaya_name;
+        }
+        req.profile = {...client._doc, type: "client", city, daira, commune }
         next();
     })
 }
