@@ -45,7 +45,8 @@ exports.validator = async(req, res, next) => {
     //     return res.status(400).json({ err: firstError })
     // }
     if (errors) {
-        return res.status(400).json({ err: errors })
+        return res.status(400).json({ err: errors.join(`
+        `) })
     }
     next()
 }
