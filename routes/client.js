@@ -16,7 +16,7 @@ router.post("/confirm/:id", confirmEmail)
 router.get("/all", getClientsList)
 
 //get client info
-router.get("/:id", requireSignin, isAuth, (req, res) => {
+router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
     return res.json({ user: req.profile })
 });
 

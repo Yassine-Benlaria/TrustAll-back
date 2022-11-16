@@ -63,7 +63,7 @@ exports.clientByID = (req, res, next, id) => {
         //get address info
         let address = getCommuneByID(client.commune_id)
         let commune, daira, city;
-        if (req.body.lang == "fr" || req.body.lang == "en") {
+        if (req.params.lang == "fr" || req.params.lang == "en") {
             commune = address.commune_name_ascii;
             daira = address.daira_name_ascii;
             city = address.wilaya_name_ascii;
