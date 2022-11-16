@@ -40,6 +40,7 @@ router.post("/reset-password", passwordValidator, resetPassword)
 
 //get communes by daira
 router.get("/communes/:daira/:lang", (req, res) => {
+
     let communes = getCommunesList(req.params.daira, req.params.lang)
     return res.json({
         communes
