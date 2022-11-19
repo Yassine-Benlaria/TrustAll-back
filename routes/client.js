@@ -27,7 +27,7 @@ router.post("/change-password/:id", requireSignin, isAuth, changeClientPassword)
 router.post("/photo/:id", uploadProfilePicture)
 
 //update client's info (first_name, last_name or birth_date)
-router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateClient)
+router.post("/update/:id", passwordValidator, requireSignin, isAuth, clientUpdateValidator, updateClient)
 
 //clientById middlware
 router.param("id", clientByID)

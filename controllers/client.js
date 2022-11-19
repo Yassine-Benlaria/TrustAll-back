@@ -168,7 +168,7 @@ exports.changeClientPassword = (req, res) => {
         let salt = uuidv1(),
             hashed_password = crypto
             .createHmac('sha1', salt)
-            .update(req.body.new_password)
+            .update(req.body.password)
             .digest("hex");
         client.hashed_password = hashed_password;
         client.salt = salt;
