@@ -21,5 +21,6 @@ msg.confirmEmail = {
 msg.noAccountFound = "Not found!"
 msg.resetEmailSent = "Click the link in your email to reset your password!"
 msg.updatedSuccess = "Your information have been updated successfully!"
+msg.nothingToChange = "Nothing to change!"
 
 module.exports = msg

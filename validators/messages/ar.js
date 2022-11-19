@@ -21,4 +21,6 @@ msg.confirmEmail = {
 msg.resetEmailSent = "انقر على الرابط المرسل في بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك!"
 msg.noAccountFound = "لا يوجد حساب بهذا البريد الإلكتروني!"
 msg.updatedSuccess = "تم تحديث معلوماتك بنجاح!"
+msg.nothingToChange = "لم تقم بتغيير معلوماتك!"
+
 module.exports = msg

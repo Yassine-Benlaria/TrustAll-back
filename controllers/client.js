@@ -101,9 +101,9 @@ exports.updateClient = (req, res) => {
     if (req.body.commune_id && (req.body.commune_id != req.profile.commune_id))
         json.commune_id = req.body.commune_id
 
-    if (Object.keys(json).length == 0) return res.status(400).json({});
+    if (Object.keys(json).length == 0) return res.status(400).json({ err: requireMessages(lang).nothingToChange });
 
-    console.log(json)
+
     Client.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
         if (err || !result) {
             return res.status(400).json({ err })
