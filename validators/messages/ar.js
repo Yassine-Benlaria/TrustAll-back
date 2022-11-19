@@ -22,5 +22,7 @@ msg.resetEmailSent = "انقر على الرابط المرسل في بريدك 
 msg.noAccountFound = "لا يوجد حساب بهذا البريد الإلكتروني!"
 msg.updatedSuccess = "تم تحديث معلوماتك بنجاح!"
 msg.nothingToChange = "لم تقم بتغيير معلوماتك!"
+msg.passwordNotCorrect = "كلمة السر القديمة غير صحيحة!"
+
 
 module.exports = msg

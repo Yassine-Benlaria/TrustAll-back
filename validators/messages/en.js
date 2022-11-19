@@ -18,9 +18,10 @@ msg.confirmEmail = {
     welcome: "Welcome!",
     message: "Enter this code to confirm your email"
 }
-msg.noAccountFound = "Not found!"
+msg.noAccountFound = "No account found!"
 msg.resetEmailSent = "Click the link in your email to reset your password!"
 msg.updatedSuccess = "Your information have been updated successfully!"
 msg.nothingToChange = "Nothing to change!"
+msg.passwordNotCorrect = "Old password is not correct!"
 
 module.exports = msg

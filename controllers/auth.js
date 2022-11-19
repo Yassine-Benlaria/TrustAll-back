@@ -256,7 +256,6 @@ exports.resetPassword = (req, res) => {
         .createHmac('sha1', salt)
         .update(req.body.password)
         .digest("hex");
-    console.log("token:", req.body)
     Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
         if (err || !user) {
             Agent.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {

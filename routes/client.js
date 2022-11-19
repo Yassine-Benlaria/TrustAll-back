@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture } = require("../controllers/client")
+const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture, changeClientPassword } = require("../controllers/client")
 const { validator, clientUpdateValidator } = require("../validators")
 const { isAuth, requireSignin } = require("../controllers/auth")
 router.use(cors())
@@ -19,6 +19,9 @@ router.get("/all", getClientsList)
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
     return res.json({ user: req.profile })
 });
+
+//change password
+router.post("/change-password/:id", requireSignin, isAuth, changeClientPassword);
 
 //upload profile pic
 router.post("/photo/:id", uploadProfilePicture)

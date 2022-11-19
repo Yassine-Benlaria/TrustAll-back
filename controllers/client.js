@@ -3,6 +3,7 @@ const crypto = require("crypto")
 const { generateConfirmationCode, sendConfirmationMail, projectObject, sendResetPasswordEmail, requireMessages } = require("../helpers");
 const { profilePicUpload } = require("../helpers/uploader");
 const { getCommuneByID } = require("../validators/cities");
+const { v1: uuidv1 } = require("uuid");
 
 var projection = {
     salt: false,
@@ -154,4 +155,24 @@ exports.setNewPassword = (req, res) => {
             else return res.json({ msg: "true" })
         })
         .catch(err => console.log(err));
+}
+
+//change password
+exports.changeClientPassword = (req, res) => {
+    const { noAccountFound, passwordNotCorrect, updatedSuccess } = requireMessages(req.body.lang)
+    Client.findById(req.params.id, (err, client) => {
+        if (err || !client)
+            return res.status(400).json({ err: noAccountFound });
+        if (!client.authenticate(req.body.old_password))
+            return res.status(400).json({ err: passwordNotCorrect })
+        let salt = uuidv1(),
+            hashed_password = crypto
+            .createHmac('sha1', salt)
+            .update(req.body.new_password)
+            .digest("hex");
+        client.hashed_password = hashed_password;
+        client.salt = salt;
+        client.save();
+        return res.json({ msg: updatedSuccess });
+    })
 }
