@@ -48,10 +48,10 @@ exports.clientUpdateValidator = async(req, res, next) => {
     const msg = requireMessages(req.body.lang)
 
     //checking first name
-    if (req.body.first_name) req.check("first_name").isLength({ min: 3, max: 32 }).withMessage(msg.firstName);
+    if (req.body.first_name != undefined) req.check("first_name").isLength({ min: 3, max: 32 }).withMessage(msg.firstName);
 
     //checking last name
-    if (req.body.last_name) req.check("last_name").isLength({ min: 3, max: 32 }).withMessage(msg.lastName);
+    if (req.body.last_name != undefined) req.check("last_name").isLength({ min: 3, max: 32 }).withMessage(msg.lastName);
 
     //checking birth date
     if (req.body.birth_date)
