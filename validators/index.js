@@ -78,13 +78,14 @@ exports.passwordValidator = async(req, res, next) => {
     const msg = requireMessages(req.body.lang).password
 
     //checking password
-    req.check("password").isLength({ min: 8 }).withMessage(msg)
+    req.check("password").isLength({ min: 8, max: 100 }).withMessage(msg)
 
     //returning error
     const errors = req.validationErrors();
     if (errors) {
-        const firstError = errors.map(error => error.msg)[0];
-        return res.status(400).json({ err: firstError })
+        let errList = [];
+        errors.map(error => errList.push(error.msg));
+        return res.status(400).json({ err: errList })
     }
     next()
 }

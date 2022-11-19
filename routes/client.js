@@ -21,13 +21,13 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 });
 
 //change password
-router.post("/change-password/:id", requireSignin, isAuth, changeClientPassword);
+router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeClientPassword);
 
 //upload profile pic
 router.post("/photo/:id", uploadProfilePicture)
 
 //update client's info (first_name, last_name or birth_date)
-router.post("/update/:id", passwordValidator, requireSignin, isAuth, clientUpdateValidator, updateClient)
+router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateClient)
 
 //clientById middlware
 router.param("id", clientByID)
