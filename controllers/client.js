@@ -108,7 +108,7 @@ exports.updateClient = (req, res) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        return res.json({ response: requireMessages(req.body.lang).updatedSuccess })
+        return res.json({ msg: requireMessages(req.body.lang).updatedSuccess })
     })
 }
 
