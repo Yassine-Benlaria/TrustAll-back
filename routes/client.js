@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture, changeClientPassword } = require("../controllers/client")
-const { validator, clientUpdateValidator } = require("../validators")
+const { validator, clientUpdateValidator, passwordValidator } = require("../validators")
 const { isAuth, requireSignin } = require("../controllers/auth")
 router.use(cors())
 
