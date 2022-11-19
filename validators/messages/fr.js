@@ -1,7 +1,7 @@
 var msg = {}
 
-msg.firstName = "Le prénom doit comporter entre 3 et 32 caractères!"
-msg.lastName = "Le nom doit comporter entre 3 et 32 caractères!"
+msg.firstName = "Le prénom n'est pas valide!"
+msg.lastName = "Le nom n'est pas valide!"
 msg.email = "L'email n'est pas valide!"
 msg.emailNotExist = "L'email n'est pas valide!"
 msg.phone = "Le numéro de téléphone n'est pas valide!"

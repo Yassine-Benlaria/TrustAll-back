@@ -1,7 +1,7 @@
 var msg = {}
 
-msg.firstName = "!يجب أن يتكون الاسم من 3 إلى 32 حرف"
-msg.lastName = "!يجب أن يتكون اللقب من 3 إلى 32 حرف"
+msg.firstName = "يوجد خطأ في الاسم!"
+msg.lastName = "يوجد خطأ في اللقب!"
 msg.email = "!أدخل بريدا الكترونيا صحيحا"
 msg.emailNotExist = "!أدخل بريد الكتروني صحيح"
 msg.phone = "!أدخل رقم هاتف صحيح"
