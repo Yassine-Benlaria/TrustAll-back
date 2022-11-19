@@ -5,16 +5,8 @@ const { getAllCommunes } = require("./cities");
 exports.validator = async(req, res, next) => {
 
     console.log("body: ", req.body)
-    var msg
-        //importing messages file
-    if (req.body.lang == "en") {
-        msg = require("./messages/en")
-    } else if (req.body.lang == "fr") {
-        msg = require("./messages/fr")
-    } else {
-        msg = require("./messages/ar")
-    }
 
+    const msg = requireMessages(req.body.lang)
 
     //checking first name
     req.check("first_name").isLength({ min: 3, max: 32 }).withMessage(msg.firstName);
@@ -34,6 +26,36 @@ exports.validator = async(req, res, next) => {
 
     //checking password
     req.check("password").isLength({ min: 8 }).withMessage(msg.password)
+
+    //checkingcity
+    req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(msg.commune)
+
+    //returning error
+    const errors = req.validationErrors();
+    // if (errors) {
+    //     const firstError = errors.map(error => error.msg)[0];
+    //     return res.status(400).json({ err: firstError })
+    // }
+    if (errors) {
+        let errList = [];
+        errors.map(error => errList.push(error.msg));
+        return res.status(400).json({ err: errList })
+    }
+    next()
+}
+exports.clientUpdateValidator = async(req, res, next) => {
+
+    const msg = requireMessages(req.body.lang)
+
+    //checking first name
+    if (client.body.first_name) req.check("first_name").isLength({ min: 3, max: 32 }).withMessage(msg.firstName);
+
+    //checking last name
+    if (client.body.last_name) req.check("last_name").isLength({ min: 3, max: 32 }).withMessage(msg.lastName);
+
+    //checking birth date
+    if (req.body.birth_date)
+        req.check("birth_date").isISO8601().withMessage(msg.date)
 
     //checkingcity
     req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(msg.commune)

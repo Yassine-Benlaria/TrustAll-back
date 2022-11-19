@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture } = require("../controllers/client")
-const { validator } = require("../validators")
+const { validator, clientUpdateValidator } = require("../validators")
 const { isAuth, requireSignin } = require("../controllers/auth")
 router.use(cors())
 
@@ -24,7 +24,7 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 router.post("/photo/:id", uploadProfilePicture)
 
 //update client's info (first_name, last_name or birth_date)
-router.post("/update/:id", validator, updateClient)
+router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateClient)
 
 //clientById middlware
 router.param("id", clientByID)

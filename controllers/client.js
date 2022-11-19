@@ -95,13 +95,7 @@ exports.updateClient = (req, res) => {
     if (req.body.first_name) json.first_name = req.body.first_name
     if (req.body.last_name) json.last_name = req.body.last_name
     if (req.body.birth_date) json.birth_date = req.body.birth_date
-    if (req.body.city) {
-        json.city = req.body.city
-        if (req.body.daira) {
-            json.daira = req.body.daira
-            if (req.body.commune) json.commune = req.body.commune
-        }
-    }
+    if (req.body.commune_id) json.commune_id = req.body.commune_id
 
 
     Client.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
