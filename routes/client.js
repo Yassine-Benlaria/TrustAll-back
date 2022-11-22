@@ -36,7 +36,7 @@ router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail);
 
 //resent confirmation code
-router.post("/resend-confirm/:id", resendConfirmEmail)
+router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //clientById middlware
 router.param("id", clientByID)
