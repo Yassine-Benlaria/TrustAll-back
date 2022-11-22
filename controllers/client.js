@@ -173,6 +173,8 @@ exports.addEmail = (req, res) => {
     Client.findById(req.params.id, (err, client) => {
         //if no account found
         if (err || !client) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        if (client.email == req.body.email) return res.status(400).json({ err: "You are already using this email!" })
+
         //else
         client.newEmail = req.body.email;
         client.newEmailConfirmation = code;
