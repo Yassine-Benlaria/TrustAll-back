@@ -207,8 +207,13 @@ exports.resendConfirmEmail = (req, res) => {
 
         //if an account found
         var code = generateConfirmationCode();
+
         if (req.body.type == "new-email") {
             if (client.newEmail) {
+                //if 60 seconds doesn't pass yet
+                if (Date.parse(client.newEmailConfirmationExpiration) - 120000 > (Date.now()))
+                    return res.status(400).json({ err: "you have to wait 60 seconds!" });
+                //else
                 client.newEmailConfirmation = code;
                 client.newEmailConfirmationExpiration = Date.now() + 180000;
                 client.save();
