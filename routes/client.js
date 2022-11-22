@@ -30,10 +30,10 @@ router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture)
 router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateClient)
 
 //add new email address
-router.post("/new_email/:id", requireSignin, isAuth, addEmail)
+router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 
 //confirm new email
-router.post("/confirm_new_email/:id", requireSignin, isAuth, confirmNewEmail);
+router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail);
 
 //clientById middlware
 router.param("id", clientByID)
