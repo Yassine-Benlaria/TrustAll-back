@@ -69,6 +69,10 @@ const clientSchema = new mongoose.Schema({
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,
+    //for changing the email
+    newEmail: String,
+    newEmailConfirmation: String,
+    newEmailConfirmationExpiration: Date,
     //
     salt: { type: String },
     hashed_password: {

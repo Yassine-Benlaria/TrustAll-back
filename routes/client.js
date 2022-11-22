@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { signup, confirmEmail, clientByID, getClientsList, updateClient, uploadProfilePicture, changeClientPassword } = require("../controllers/client")
+const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator } = require("../validators")
 const { isAuth, requireSignin } = require("../controllers/auth")
 router.use(cors())
@@ -10,7 +10,7 @@ router.use(cors())
 router.post("/signup", validator, signup)
 
 //email confirmation route
-router.post("/confirm/:id", confirmEmail)
+router.post("/confirm/:id", requireSignin, isAuth, confirmEmail)
 
 //get clients list
 router.get("/all", getClientsList)
@@ -24,10 +24,16 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeClientPassword);
 
 //upload profile pic
-router.post("/photo/:id", uploadProfilePicture)
+router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture)
 
 //update client's info (first_name, last_name or birth_date)
 router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateClient)
+
+//add new email address
+router.post("/new_email/:id", requireSignin, isAuth, addEmail)
+
+//confirm new email
+router.post("/confirm_new_email/:id", requireSignin, isAuth, confirmNewEmail);
 
 //clientById middlware
 router.param("id", clientByID)

@@ -146,16 +146,6 @@ exports.postReset = (req, res, next) => {
     })
 }
 
-//setting new password
-exports.setNewPassword = (req, res) => {
-    let token = req.params.token;
-    Client.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
-        .then(client => {
-            if (!client) return res.json({ msg: "not found" })
-            else return res.json({ msg: "true" })
-        })
-        .catch(err => console.log(err));
-}
 
 //change password
 exports.changeClientPassword = (req, res) => {
@@ -175,4 +165,35 @@ exports.changeClientPassword = (req, res) => {
         client.save();
         return res.json({ msg: updatedSuccess });
     })
+}
+
+//add new email
+exports.addEmail = (req, res) => {
+    const code = generateConfirmationCode()
+    Client.findById(req.params.id, (err, client) => {
+        //if no account found
+        if (err || !client) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        //else
+        client.newEmail = req.body.email;
+        client.newEmailConfirmation = code;
+        client.newEmailConfirmationExpiration = Date.now() + 180000;
+        client.save()
+        sendConfirmationMail(req.body.email, code);
+        return res.json({ msg: "confirmation code sent to email!" })
+    });
+}
+
+//confirm the new email
+exports.confirmNewEmail = (req, res) => {
+    Client.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
+        .then(client => {
+            if (!client) return res.json({ msg: "not found" });
+            if (client.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            client.email = client.newEmail;
+            client.newEmail = undefined;
+            client.newEmailConfirmation = undefined;
+            client.newEmailConfirmationExpiration = undefined;
+            client.save();
+            return res.json({ msg: "Email address has been modified!" })
+        })
 }
