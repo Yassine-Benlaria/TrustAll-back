@@ -23,5 +23,6 @@ msg.resetEmailSent = "Cliquez sur le lien dans votre e-mail pour réinitialiser 
 msg.updatedSuccess = "Vos informations ont été modifiés avec succès!"
 msg.nothingToChange = "Rien à modifier!"
 msg.passwordNotCorrect = "L'ancien mot de passe n'est pass correct!"
+msg.emailSent = "Code envoyé, vérifiez votre email!"
 
 module.exports = msg

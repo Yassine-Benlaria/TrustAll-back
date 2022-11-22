@@ -23,5 +23,6 @@ msg.resetEmailSent = "Click the link in your email to reset your password!"
 msg.updatedSuccess = "Your information have been updated successfully!"
 msg.nothingToChange = "Nothing to change!"
 msg.passwordNotCorrect = "Old password is not correct!"
+msg.emailSent = "Code sent, check your email!"
 
 module.exports = msg

@@ -180,7 +180,7 @@ exports.addEmail = (req, res) => {
         client.newEmailConfirmation = code;
         client.newEmailConfirmationExpiration = Date.now() + 180000;
         client.save()
-        sendConfirmationMail(req.body.email, code);
+        sendConfirmationMail(req.body.email, code, req.body.lang);
         return res.json({ msg: "confirmation code sent to email!" })
     });
 }
@@ -189,7 +189,7 @@ exports.addEmail = (req, res) => {
 exports.confirmNewEmail = (req, res) => {
     Client.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
         .then(client => {
-            if (!client) return res.json({ msg: "not found" });
+            if (!client) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
             if (client.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
             client.email = client.newEmail;
             client.newEmail = undefined;
@@ -198,4 +198,27 @@ exports.confirmNewEmail = (req, res) => {
             client.save();
             return res.json({ msg: "Email address has been modified!" })
         })
+}
+
+//resend confirmation code
+exports.resendConfirmEmail = (req, res) => {
+    Client.findById(req.params.id, (err, client) => {
+        if (err || !client) return res.status(400).json({ msg: requireMessages(req.body.lang).noAccountFound });
+
+        //if an account found
+        var code = generateConfirmationCode();
+        if (req.body.type == "new-email") {
+            if (client.newEmail) {
+                client.newEmailConfirmation = code;
+                client.newEmailConfirmationExpiration = Date.now() + 180000;
+                client.save();
+                sendConfirmationMail(client.newEmail, code, req.body.lang);
+            } else return res.status(400).json({ err: "want to resend code, but no newEmail found!" });
+        } else {
+            client.confirmation_code = code;
+            client.save();
+            sendConfirmationMail(client.email, code, req.body.lang);
+        }
+        return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
 }

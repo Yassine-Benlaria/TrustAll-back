@@ -32,8 +32,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
         from: 'ehealth.company@yahoo.com',
         to: receiver,
         subject: "Code de confirmation",
-        html: `
-        <!DOCTYPE html>
+        html: `<!DOCTYPE html>
         <html>
         
         <head>
@@ -42,27 +41,29 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <style type="text/css">
+                @import url(http://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+                @import url('https://fonts.googleapis.com/css2?family=Saira:wght@700&display=swap');
                 @media screen {
                     @font-face {
-                        font-family: 'Lato';
+                        font-family: 'Saira', 'Lato';
                         font-style: normal;
                         font-weight: 400;
                         src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
                     }
                     @font-face {
-                        font-family: 'Lato';
+                        font-family: 'Saira', 'Lato';
                         font-style: normal;
                         font-weight: 700;
                         src: local('Lato Bold'), local('Lato-Bold'), url(https://fonts.gstatic.com/s/lato/v11/qdgUG4U09HnJwhYI-uK18wLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
                     }
                     @font-face {
-                        font-family: 'Lato';
+                        font-family: 'Saira', 'Lato';
                         font-style: italic;
                         font-weight: 400;
                         src: local('Lato Italic'), local('Lato-Italic'), url(https://fonts.gstatic.com/s/lato/v11/RYyZNoeFgb0l7W3Vu1aSWOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
                     }
                     @font-face {
-                        font-family: 'Lato';
+                        font-family: 'Saira', 'Lato';
                         font-style: italic;
                         font-weight: 700;
                         src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url(https://fonts.gstatic.com/s/lato/v11/HkF_qI1x_noxlxhrhMQYELO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
@@ -149,7 +150,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
                     <td bgcolor="#FFD000" align="center" style="padding: 0px 10px 0px 10px;">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                             <tr>
-                                <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
+                                <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Saira',  'Droid Arabic Kufi','Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;">
                                     <h1 style="font-size: 48px; font-weight: 400; margin: 2;">${msg.welcome}</h1> <img src="https://nameless-peak-50935.herokuapp.com/api/logo" width="125" height="120" style="display: block; border: 0px;" />
                                 </td>
                             </tr>
@@ -165,7 +166,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
                                 </td>
                             </tr>
                             <tr>
-                                <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                                <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Saira',  'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                                     <p style="margin: 0;">${msg.message}</p>
                                 </td>
                             </tr>
@@ -188,7 +189,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
         
         
                             <tr>
-                                <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                                <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Saira',  'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                                     <p style="margin: 0;"><br>TrustAll</p>
                                 </td>
                             </tr>
@@ -206,7 +207,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
                     <td bgcolor="#4D4D4D" align="center" style="padding: 0px 10px 0px 10px;">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                             <tr>
-                                <td bgcolor="#4D4D4D" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;"> <br>
+                                <td bgcolor="#4D4D4D" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Saira',  'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;"> <br>
         
                                 </td>
                             </tr>
