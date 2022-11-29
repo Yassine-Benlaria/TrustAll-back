@@ -14,10 +14,10 @@ const clientRoutes = require("./routes/client")
 const adminRoutes = require("./routes/admin")
 const agentRoutes = require("./routes/agent")
 const authRoutes = require("./routes/auth")
+const commandRoutes = require("./routes/command")
 
 //app
 const app = express();
-
 
 //db connection
 mongoose.connect(process.env.DATABASE, {
@@ -31,17 +31,12 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(expressValidator())
 
-
 //routes middlware
 app.use("/api/client", clientRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/agent", agentRoutes)
 app.use("/api", authRoutes)
-
-
-
-
-
+app.use("/api/command", commandRoutes)
 
 const port = process.env.PORT || 8000;
 
