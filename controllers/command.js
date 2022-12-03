@@ -2,7 +2,11 @@ const Command = require("../models/command")
 
 //add new command
 exports.addCommand = (req, res) => {
-    const command = new Command(req.body)
+    var json = req.body
+    json = {...json, client_id: req.params.id }
+    console.log(json)
+
+    const command = new Command(json)
     command.save((err, createdCommand) => {
         if (err || !createdCommand)
             return res.status(400).json({ err: "cannot create command" });

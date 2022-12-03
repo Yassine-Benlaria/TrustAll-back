@@ -13,7 +13,6 @@ router.post("/signin", signIn);
 //SignOut api
 router.post("/signout", signout)
 
-
 //Get wilayas list
 router.get("/cities/:lang", (req, res) => {
     return res.json({

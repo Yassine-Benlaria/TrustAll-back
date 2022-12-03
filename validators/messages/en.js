@@ -24,5 +24,6 @@ msg.updatedSuccess = "Your information have been updated successfully!"
 msg.nothingToChange = "Nothing to change!"
 msg.passwordNotCorrect = "Old password is not correct!"
 msg.emailSent = "Code sent, check your email!"
+msg.carName = "car name should not be empty!"
 
 module.exports = msg

@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail } = require("../controllers/client")
-const { validator, clientUpdateValidator, passwordValidator } = require("../validators")
+const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin } = require("../controllers/auth")
 const { addCommand } = require("../controllers/command")
 router.use(cors())
@@ -40,7 +40,7 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail);
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //add new command
-router.post("/add-command/:id", requireSignin, isAuth, addCommand)
+router.post("/add-command/:id", /*requireSignin, isAuth,*/ addCommandValidator, addCommand)
 
 //clientById middlware
 router.param("id", clientByID)

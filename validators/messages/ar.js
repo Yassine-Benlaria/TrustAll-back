@@ -24,6 +24,8 @@ msg.updatedSuccess = "تم تحديث معلوماتك بنجاح!"
 msg.nothingToChange = "لم تقم بتغيير معلوماتك!"
 msg.passwordNotCorrect = "كلمة السر القديمة غير صحيحة!"
 msg.emailSent = "تفقد حسابك، لقد تم إرسال رمز التأكيد!"
+msg.carName = "خطأ في اسم السيارة!"
+
 
 
 module.exports = msg
