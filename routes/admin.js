@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin } = require("../controllers/admin")
+const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan } = require("../controllers/admin")
 const { validator } = require("../validators")
 router.use(cors())
 
@@ -21,6 +21,9 @@ router.post("/create_auth_agent/:id", createAuthAgent)
 router.get("/:id", (req, res) => {
     return res.json(req.profile)
 })
+
+//create new plan
+router.post("/create_plan/:id", createPlan)
 
 //admin by id middlware
 router.param("id", adminByID)

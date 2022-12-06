@@ -1,7 +1,9 @@
 const Agent = require("../models/agent")
 const Admin = require("../models/admin")
+const Plan = require("../models/plan")
 const AuthAgent = require("../models/auth-agent")
 const { generateRandomPassword, sendConfirmationMail, projectObject } = require("../helpers");
+const { scanOptions } = require("../helpers/options")
 const projection = {
     salt: false,
     hashed_password: false,
@@ -97,16 +99,16 @@ exports.createAuthAgent = (req, res) => {
 //Admin by id
 exports.adminByID = (req, res, next, id) => {
 
-    // Admin.findById(req.params.id, projection, (err, result) => {
-    //     if (err || !result) {
-    //         return res.status(400).json({ err })
-    //     }
-    //     req.profile = {...result._doc, type: "admin" }
-    //     next();
-    // })
-    next();
+    Admin.findById(req.params.id, projection, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err })
+        }
+        req.profile = {...result._doc, type: "admin" }
+        next();
+    })
 }
 
+//update admin
 exports.updateAdmin = (req, res) => {
     let json = {}
 
@@ -119,5 +121,21 @@ exports.updateAdmin = (req, res) => {
             return res.status(400).json({ err })
         }
         return res.json({ response: "Admin updated successfully!" })
+    })
+}
+
+//create new plan
+exports.createPlan = (req, res) => {
+    let json = {...req.body,
+        car_information: scanOptions.car_information
+    }
+    console.log(json)
+    let plan = new Plan(json)
+    plan.save((err, createdPlan) => {
+        if (err || !createdPlan) {
+            console.log("err:", err)
+            return res.status(400).json({ err: "err while creating new plan!" })
+        }
+        return res.json({ msg: "plan created successfully!" })
     })
 }

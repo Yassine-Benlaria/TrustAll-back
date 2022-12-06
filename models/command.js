@@ -22,9 +22,21 @@ const commandSchema = new mongoose.Schema({
     seller_name: {
         type: String
     },
+    plan_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     status: {
         type: String,
-        default: "Vehicle Information"
+        /*
+        -car informarion
+        -contacting car owner
+        -confirming
+        -payment
+        -In progress
+        -Done
+        */
+        default: "Car Information"
     }
 }, { timestamps: true });
 

@@ -5,8 +5,6 @@ const { getAllCommands } = require("../controllers/command")
 router.use(cors())
 const url = require('url');
 
-
-
 //get list of commands
 router.get("/", getAllCommands)
 
