@@ -2,6 +2,23 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
+
+
+//Status schema
+const authAgentStatusSchema = new mongoose.Schema({
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    active: {
+        type: Boolean,
+        default: true
+    },
+    online: {
+        type: Boolean,
+    }
+})
+
 //AuthAgent schema
 const authAgentSchema = new mongoose.Schema({
     first_name: {
@@ -39,6 +56,13 @@ const authAgentSchema = new mongoose.Schema({
     img: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: authAgentStatusSchema,
+        default: {
+            verified: false,
+            active: true,
+        }
     },
     //token for password resetting
     resetToken: String,

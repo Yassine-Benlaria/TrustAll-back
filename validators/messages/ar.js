@@ -25,7 +25,46 @@ msg.nothingToChange = "لم تقم بتغيير معلوماتك!"
 msg.passwordNotCorrect = "كلمة السر القديمة غير صحيحة!"
 msg.emailSent = "تفقد حسابك، لقد تم إرسال رمز التأكيد!"
 msg.carName = "خطأ في اسم السيارة!"
+msg.options = {
+    car_information: {
+        car_brand: "ماركة السيارة",
+        car_model: "موديل السيارة",
+        manufacture_year: "سنة التصنيع",
+        kilometer_number: "عدد الكيلومترات",
+        car_plate: "لوحة السيارة",
+        vin: "رقم الشاسيه",
+        gazoline_type: "نوع الوقود",
+        car_color: "لون السيارة"
+    },
+    interior: {
+        internal_order: "الديكورات",
+        seats: "المقاعد",
+        airBags: "الوسائد الهوائية (الايرباق)",
+        floorMats: "سجاد الأرضية",
+        windows: "النوافذ",
+        AC: "التكييف",
+        Radio: "الراديو",
+        Screen: "الشاشة"
+    },
+    exterior: {
+        external_structure: "الهيكل الخارجي",
+        exterior_lights: "الأضواء الخارجية",
+        Tires: "الاطارات",
+        Wiper_Blades: "شفرات المسّاحات",
+        Dents: "الخدوش"
+    },
+    mechanical: {
+        engine_transmission: "المحرك / ناقل الحركة",
+        differential: "الدفرنس / الدبل",
+        engine_cooling_system: "نظام تبريد المحرك",
+        fluid_leaks: "تسرب السائل",
+        Brake_Arms_Shock_absorbs: "الفرامل / الاذرعه / المساعدات",
+        AC_system: "نظام المكيف",
+        electricity_system: "electricity_system",
+        computer_system_scanned: "نتيجة فحص نظام الكمبيوتر"
+    }
 
+}
 
 
 module.exports = msg

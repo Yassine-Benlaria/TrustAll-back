@@ -10,11 +10,12 @@ const cors = require("cors");
 require("dotenv").config();
 
 //import routes
-const clientRoutes = require("./routes/client")
-const adminRoutes = require("./routes/admin")
-const agentRoutes = require("./routes/agent")
-const authRoutes = require("./routes/auth")
-const commandRoutes = require("./routes/command")
+const clientRoutes = require("./routes/client"),
+    adminRoutes = require("./routes/admin"),
+    agentRoutes = require("./routes/agent"),
+    authRoutes = require("./routes/auth"),
+    commandRoutes = require("./routes/command"),
+    planRoutes = require("./routes/plan")
 
 //app
 const app = express();
@@ -37,6 +38,7 @@ app.use("/api/admin", adminRoutes)
 app.use("/api/agent", agentRoutes)
 app.use("/api", authRoutes)
 app.use("/api/command", commandRoutes)
+app.use("/api/plan", planRoutes)
 
 const port = process.env.PORT || 8000;
 

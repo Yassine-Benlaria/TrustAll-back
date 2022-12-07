@@ -25,5 +25,44 @@ msg.nothingToChange = "Nothing to change!"
 msg.passwordNotCorrect = "Old password is not correct!"
 msg.emailSent = "Code sent, check your email!"
 msg.carName = "car name should not be empty!"
+msg.options = {
+    car_information: {
+        car_brand: "car brand",
+        car_model: "car model",
+        manufacture_year: "manufacture year",
+        kilometer_number: "kilometer number",
+        car_plate: "car plate",
+        vin: "Vehicule identification number",
+        gazoline_type: "gazoline type",
+        car_color: "car color"
+    },
+    interior: {
+        internal_order: "internal order",
+        seats: "seats",
+        airBags: "airBags",
+        floorMats: "floorMats",
+        windows: "windows",
+        AC: "AC",
+        Radio: "Radio",
+        Screen: "Screen"
+    },
+    exterior: {
+        external_structure: "external structure",
+        exterior_lights: "exterior lights",
+        Tires: "Tires",
+        Wiper_Blades: "Wiper Blades",
+        Dents: "Dents"
+    },
+    mechanical: {
+        engine_transmission: "engine transmission",
+        differential: "differential",
+        engine_cooling_system: "engine cooling_system",
+        fluid_leaks: "fluid leaks",
+        Brake_Arms_Shock_absorbs: "Brake / Arms / Shock / absorbs",
+        AC_system: "AC system",
+        electricity_system: "electricity system",
+        computer_system_scanned: "Computer scan result"
+    }
 
+}
 module.exports = msg

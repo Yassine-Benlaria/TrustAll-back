@@ -3,6 +3,8 @@ const router = express.Router()
 const cors = require("cors")
 const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan } = require("../controllers/admin")
 const { validator } = require("../validators")
+const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
+
 router.use(cors())
 
 //create an admin account
@@ -23,7 +25,7 @@ router.get("/:id", (req, res) => {
 })
 
 //create new plan
-router.post("/create_plan/:id", createPlan)
+router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
 
 //admin by id middlware
 router.param("id", adminByID)

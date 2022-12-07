@@ -123,7 +123,6 @@ exports.requireSignin = express_jwt({
 //Authentication check
 exports.isAuth = (req, res, next) => {
     let user = req.profile && req.auth && (req.profile._id == req.auth._id)
-
     if (!user) {
         return res.status(403).json({
             error: "Access denied, authentication required!!"
@@ -133,37 +132,61 @@ exports.isAuth = (req, res, next) => {
 };
 
 //Admin check
-exports.isAdmin = (req, res) => {
+exports.isAdmin = (req, res, next) => {
     if (req.profile.type != "admin") {
         return res.status(403).json({
             error: "Access denied!! you are not an admin!!"
         })
     }
+    next();
 }
 
-//Admin check
-exports.isAgent = (req, res) => {
-        if (req.profile.type != "agent") {
-            return res.status(403).json({
-                error: "Access denied!! you are not an agent!!"
-            })
-        }
+//Check if account is verified
+exports.isVerified = (req, res, next) => {
+    if (req.profile.status.verified == false)
+        return res.status(400).json({ err: "Access denied!! this account is not verified!" })
+
+    next();
+}
+
+//check if account is active
+exports.isActive = (req, res, next) => {
+    if (req.profile.status.active == false)
+        return res.status(400).json({ err: "Access denied!! this account is deactivated by admin!" })
+
+    next();
+}
+
+
+//Agent check
+exports.isAgent = (req, res, next) => {
+    if (req.profile.type != "agent") {
+        return res.status(403).json({
+            error: "Access denied!! you are not an agent!!"
+        })
     }
-    //Admin check
-exports.isAuthAgent = (req, res) => {
-        if (req.profile.type != "auth-agent") {
-            return res.status(403).json({
-                error: "Access denied!! you are not an autorized agent!!"
-            })
-        }
+    next();
+}
+
+//AuthAgent check
+exports.isAuthAgent = (req, res, next) => {
+    if (req.profile.type != "auth-agent") {
+        return res.status(403).json({
+            error: "Access denied!! you are not an autorized agent!!"
+        })
     }
-    //Admin check
-exports.isClient = (req, res) => {
+    next();
+}
+
+//Client check
+exports.isClient = (req, res, next) => {
+
     if (req.profile.type != "client") {
         return res.status(403).json({
             error: "Access denied!! you are not a client!!"
         })
     }
+    next();
 }
 
 //requesting to reset password

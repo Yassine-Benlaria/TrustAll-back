@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
 
-//Client status schema
+//Status schema
 const agentStatusSchema = new mongoose.Schema({
     verified: {
         type: Boolean,

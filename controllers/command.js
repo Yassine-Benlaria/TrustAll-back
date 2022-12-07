@@ -1,16 +1,22 @@
 const Command = require("../models/command")
+const Plan = require("../models/plan")
 
 //add new command
 exports.addCommand = (req, res) => {
-    var json = req.body
-    json = {...json, client_id: req.params.id }
-    console.log(json)
 
-    const command = new Command(json)
-    command.save((err, createdCommand) => {
-        if (err || !createdCommand)
-            return res.status(400).json({ err: "cannot create command" });
-        return res.json({ createdCommand });
+    let json = {...req.body, client_id: req.params.id }
+
+    Plan.findById(json.plan_id, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err: "Could not find the plan!" })
+        }
+
+        let command = new Command(json)
+        command.save((err, createdCommand) => {
+            if (err || !createdCommand)
+                return res.status(400).json({ err: "Error occured while creating command!" });
+            return res.json({ createdCommand });
+        })
     })
 }
 

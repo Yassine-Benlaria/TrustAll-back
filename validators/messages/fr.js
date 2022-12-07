@@ -25,6 +25,46 @@ msg.nothingToChange = "Rien à modifier!"
 msg.passwordNotCorrect = "L'ancien mot de passe n'est pass correct!"
 msg.emailSent = "Code envoyé, vérifiez votre email!"
 msg.carName = "Le nom du voiture n'est pas valid!"
+msg.options = {
+    car_information: {
+        car_brand: "Marque de véhicule",
+        car_model: "Modèle de véhicule",
+        manufacture_year: "Année de fabrication",
+        kilometer_number: "kilométrage",
+        car_plate: "plaque de véhicule",
+        vin: "Numéro d'identification de véhicule",
+        gazoline_type: "Type d'essence",
+        car_color: "Couleur de véhicule"
+    },
+    interior: {
+        internal_order: "Décoration interne",
+        seats: "Sièges",
+        airBags: "AirBags",
+        floorMats: "Tapis de sol",
+        windows: "Fenêtres",
+        AC: "Climatiseur",
+        Radio: "Radio",
+        Screen: "Ecran"
+    },
+    exterior: {
+        external_structure: "Structure externe",
+        exterior_lights: "Lumières extérieures",
+        Tires: "Pneus",
+        Wiper_Blades: "Balais d'essuie-glace",
+        Dents: "Rayures"
+    },
+    mechanical: {
+        engine_transmission: "Transmission moteur",
+        differential: "Différentiel",
+        engine_cooling_system: "Système de refroidissement moteur",
+        fluid_leaks: "Fuites de liquide",
+        Brake_Arms_Shock_absorbs: "Frein / Bras / Absorbe les chocs",
+        AC_system: "Système de climatisation",
+        electricity_system: "Système élictricité",
+        computer_system_scan: "Résultat de l'analyse de l'ordinateur"
+    }
+
+}
 
 
 module.exports = msg
