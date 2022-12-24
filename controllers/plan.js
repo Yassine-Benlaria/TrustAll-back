@@ -23,3 +23,27 @@ exports.getPlans = (req, res) => {
         return res.json({ msg: response })
     })
 }
+
+//get plans separated by " - " 
+exports.getPlansFormatted = (req, res) => {
+    let texts = requireMessages(req.params.lang).options
+    Plan.find({}, (err, plans) => {
+        if (err || !plans) return res.status(400).json({ err: "no plans found" })
+        let response = plans.map(plan => {
+            console.table({ test: plan.mechanical })
+            return {
+                _id: plan._id,
+                price: plan.price,
+                price_baridi_mob: plan.price_baridi_mob,
+                decription: plan.description,
+                options: [plan.car_information.map(option => { return texts.car_information[option] }).join(" - "),
+                    plan.interior.map(option => { return texts.interior[option] }).join(" - "),
+                    plan.exterior.map(option => { return texts.exterior[option] }).join(" - "),
+                    plan.mechanical.map(option => { return texts.mechanical[option] }).join(" - ")
+                ].join(" - ")
+
+            }
+        })
+        return res.json({ msg: response })
+    })
+}
