@@ -70,9 +70,9 @@ const agentSchema = new mongoose.Schema({
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,
-    // confirmation_code: {
-    //     type: String,
-    // },
+    confirmation_code: {
+        type: String,
+    },
     status: {
         type: agentStatusSchema,
         default: {

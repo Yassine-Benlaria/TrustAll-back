@@ -8,7 +8,7 @@ const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
 router.use(cors())
 
 //create an admin account
-router.post("/create_admin/:id", validator, createAdmin)
+router.post("/create_admin/:id" /*, validator*/ , createAdmin)
 
 //create agent account
 router.post("/create_agent/:id", createAgent)
@@ -23,6 +23,7 @@ router.post("/create_auth_agent/:id", createAuthAgent)
 router.get("/:id", (req, res) => {
     return res.json(req.profile)
 })
+
 
 //create new plan
 router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)

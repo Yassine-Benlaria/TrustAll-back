@@ -15,7 +15,7 @@ exports.addCommand = (req, res) => {
         command.save((err, createdCommand) => {
             if (err || !createdCommand)
                 return res.status(400).json({ err: "Error occured while creating command!" });
-            return res.json({ createdCommand });
+            return res.json({ msg: "Created successfully!!!" });
         })
     })
 }

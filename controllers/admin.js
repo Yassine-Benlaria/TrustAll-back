@@ -13,10 +13,12 @@ const projection = {
 
 //create an admin
 exports.createAdmin = (req, res) => {
+    console.log("mmak")
     let admin = new Admin(req.body);
 
     admin.save((err, createdAdmin) => {
         if (err) {
+            console.table({ err })
             return res.status(400).json({ err })
         }
         return res.json(projectObject(createdAdmin, {
@@ -37,7 +39,7 @@ exports.createAgent = (req, res) => {
     let json = req.body;
     //generating random password
     json.created_by = req.params.id
-    json.password = generateRandomPassword();
+    json.password = generatefRandomPassword();
 
     const agent = new Agent(json)
     agent.save((err, createdAgent) => {
@@ -133,7 +135,7 @@ exports.createPlan = (req, res) => {
     let plan = new Plan(json)
     plan.save((err, createdPlan) => {
         if (err || !createdPlan) {
-            console.log("err:", err)
+            console.table({ err })
             return res.status(400).json({ err: "err while creating new plan!" })
         }
         return res.json({ msg: "plan created successfully!" })

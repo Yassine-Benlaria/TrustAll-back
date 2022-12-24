@@ -8,8 +8,6 @@ exports.generateConfirmationCode = () => {
     return code
 }
 
-
-
 //sending emails
 var transporter = nodemailer.createTransport({
     host: 'smtp.mail.yahoo.com',
