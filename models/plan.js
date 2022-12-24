@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 const planSchema = new mongoose.Schema({
+    title: { type: String, required: true },
     car_information: {
         type: Array
     },
@@ -16,7 +17,9 @@ const planSchema = new mongoose.Schema({
     price: {
         type: String,
         required: true
-    }
+    },
+    price_baridi_mob: { type: String, required: true },
+    decription: { type: String, required: true },
 }, {
     timestamps: true
 })

@@ -12,6 +12,7 @@ exports.getPlans = (req, res) => {
             return {
                 _id: plan._id,
                 price: plan.price,
+                title: plan.title,
                 price_baridi_mob: plan.price_baridi_mob,
                 decription: plan.description,
                 car_information: plan.car_information.map(option => { return texts.car_information[option] }),
@@ -33,6 +34,7 @@ exports.getPlansFormatted = (req, res) => {
             console.table({ test: plan.mechanical })
             return {
                 _id: plan._id,
+                title: plan.title,
                 price: plan.price,
                 price_baridi_mob: plan.price_baridi_mob,
                 decription: plan.description,
