@@ -21,7 +21,7 @@ router.post("/create_auth_agent/:id", createAuthAgent)
 
 //admin by id API
 router.get("/:id/:lang", (req, res) => {
-    return res.json(req.profile)
+    return res.json({ user: req.profile })
 })
 
 
