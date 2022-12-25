@@ -2,7 +2,7 @@ const Agent = require("../models/agent")
 const Admin = require("../models/admin")
 const Plan = require("../models/plan")
 const AuthAgent = require("../models/auth-agent")
-const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode } = require("../helpers");
+const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
 const projection = {
     salt: false,
