@@ -1,5 +1,6 @@
 const Command = require("../models/command")
 const Plan = require("../models/plan")
+const mongoose = require("mongoose")
 
 //add new command
 exports.addCommand = (req, res) => {
@@ -22,7 +23,48 @@ exports.addCommand = (req, res) => {
 
 //get all commands
 exports.getAllCommands = (req, res) => {
-    Command.find({}, (err, result) => {
+    Command.aggregate([{
+            $lookup: {
+                from: 'plans',
+                localField: 'plan_id',
+                foreignField: '_id',
+                as: 'plan'
+            }
+        },
+        {
+            $set: {
+                plan: { $arrayElemAt: ["$plan.title", 0] }
+            }
+        }
+    ], (err, result) => {
+        if (err || !result) {
+            return res.status(400).json(err)
+        }
+        return res.json(result)
+    })
+}
+
+//get commands by client ID
+exports.getCommandsByClientID = (req, res) => {
+    console.log(req.params)
+    Command.aggregate([{
+            $lookup: {
+                from: 'plans',
+                localField: 'plan_id',
+                foreignField: '_id',
+                as: 'plan'
+            }
+        },
+        {
+            $set: {
+                plan: { $arrayElemAt: ["$plan.title", 0] }
+            }
+        },
+        { $match: { client_id: mongoose.Types.ObjectId(req.params.id) } }
+        // {
+        //     client_id: req.params.id
+        // }
+    ], (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
         }

@@ -8,7 +8,7 @@ exports.getPlans = (req, res) => {
     Plan.find({}, (err, plans) => {
         if (err || !plans) return res.status(400).json({ err: "no plans found" })
         let response = plans.map(plan => {
-            console.table({ test: plan.mechanical })
+            // console.table({ test: plan.mechanical })
             return {
                 _id: plan._id,
                 price: plan.price,
@@ -31,7 +31,7 @@ exports.getPlansFormatted = (req, res) => {
     Plan.find({}, (err, plans) => {
         if (err || !plans) return res.status(400).json({ err: "no plans found" })
         let response = plans.map(plan => {
-            console.table({ test: plan.mechanical })
+            // console.table({ test: plan.mechanical })
             return {
                 _id: plan._id,
                 title: plan.title,

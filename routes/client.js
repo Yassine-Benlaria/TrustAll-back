@@ -3,8 +3,8 @@ const router = express.Router()
 const cors = require("cors")
 const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
-const { isAuth, requireSignin } = require("../controllers/auth")
-const { addCommand } = require("../controllers/command")
+const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
+const { addCommand, getCommandsByClientID } = require("../controllers/command")
 router.use(cors())
 
 //signup route
@@ -12,6 +12,10 @@ router.post("/signup", validator, signup)
 
 //email confirmation route
 router.post("/confirm/:id", requireSignin, isAuth, confirmEmail)
+
+
+//get commands
+router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID)
 
 //get clients list
 router.get("/all", getClientsList)
