@@ -141,3 +141,65 @@ exports.createPlan = (req, res) => {
         return res.json({ msg: "plan created successfully!" })
     })
 }
+
+//add new email
+exports.addEmail = (req, res) => {
+    const code = generateConfirmationCode()
+    Admin.findById(req.params.id, (err, admin) => {
+        //if no account found
+        if (err || !admin) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        if (admin.email == req.body.email) return res.status(400).json({ err: "You are already using this email!" })
+
+        //else
+        admin.newEmail = req.body.email;
+        admin.newEmailConfirmation = code;
+        admin.newEmailConfirmationExpiration = Date.now() + 180000;
+        admin.save()
+        sendConfirmationMail(req.body.email, code, req.body.lang);
+        return res.json({ msg: "confirmation code sent to email!" })
+    });
+}
+
+
+//confirm the new email
+exports.confirmNewEmail = (req, res) => {
+    Admin.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
+        .then(admin => {
+            if (!admin) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
+            if (admin.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            admin.email = admin.newEmail;
+            admin.newEmail = undefined;
+            admin.newEmailConfirmation = undefined;
+            admin.newEmailConfirmationExpiration = undefined;
+            admin.save();
+            return res.json({ msg: "Email address has been modified!" })
+        })
+}
+
+//resend confirmation code
+exports.resendConfirmEmail = (req, res) => {
+    Admin.findById(req.params.id, (err, admin) => {
+        if (err || !admin) return res.status(400).json({ msg: requireMessages(req.body.lang).noAccountFound });
+
+        //if an account found
+        var code = generateConfirmationCode();
+
+        if (req.body.type == "new-email") {
+            if (admin.newEmail) {
+                //if 60 seconds doesn't pass yet
+                if (Date.parse(admin.newEmailConfirmationExpiration) - 120000 > (Date.now()))
+                    return res.status(400).json({ err: "you have to wait 60 seconds!" });
+                //else
+                admin.newEmailConfirmation = code;
+                admin.newEmailConfirmationExpiration = Date.now() + 180000;
+                admin.save();
+                sendConfirmationMail(admin.newEmail, code, req.body.lang);
+            } else return res.status(400).json({ err: "want to resend code, but no newEmail found!" });
+        } else {
+            admin.confirmation_code = code;
+            admin.save();
+            sendConfirmationMail(admin.email, code, req.body.lang);
+        }
+        return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
+}

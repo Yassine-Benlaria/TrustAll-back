@@ -50,6 +50,10 @@ const adminSchema = new mongoose.Schema({
     //     type: Boolean,
     //     default: false
     // },
+    //for changing the email
+    newEmail: String,
+    newEmailConfirmation: String,
+    newEmailConfirmationExpiration: Date,
     salt: { type: String },
     hashed_password: {
         type: String,

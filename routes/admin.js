@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan } = require("../controllers/admin")
+const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/admin")
 const { validator } = require("../validators")
 const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
 
@@ -24,6 +24,15 @@ router.get("/:id/:lang", (req, res) => {
     return res.json({ user: req.profile })
 })
 
+
+//add new email address
+router.post("/new-email/:id", requireSignin, isAuth, addEmail)
+
+//confirm new email
+router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
+
+//resent confirmation code
+router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //create new plan
 router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
