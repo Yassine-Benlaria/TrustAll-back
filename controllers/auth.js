@@ -102,7 +102,7 @@ exports.signIn = (req, res) => {
 
             //return response
             const { _id, first_name, last_name, email } = admin;
-            return res.json({ token, user: { _id, first_name, last_name, email, type: "admin" } })
+            return res.json({ token, user: { _id, first_name, status: { verified: true }, last_name, email, type: "admin" } })
         }
     })
 }
