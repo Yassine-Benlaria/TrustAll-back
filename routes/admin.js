@@ -1,11 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/admin")
+const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail, changeAdminPassword } = require("../controllers/admin")
 const { validator } = require("../validators")
 const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
 
 router.use(cors())
+
+//change password
+router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
 
 //create an admin account
 router.post("/create_admin/:id" /*, validator*/ , createAdmin)

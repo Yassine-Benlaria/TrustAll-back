@@ -112,6 +112,7 @@ exports.adminByID = (req, res, next, id) => {
 
 //update admin
 exports.updateAdmin = (req, res) => {
+    console.table(req.body)
     let json = {}
 
     if (req.body.first_name) json.first_name = req.body.first_name
@@ -201,5 +202,25 @@ exports.resendConfirmEmail = (req, res) => {
             sendConfirmationMail(admin.email, code, req.body.lang);
         }
         return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
+}
+
+//change password
+exports.changeAdminPassword = (req, res) => {
+    const { noAccountFound, passwordNotCorrect, updatedSuccess } = requireMessages(req.body.lang)
+    Admin.findById(req.params.id, (err, admin) => {
+        if (err || !admin)
+            return res.status(400).json({ err: noAccountFound });
+        if (!admin.authenticate(req.body.old_password))
+            return res.status(400).json({ err: passwordNotCorrect })
+        let salt = uuidv1(),
+            hashed_password = crypto
+            .createHmac('sha1', salt)
+            .update(req.body.password)
+            .digest("hex");
+        admin.hashed_password = hashed_password;
+        admin.salt = salt;
+        admin.save();
+        return res.json({ msg: updatedSuccess });
     })
 }

@@ -37,7 +37,7 @@ router.post("/update/:id", requireSignin, isAuth, clientUpdateValidator, updateC
 router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 
 //confirm new email
-router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail);
+router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
