@@ -20,7 +20,7 @@ router.post("/update/:id", updateAdmin)
 router.post("/create_auth_agent/:id", createAuthAgent)
 
 //admin by id API
-router.get("/:id", (req, res) => {
+router.get("/:id/:lang", (req, res) => {
     return res.json(req.profile)
 })
 
