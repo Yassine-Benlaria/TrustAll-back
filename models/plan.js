@@ -19,7 +19,7 @@ const planSchema = new mongoose.Schema({
         required: true
     },
     price_baridi_mob: { type: String, required: true },
-    decription: { type: String, required: true },
+    description: { type: String, required: true },
 }, {
     timestamps: true
 })
