@@ -118,7 +118,11 @@ exports.updateAdmin = (req, res) => {
     if (req.body.first_name) json.first_name = req.body.first_name
     if (req.body.last_name) json.last_name = req.body.last_name
     if (req.body.birth_date) json.birth_date = req.body.birth_date
-
+    if (isNumeric(req.body.city)) {
+        if (parseFloat(req.body.city) < 1 || parseFloat(req.body.city) > 58)
+            return res.status(400).json({ err: "invalid city" })
+        json.city = req.body.city
+    }
     Admin.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
         if (err || !result) {
             return res.status(400).json({ err })
@@ -223,4 +227,10 @@ exports.changeAdminPassword = (req, res) => {
         admin.save();
         return res.json({ msg: updatedSuccess });
     })
+}
+
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
