@@ -2,6 +2,7 @@ const Agent = require("../models/agent")
 const Admin = require("../models/admin")
 const Plan = require("../models/plan")
 const AuthAgent = require("../models/auth-agent")
+const crypto = require("crypto")
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
 const { v1: uuidv1 } = require("uuid");
