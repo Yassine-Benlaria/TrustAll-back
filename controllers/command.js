@@ -47,7 +47,9 @@ exports.getAllCommands = (req, res) => {
 //get commands by client ID
 exports.getCommandsByClientID = (req, res) => {
     console.log(req.params)
-    Command.aggregate([{
+    Command.aggregate([
+        { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
+        {
             $lookup: {
                 from: 'plans',
                 localField: 'plan_id',

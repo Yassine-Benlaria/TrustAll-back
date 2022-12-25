@@ -13,9 +13,8 @@ router.post("/signup", validator, signup)
 //email confirmation route
 router.post("/confirm/:id", requireSignin, isAuth, confirmEmail)
 
-
 //get commands
-router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID)
+router.get("/commands/:id" /*, requireSignin, isAuth, isVerified, isActive*/ , getCommandsByClientID)
 
 //get clients list
 router.get("/all", getClientsList)
