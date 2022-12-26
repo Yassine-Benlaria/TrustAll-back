@@ -141,6 +141,16 @@ exports.isAdmin = (req, res, next) => {
     next();
 }
 
+//if user is Admin or Auth-agent
+exports.isAdminOrAgent = (req, res, next) => {
+    if (req.profile.type != "admin" && req.profile.type != "auth-agent") {
+        return res.status(403).json({
+            error: "Access denied!! You are not authorized to access this route!!"
+        })
+    }
+    next();
+}
+
 //Check if account is verified
 exports.isVerified = (req, res, next) => {
     if (req.profile.status.verified == false)

@@ -6,6 +6,7 @@ const crypto = require("crypto")
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
 const { v1: uuidv1 } = require("uuid");
+const { getCitiesList } = require("../validators/cities")
 
 
 const projection = {
@@ -109,7 +110,8 @@ exports.adminByID = (req, res, next, id) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        req.profile = {...result._doc, type: "admin" }
+        let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == result.city).wilaya_name
+        req.profile = {...result._doc, city, type: "admin" }
         next();
     })
 }

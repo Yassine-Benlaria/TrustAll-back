@@ -2,14 +2,15 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture } = require("../controllers/auth-agent")
+const { requireSignin, isAuth, isAdmin, isAdminOrAgent } = require("../controllers/auth")
 router.use(cors())
 
 
 //get AuthAgents list (filtered)
-router.get("/all", getAuthAgentsList)
+router.get("/all", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
 //get Authorized Agent by id
-router.get("/:id", (req, res) => {
+router.get("/:id", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
     return res.json(req.profile)
 });
 
