@@ -13,7 +13,8 @@ require("dotenv").config();
 const clientRoutes = require("./routes/client"),
     adminRoutes = require("./routes/admin"),
     agentRoutes = require("./routes/agent"),
-    authRoutes = require("./routes/auth"),
+    authAgentRoutes = require("./routes/auth-agent")
+authRoutes = require("./routes/auth"),
     commandRoutes = require("./routes/command"),
     planRoutes = require("./routes/plan")
 
@@ -35,6 +36,7 @@ app.use(expressValidator())
 //routes middlware
 app.use("/api/client", clientRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/api/auth-agent", authAgentRoutes)
 app.use("/api/agent", agentRoutes)
 app.use("/api", authRoutes)
 app.use("/api/command", commandRoutes)
