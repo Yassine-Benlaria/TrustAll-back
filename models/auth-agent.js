@@ -27,7 +27,7 @@ const authAgentSchema = new mongoose.Schema({
         required: true,
         maxlength: 32,
     },
-    family_name: {
+    last_name: {
         type: String,
         trim: true,
         required: true,

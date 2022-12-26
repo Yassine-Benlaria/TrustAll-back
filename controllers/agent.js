@@ -1,7 +1,8 @@
 const Agent = require("../models/agent")
 const multer = require("multer")
 const fs = require("fs")
-const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader")
+const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
+const { getCitiesList } = require("../validators/cities");
 const projection = {
     salt: false,
     hashed_password: false,
@@ -58,11 +59,24 @@ exports.getAgentsList = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        return res.json(result)
+        let citiesList = getCitiesList(req.params.lang)
+        let agents = result.map(user => {
+            let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+            return {...user._doc, city }
+        })
+        return res.json(agents)
     })
 }
 
-//update agent's info (first_name, last_name, birth_date)
+//set auth-agent Inactive
+exports.deactivateAgent = (req, res) => {
+        Agent.updateOne({ _id: req.body.agent_id }, { $set: { status: { active: false } } },
+            (err, result) => {
+                if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+                return res.json({ response: "Agent deativated!" })
+            })
+    }
+    //update agent's info (first_name, last_name, birth_date)
 exports.updateAgent = (req, res) => {
     let json = {}
 
