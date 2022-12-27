@@ -17,12 +17,8 @@ router.post("/confirm/:id", requireSignin, isAuth, confirmEmail)
 router.get("/commands/:id" /*, requireSignin, isAuth, isVerified, isActive*/ , getCommandsByClientID)
 
 //get clients list
-router.get("/all", getClientsList)
+// router.get("/all/:lang", getClientsList)
 
-//get client info
-router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
-    return res.json({ user: req.profile })
-});
 
 //change password
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeClientPassword);
@@ -44,6 +40,11 @@ router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //add new command
 router.post("/add-command/:id", /*requireSignin, isAuth,*/ addCommandValidator, addCommand)
+
+//get client info
+router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
+    return res.json({ user: req.profile })
+});
 
 //clientById middlware
 router.param("id", clientByID)

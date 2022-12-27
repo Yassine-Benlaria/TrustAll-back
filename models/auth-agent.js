@@ -21,6 +21,10 @@ const authAgentStatusSchema = new mongoose.Schema({
 
 //AuthAgent schema
 const authAgentSchema = new mongoose.Schema({
+    created_by: {
+        type: String,
+        required: true
+    },
     first_name: {
         type: String,
         trim: true,

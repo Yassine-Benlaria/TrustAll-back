@@ -10,7 +10,12 @@ var projection = {
     hashed_password: false,
     updatedAt: false,
     __v: false,
-    confirmation_code: false
+    confirmation_code: false,
+    resetToken: false,
+    resetTokenExpiration: false,
+    newEmail: false,
+    newEmailConfirmation: false,
+    newEmailConfirmationExpiration: false,
 };
 
 //signup
@@ -85,7 +90,12 @@ exports.getClientsList = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        return res.json(result)
+        let clients = result.map(client => {
+            let commune = getCommuneByID(client.commune_id)
+            let address = req.params.lang == "ar" ? `${commune.commune_name}, ${commune.daira_name}, ${commune.wilaya_name}` : `${commune.commune_name_ascii}, ${commune.daira_name_ascii}, ${commune.wilaya_name_ascii}`
+            return {...client._doc, address }
+        })
+        return res.json(clients)
     })
 }
 
@@ -226,4 +236,25 @@ exports.resendConfirmEmail = (req, res) => {
         }
         return res.json({ msg: requireMessages(req.body.lang).emailSent })
     })
+}
+
+
+//set client Inactive
+exports.deactivateClient = (req, res) => {
+    console.table(req.body)
+    Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: false } } },
+        (err, result) => {
+            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+            return res.json({ response: "Client deativated!" })
+        })
+}
+
+//set client active
+exports.activateClient = (req, res) => {
+    console.log(req.body)
+    Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: true } } },
+        (err, result) => {
+            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+            return res.json({ response: "Client ativated!" })
+        })
 }

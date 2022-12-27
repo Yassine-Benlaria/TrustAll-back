@@ -4,16 +4,20 @@ const cors = require("cors")
 const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail, changeAdminPassword } = require("../controllers/admin")
 const { validator, passwordValidator } = require("../validators")
 const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
-const { deactivateAuthAgent, getAuthAgentsList } = require("../controllers/auth-agent")
-const { getAgentsList, deactivateAgent } = require("../controllers/agent")
+const { deactivateAuthAgent, getAuthAgentsList, activateAuthAgent } = require("../controllers/auth-agent")
+const { getAgentsList, deactivateAgent, activateAgent } = require("../controllers/agent")
+const { getClientsList, deactivateClient, activateClient } = require("../controllers/client")
 
 router.use(cors())
 
 //get auth agents list
-router.get("/auth-agent/all/:id/:lang", /* requireSignin, isAuth, isAdmin,*/ getAuthAgentsList)
+router.get("/auth-agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
 //get auth agents list
-router.get("/agent/all/:id/:lang", /*requireSignin, isAuth, isAdmin,*/ getAgentsList)
+router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
+
+//get clients list
+router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsList)
 
 //change password
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
@@ -31,10 +35,22 @@ router.post("/update/:id", updateAdmin)
 router.post("/create_auth_agent/:id", createAuthAgent)
 
 //deactivate auth-agent
-router.post("/deactivate-auth-agent/:id", deactivateAuthAgent)
+router.post("/deactivate-auth-agent/:id", requireSignin, isAuth, isAdmin, deactivateAuthAgent)
+
+//activate auth-agent
+router.post("/activate-auth-agent/:id", requireSignin, isAuth, isAdmin, activateAuthAgent)
 
 //deactivate agent
-router.post("/deactivate-agent/:id", deactivateAgent)
+router.post("/deactivate-agent/:id", requireSignin, isAuth, isAdmin, deactivateAgent)
+
+//activate agent
+router.post("/activate-agent/:id", requireSignin, isAuth, isAdmin, activateAgent)
+
+//deactivate client
+router.post("/deactivate-client/:id", requireSignin, isAuth, isAdmin, deactivateClient)
+
+//activate client
+router.post("/activate-client/:id", requireSignin, isAuth, isAdmin, activateClient)
 
 
 //add new email address

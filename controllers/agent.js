@@ -68,15 +68,26 @@ exports.getAgentsList = (req, res) => {
     })
 }
 
-//set auth-agent Inactive
+//set agent Inactive
 exports.deactivateAgent = (req, res) => {
-        Agent.updateOne({ _id: req.body.agent_id }, { $set: { status: { active: false } } },
-            (err, result) => {
-                if (err || !result) return res.status(400).json({ err: "cannot find this user" })
-                return res.json({ response: "Agent deativated!" })
-            })
-    }
-    //update agent's info (first_name, last_name, birth_date)
+    console.table(req.body)
+    Agent.updateOne({ _id: req.body.agent_id }, { $set: { status: { active: false } } },
+        (err, result) => {
+            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+            return res.json({ response: "Agent deativated!" })
+        })
+}
+
+//set agent active
+exports.activateAgent = (req, res) => {
+    Agent.updateOne({ _id: req.body.agent_id }, { $set: { status: { active: true } } },
+        (err, result) => {
+            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+            return res.json({ response: "Agent ativated!" })
+        })
+}
+
+//update agent's info (first_name, last_name, birth_date)
 exports.updateAgent = (req, res) => {
     let json = {}
 

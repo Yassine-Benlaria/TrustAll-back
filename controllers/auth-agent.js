@@ -43,6 +43,16 @@ exports.deactivateAuthAgent = (req, res) => {
         })
 }
 
+//set auth-agent Inactive
+exports.activateAuthAgent = (req, res) => {
+    console.table(req.body)
+    AuthAgent.updateOne({ _id: req.body.auth_agent_id }, { $set: { status: { active: true } } },
+        (err, result) => {
+            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+            return res.json({ response: "Authorized Agent ativated!" })
+        })
+}
+
 //update authAgent's info (first_name, last_name, birth_date)
 exports.updateAuthAgent = (req, res) => {
     let json = {}
