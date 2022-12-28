@@ -133,7 +133,7 @@ exports.updateAdmin = (req, res) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        return res.json({ response: "Admin updated successfully!" })
+        return res.json({ msg: requireMessages(req.body.lang).updatedSuccess })
     })
 }
 
