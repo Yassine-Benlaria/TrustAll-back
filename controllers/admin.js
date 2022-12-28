@@ -129,6 +129,7 @@ exports.updateAdmin = (req, res) => {
             return res.status(400).json({ err: "invalid city" })
         json.city = req.body.city
     }
+    if (Object.keys(json).length < 1) return res.status(400).json({ err: "You haven't update anything!" })
     Admin.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
         if (err || !result) {
             return res.status(400).json({ err })
