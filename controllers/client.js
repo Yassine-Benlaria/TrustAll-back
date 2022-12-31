@@ -101,6 +101,7 @@ exports.getClientsList = (req, res) => {
 
 //update client info (first_name, last_name or birth_date)
 exports.updateClient = (req, res) => {
+
     let json = {}
 
     if (req.body.first_name && (req.body.first_name != req.profile.first_name))
@@ -205,8 +206,11 @@ exports.confirmNewEmail = (req, res) => {
             client.newEmail = undefined;
             client.newEmailConfirmation = undefined;
             client.newEmailConfirmationExpiration = undefined;
-            client.save();
-            return res.json({ msg: "Email address has been modified!" })
+            client.save().then(result => {
+                return res.json({ msg: requireMessages(req.body.lang).emailModified })
+            }).catch(err => {
+                return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
+            });
         })
 }
 
@@ -237,7 +241,6 @@ exports.resendConfirmEmail = (req, res) => {
         return res.json({ msg: requireMessages(req.body.lang).emailSent })
     })
 }
-
 
 //set client Inactive
 exports.deactivateClient = (req, res) => {

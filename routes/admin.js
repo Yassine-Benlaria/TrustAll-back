@@ -1,19 +1,25 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail, changeAdminPassword } = require("../controllers/admin")
-const { validator, passwordValidator } = require("../validators")
-const { isAuth, requireSignin, isAdmin } = require("../controllers/auth")
-const { deactivateAuthAgent, getAuthAgentsList, activateAuthAgent } = require("../controllers/auth-agent")
+const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail, changeAdminPassword, getSubAdminsList } = require("../controllers/admin")
+const { validator, passwordValidator, createAuthAgentValidator } = require("../validators")
+const { isAuth, requireSignin, isAdmin, isMainAdmin } = require("../controllers/auth")
+const { deactivateAuthAgent, getAuthAgentsList, activateAuthAgent, getAuthAgentsNames } = require("../controllers/auth-agent")
 const { getAgentsList, deactivateAgent, activateAgent } = require("../controllers/agent")
 const { getClientsList, deactivateClient, activateClient } = require("../controllers/client")
 
 router.use(cors())
 
+//get sub admins list
+router.get("/sub-admin/all/:id/:lang", requireSignin, isAuth, isAdmin, isMainAdmin, getSubAdminsList)
+
 //get auth agents list
 router.get("/auth-agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
-//get auth agents list
+//get auth agents names
+router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsNames)
+
+//get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
 
 //get clients list
@@ -23,16 +29,16 @@ router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsLi
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
 
 //create an admin account
-router.post("/create_admin/:id" /*, validator*/ , createAdmin)
+router.post("/create-sub-admin/:id", requireSignin, isAuth, isAdmin, createAuthAgentValidator, createAdmin)
 
 //create agent account
-router.post("/create_agent/:id", createAgent)
+router.post("/create-agent/:id", createAgent)
 
 //update admin's info
 router.post("/update/:id", updateAdmin)
 
 //create auth-agent account
-router.post("/create_auth_agent/:id", createAuthAgent)
+router.post("/create-auth-agent/:id", createAuthAgentValidator, requireSignin, isAuth, isAdmin, createAuthAgent)
 
 //deactivate auth-agent
 router.post("/deactivate-auth-agent/:id", requireSignin, isAuth, isAdmin, deactivateAuthAgent)

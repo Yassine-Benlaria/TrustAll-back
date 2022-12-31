@@ -8,7 +8,6 @@ const { scanOptions } = require("../helpers/options")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList } = require("../validators/cities")
 
-
 const projection = {
     salt: false,
     hashed_password: false,
@@ -18,8 +17,13 @@ const projection = {
 
 //create an admin
 exports.createAdmin = (req, res) => {
-    console.log("mmak")
-    let admin = new Admin(req.body);
+    let json = req.body
+    console.table(req.body)
+
+    //generating random password
+    let password = generateRandomPassword();
+
+    let admin = new Admin({...json, created_by: req.params.id, password: password });
 
     admin.save((err, createdAdmin) => {
         if (err) {
@@ -41,11 +45,11 @@ exports.createAdmin = (req, res) => {
 
 //creating new agent
 exports.createAgent = (req, res) => {
+    console.table(req.body)
     let json = req.body;
     //generating random password
     json.created_by = req.params.id
-    json.password = generatefRandomPassword();
-
+    json.password = generateRandomPassword();
     const agent = new Agent(json)
     agent.save((err, createdAgent) => {
         if (err) {
@@ -58,16 +62,17 @@ exports.createAgent = (req, res) => {
         //sending email to agent
         sendConfirmationMail(json.email, json.password)
 
-        ////saving to DB
-        res.json(projectObject(createdAgent, {
-            _id: 1,
-            first_name: 1,
-            last_name: 1,
-            email: 1,
-            phone: 1,
-            city: 1,
-            birth_date: 1
-        }))
+        return res.json({ msg: "Agent created successfully!" })
+            ///saving to DB
+            // res.json(projectObject(createdAgent, {
+            //     _id: 1,
+            //     first_name: 1,
+            //     last_name: 1,
+            //     email: 1,
+            //     phone: 1,
+            //     city: 1,
+            //     birth_date: 1
+            // }))
     })
 }
 
@@ -78,7 +83,8 @@ exports.createAuthAgent = (req, res) => {
     json.created_by = req.params.id
     json.password = generateRandomPassword();
 
-    const authAgent = new AuthAgent(json)
+    console.table(req.body)
+    const authAgent = new AuthAgent({...json, created_by: req.params.id })
     authAgent.save((err, created) => {
         if (err) {
             console.log(err)
@@ -111,7 +117,7 @@ exports.adminByID = (req, res, next, id) => {
             return res.status(400).json({ err })
         }
         let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == result.city).wilaya_name
-        req.profile = {...result._doc, city, type: "admin" }
+        req.profile = {...result._doc, city_number: result.city, city, type: "admin" }
         next();
     })
 }
@@ -121,22 +127,32 @@ exports.updateAdmin = (req, res) => {
     console.table(req.body)
     let json = {}
 
-    if (req.body.first_name) json.first_name = req.body.first_name
-    if (req.body.last_name) json.last_name = req.body.last_name
-    if (req.body.birth_date) json.birth_date = req.body.birth_date
+    if (req.body.first_name && (req.body.first_name != req.profile.first_name))
+        json.first_name = req.body.first_name
+    if (req.body.last_name && (req.body.last_name != req.profile.last_name))
+        json.last_name = req.body.last_name
+
+    // console.log(admin.birth_date.toISOString())
+    if (req.body.birth_date && (new Date(req.body.birth_date).toISOString() != new Date(req.profile.birth_date).toISOString()))
+        json.birth_date = req.body.birth_date
     if (isNumeric(req.body.city)) {
         if (parseFloat(req.body.city) < 1 || parseFloat(req.body.city) > 58)
             return res.status(400).json({ err: "invalid city" })
-        json.city = req.body.city
+        if (req.body.city != req.profile.city_number)
+            json.city = req.body.city
     }
-    console.table({ length: Object.keys(json).length })
-    if (Object.keys(json).length < 1) return res.status(400).json({ err: "You haven't update anything!" })
+
+    // console.table({ length: Object.keys(json).length, json, city: req.profile.city })
+    if (Object.keys(json).length < 1)
+        return res.status(400).json({ err: requireMessages(req.body.lang).nothingToChange })
     Admin.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
         return res.json({ msg: requireMessages(req.body.lang).updatedSuccess })
     })
+
+
 }
 
 //create new plan
@@ -173,7 +189,6 @@ exports.addEmail = (req, res) => {
     });
 }
 
-
 //confirm the new email
 exports.confirmNewEmail = (req, res) => {
     Admin.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
@@ -184,8 +199,11 @@ exports.confirmNewEmail = (req, res) => {
             admin.newEmail = undefined;
             admin.newEmailConfirmation = undefined;
             admin.newEmailConfirmationExpiration = undefined;
-            admin.save();
-            return res.json({ msg: "Email address has been modified!" })
+            admin.save().then(result => {
+                return res.json({ msg: requireMessages(req.body.lang).emailModified })
+            }).catch(err => {
+                return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
+            });
         })
 }
 
@@ -241,4 +259,20 @@ function isNumeric(str) {
     if (typeof str != "string") return false // we only process strings!  
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+//get sub-admins list
+exports.getSubAdminsList = (req, res) => {
+    Admin.find({ role: "sub_admin" }, projection, (err, result) => {
+        if (err) {
+            return res.status(400).json({ err: "Error occured!" });
+        }
+
+        let citiesList = getCitiesList(req.params.lang)
+        let subAdmins = result.map(user => {
+            let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+            return {...user._doc, city }
+        })
+        return res.json(subAdmins)
+    })
 }

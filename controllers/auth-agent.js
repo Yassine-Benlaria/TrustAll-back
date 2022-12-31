@@ -18,7 +18,7 @@ exports.authAgentByID = (req, res, next, id) => {
     })
 }
 
-//get agents list
+//get auth agents list
 exports.getAuthAgentsList = (req, res) => {
     AuthAgent.find(req.body, projection, (err, result) => {
         if (err || !result) {
@@ -30,6 +30,17 @@ exports.getAuthAgentsList = (req, res) => {
             return {...user._doc, city }
         })
         return res.json(authAgents)
+    })
+}
+
+//get auth agents names
+exports.getAuthAgentsNames = (req, res) => {
+    AuthAgent.find(req.body, { _id: true, first_name: true, last_name: true }, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json(err)
+        }
+
+        return res.json(result)
     })
 }
 

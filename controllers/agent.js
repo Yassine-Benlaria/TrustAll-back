@@ -55,14 +55,41 @@ exports.agentByID = (req, res, next, id) => {
 
 //get agents list
 exports.getAgentsList = (req, res) => {
-    Agent.find(req.body, projection, (err, result) => {
+
+    Agent.aggregate([
+        { $project: { _id: 1, createdAt: 1, first_name: 1, last_name: 1, city: 1, email: 1, phone: 1, birth_date: 1, auth_agent_ID: 1, status: 1 } },
+        {
+            $lookup: {
+                from: "authagents",
+                localField: "auth_agent_ID",
+                foreignField: "_id",
+                as: "auth_agent"
+            },
+
+        },
+        {
+            $set: {
+                auth_agent_first_name: { $arrayElemAt: ["$auth_agent.first_name", 0] }
+            }
+        },
+        {
+            $set: {
+                auth_agent_last_name: { $arrayElemAt: ["$auth_agent.last_name", 0] }
+            }
+        },
+        {
+            $set: {
+                auth_agent: undefined
+            }
+        },
+    ], (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
         let citiesList = getCitiesList(req.params.lang)
         let agents = result.map(user => {
             let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
-            return {...user._doc, city }
+            return {...user, city }
         })
         return res.json(agents)
     })

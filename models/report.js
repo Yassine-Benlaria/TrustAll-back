@@ -2,33 +2,15 @@ const mongoose = require("mongoose")
 
 const reportSchema = new mongoose.Schema({
     car_information: {
-        car_brand: {
-            type: String,
-        },
-        car_model: {
-            type: String,
-        },
-        manufacture_year: {
-            type: String,
-        },
-        kilometer_number: {
-            type: String,
-        },
-        car_brand: {
-            type: String,
-        },
-        vin: {
-            type: String,
-        },
-        car_plate: {
-            type: String,
-        },
-        gazoline_type: {
-            type: String,
-        },
-        car_color: {
-            type: String,
-        },
+        car_brand: { type: String, },
+        car_model: { type: String, },
+        manufacture_year: { type: String, },
+        kilometer_number: { type: String, },
+        car_brand: { type: String, },
+        vin: { type: String, },
+        car_plate: { type: String, },
+        gazoline_type: { type: String, },
+        car_color: { type: String, },
 
     },
     interior: {

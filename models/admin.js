@@ -2,6 +2,21 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
+//Status schema
+const adminStatusSchema = new mongoose.Schema({
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    active: {
+        type: Boolean,
+        default: true
+    },
+    online: {
+        type: Boolean,
+    }
+})
+
 //Admin schema
 const adminSchema = new mongoose.Schema({
     first_name: {
@@ -35,6 +50,13 @@ const adminSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    status: {
+        type: adminStatusSchema,
+        default: {
+            verified: false,
+            active: true,
+        }
+    },
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,
@@ -50,6 +72,14 @@ const adminSchema = new mongoose.Schema({
     //     type: Boolean,
     //     default: false
     // },
+    role: {
+        type: String,
+        require: true,
+        default: "sub_admin"
+    },
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
     //for changing the email
     newEmail: String,
     newEmailConfirmation: String,
@@ -60,7 +90,6 @@ const adminSchema = new mongoose.Schema({
         required: true
     }
 }, { timestamps: true });
-
 
 // virtual field
 adminSchema
@@ -92,4 +121,6 @@ adminSchema.methods = {
         }
     }
 };
+
+//export the model
 module.exports = mongoose.model("Admin", adminSchema);

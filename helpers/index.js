@@ -7,6 +7,7 @@ exports.generateConfirmationCode = () => {
     }
     return code
 }
+const logo_url = "https://prickly-beanie-fox.cyclic.app/api/logo"
 
 //sending emails
 var transporter = nodemailer.createTransport({
@@ -150,7 +151,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                             <tr>
                                 <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Saira',  'Droid Arabic Kufi','Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;">
-                                    <h1 style="font-size: 48px; font-weight: 400; margin: 2;">${msg.welcome}</h1> <img src="https://nameless-peak-50935.herokuapp.com/api/logo" width="125" height="120" style="display: block; border: 0px;" />
+                                    <h1 style="font-size: 48px; font-weight: 400; margin: 2;">${msg.welcome}</h1> <img src="${logo_url}" width="125" height="120" style="display: block; border: 0px;" />
                                 </td>
                             </tr>
                         </table>
@@ -267,7 +268,7 @@ exports.projectObject = (o, p) => {
 
 //random password generator
 exports.generateRandomPassword = () => {
-    const letter = "0123456789ABCDEFGHIJabcdef,*/#ghijklmnopqrstuvwxyzKLMNOP,*/#QRSTUVWXYZ0123456789abcd,*/#efghiABCDEFGHIJKLMNOPQ,*/#RST0123456789jklmnopqrstuvwxyz,*/#";
+    const letter = "0123456789ABCDEFGHIJabcdef*/#ghijklmnopqrstuvwxyzKLMNOP*/#QRSTUVWXYZ0123456789abcd*/#efghiABCDEFGHIJKLMNOPQ*/#RST0123456789jklmnopqrstuvwxyz*/#";
     let randomString = "";
     for (let i = 0; i < 10; i++) {
         const randomStringNumber = Math.floor(1 + Math.random() * (letter.length - 1));

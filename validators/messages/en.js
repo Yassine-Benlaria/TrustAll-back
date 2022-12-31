@@ -12,6 +12,7 @@ msg.daira = "Invalid daira!"
 msg.password = "Password must contain at least 8 characters!"
 msg.registerSuccess = "Your account have been created successfully, check your email!"
 msg.emailAlreadyExist = "This email is already used!"
+msg.emailModified = "Your email has been modified successfully!"
 msg.loginFailed = "Your email/phone or password is not correct!"
 msg.confirmCodeUncorrect = "Confirmation code is not correct!"
 msg.confirmEmail = {

@@ -1,6 +1,6 @@
 const { requireMessages } = require("../helpers")
 const Plan = require("../models/plan")
-const { options } = require("../routes/client")
+const { options } = require("../routes/plan")
 
 
 exports.getPlans = (req, res) => {
@@ -25,7 +25,30 @@ exports.getPlans = (req, res) => {
     })
 }
 
-//get plans separated by " - " 
+exports.planById = (req, res) => {
+        let texts = requireMessages(req.params.lang).options
+        Plan.findById(req.params.id, (err, plan) => {
+            if (err || !plan) return res.status(400).json({ err: "No plan was found!" })
+
+            //formatting response 
+            let car_information = plan.car_information || [],
+                interior = plan.interior || [],
+                exterior = plan.exterior || [],
+                mechanical = plan.mechanical || [];
+            let car_information_object = {},
+                interior_object = {},
+                exterior_object = {},
+                mechanical_object = {};
+
+            car_information.map(element => { car_information_object[element] = texts.car_information[element] })
+            interior.map(element => { interior_object[element] = texts.interior[element] })
+            exterior.map(element => { exterior_object[element] = texts.exterior[element] })
+            mechanical.map(element => { mechanical_object[element] = texts.mechanical[element] })
+
+            return res.json({ msg: {...plan._doc, car_information: car_information_object, interior: interior_object, exterior: exterior_object, mechanical: mechanical_object } })
+        })
+    }
+    //get plans separated by " - " 
 exports.getPlansFormatted = (req, res) => {
     let texts = requireMessages(req.params.lang).options
     Plan.find({}, (err, plans) => {

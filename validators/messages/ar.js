@@ -12,6 +12,7 @@ msg.daira = "!هذه الدائرة غير موجودة"
 msg.password = "يجب أن تتكون كلمة السر من 8 أحرف أو أكثر"
 msg.registerSuccess = "لقد تم إنشاء حسابك بنجاح، تفحص بريدك الإلكتروني!"
 msg.emailAlreadyExist = "البريد الإلكتروني مستعمل سابقا!"
+msg.emailModified = "!تم تغيير بريدك اﻹلكتروني"
 msg.loginFailed = "خطأ في البريد/الهاتف أو كلمة السر!"
 msg.confirmCodeUncorrect = "رمز التأكيد غير صحيح!"
 msg.confirmEmail = {

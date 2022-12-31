@@ -82,7 +82,9 @@ exports.signIn = (req, res) => {
 
                     //return response
                     const { _id, first_name, last_name, status, email } = client;
-                    return res.json({ token, user: { _id, first_name, last_name, status, email, type: "client" } })
+                    if (client.status.active == true)
+                        return res.json({ token, user: { _id, first_name, last_name, status, email, type: "client" } })
+                    return res.status(400).json({ err: "your account is deactivated, please contact support!" })
 
                 }
             })
@@ -101,8 +103,8 @@ exports.signIn = (req, res) => {
             res.cookie("token", token, { expire: new Date() + 9999 });
 
             //return response
-            const { _id, first_name, last_name, email } = admin;
-            return res.json({ token, user: { _id, first_name, status: { verified: true }, last_name, email, type: "admin" } })
+            const { _id, first_name, last_name, email, role } = admin;
+            return res.json({ token, user: { _id, first_name, status: { verified: true }, last_name, email, type: "admin", role } })
         }
     })
 }
@@ -141,6 +143,12 @@ exports.isAdmin = (req, res, next) => {
     next();
 }
 
+//if user is a main-admin
+exports.isMainAdmin = (req, res, next) => {
+    if (req.profile.role != "main_admin") return res.status(403).json({ error: "Access denied!!" })
+    next();
+}
+
 //if user is Admin or Auth-agent
 exports.isAdminOrAgent = (req, res, next) => {
     if (req.profile.type != "admin" && req.profile.type != "auth-agent") {
@@ -153,8 +161,9 @@ exports.isAdminOrAgent = (req, res, next) => {
 
 //Check if account is verified
 exports.isVerified = (req, res, next) => {
-    if (req.profile.status.verified == false)
+    if (req.profile.status.verified == false) {
         return res.status(400).json({ err: "Access denied!! this account is not verified!" })
+    }
 
     next();
 }

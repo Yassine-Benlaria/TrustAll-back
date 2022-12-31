@@ -20,10 +20,7 @@ const agentStatusSchema = new mongoose.Schema({
 
 //Agent schema
 const agentSchema = new mongoose.Schema({
-    created_by: {
-        type: String,
-        required: true
-    },
+
     first_name: {
         type: String,
         trim: true,
@@ -55,7 +52,7 @@ const agentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    created_by: {
+    auth_agent_ID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },

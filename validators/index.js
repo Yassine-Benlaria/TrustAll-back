@@ -115,3 +115,44 @@ exports.addCommandValidator = async(req, res, next) => {
     }
     next()
 }
+
+exports.createAuthAgentValidator = async(req, res, next) => {
+    const messages = requireMessages(req.body.lang)
+    console.table(req.body)
+
+    //checking first name
+    req.check("first_name").trim().matches(regName).withMessage(messages.firstName);
+
+    //checking last name
+    req.check("last_name").trim().matches(regName).withMessage(messages.lastName);
+
+    //checking email
+    req.check("email").isEmail().withMessage(messages.email)
+
+    //checking phone
+    req.check("phone").isMobilePhone().isLength({ min: 10, max: 10 }).withMessage(messages.phone)
+
+    //checkingcity
+    console.log(range(1, 58, 1).map(number => { return String(number).padStart(2, "0") }))
+    req.check("city").isIn(range(1, 59, 1).map(number => { return String(number).padStart(2, "0") })).withMessage(messages.city)
+
+    //checking birth date
+    if (req.body.birth_date)
+        req.check("birth_date").isISO8601().withMessage(messages.date)
+
+    //returning error
+    const errors = req.validationErrors();
+    // if (errors) {
+    //     const firstError = errors.map(error => error.msg)[0];
+    //     return res.status(400).json({ err: firstError })
+    // }
+    if (errors) {
+        let errList = [];
+        errors.map(error => errList.push(error.msg));
+        return res.status(400).json({ err: [...new Set(errList)] })
+    }
+    next()
+}
+
+const range = (start, stop, step) =>
+    Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);

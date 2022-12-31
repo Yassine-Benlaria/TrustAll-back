@@ -12,6 +12,7 @@ msg.daira = "La daira n'est pas valide!"
 msg.password = "Le mot de passe doit contenir au moins 8 caractères!"
 msg.registerSuccess = "Votre compte a été créé avec succés, vérifier votre email!"
 msg.emailAlreadyExist = "Cet addresse email est déja utilisé!"
+msg.emailModified = "Votre email a été modifié avec succés!"
 msg.loginFailed = "Votre email/telephone ou mot de passe n'est pas correct!"
 msg.confirmCodeUncorrect = "Le code de confirmation n'est pas correct!"
 msg.confirmEmail = {
@@ -61,7 +62,7 @@ msg.options = {
         Brake_Arms_Shock_absorbs: "Frein / Bras / Absorbe les chocs",
         AC_system: "Système de climatisation",
         electricity_system: "Système élictricité",
-        computer_system_scan: "Résultat de l'analyse de l'ordinateur"
+        computer_system_scanned: "Résultat de l'analyse de l'ordinateur"
     }
 
 }
