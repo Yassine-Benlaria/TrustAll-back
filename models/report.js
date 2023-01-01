@@ -1,6 +1,14 @@
 const mongoose = require("mongoose")
 
 const reportSchema = new mongoose.Schema({
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    command_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     car_information: {
         car_brand: { type: String, },
         car_model: { type: String, },
@@ -11,7 +19,6 @@ const reportSchema = new mongoose.Schema({
         car_plate: { type: String, },
         gazoline_type: { type: String, },
         car_color: { type: String, },
-
     },
     interior: {
         internal_order: { status: { type: Boolean }, description: { type: String }, image_url: { type: String } },

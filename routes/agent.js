@@ -2,7 +2,17 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { uploadId, uploadPassport, agentByID, getAgentsList, updateAgent, uploadProfilePicture } = require("../controllers/agent")
+const { uploadImages, createReport } = require("../controllers/report")
 router.use(cors())
+
+var multer = require('multer');
+var upload = multer();
+
+//uploading report
+router.post("/upload-report/:id", createReport)
+
+//testing uploading multiple files
+router.post("/test-upload", /*upload.array('uploadedImages'),*/ uploadImages)
 
 //uploading id card / driving license
 router.post("/upload_ID/:id", /*require signin */ uploadId)

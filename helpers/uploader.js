@@ -14,6 +14,7 @@ var storage = multer.diskStorage({
         return callback(null, req.params.id + new Date().toISOString() + "." + ext)
     }
 })
+
 var IDUpload = multer({
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
@@ -28,6 +29,20 @@ var IDUpload = multer({
         }
     }
 }).array("images", 2)
+
+var imagesUpload = multer({
+    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    }
+}).array("uploadedImages")
 
 var passportUpload = multer({
     storage: storage,
@@ -46,6 +61,7 @@ var passportUpload = multer({
 
 exports.agentUploadPassprt = passportUpload
 exports.agentUploadID = IDUpload
+exports.imagesUpload = imagesUpload
 
 ///profile pictures upload
 var profilePicStorage = multer.diskStorage({
