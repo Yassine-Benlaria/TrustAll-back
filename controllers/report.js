@@ -28,7 +28,8 @@ exports.createReport = (req, res) => {
             // console.log("req:---", req)
         Command.findById(req.body.command_id, (err, command) => {
 
-            // uploadFilesToImageKit(req.files)
+            uploadFilesToImageKit(req.files)
+
             // return res.send("images uploaded successfully")
             //if command not found
             if (err || !command) return res.status(400).json({ err: "Command not found!" })
