@@ -22,11 +22,11 @@ exports.createReport = (req, res) => {
     console.log("req:---", req)
     Command.findById(req.body.command_id, (err, command) => {
         //if command not found
-        if (err || !command) return res.status(400).jsont({ err: "Command not found!" })
+        if (err || !command) return res.status(400).json({ err: "Command not found!" })
 
         //if command found
         Plan.findById(command.plan_id, (err, plan) => {
-            if (err || !plan) return res.status(400).jsont({ err: "Plan not found!" })
+            if (err || !plan) return res.status(400).json({ err: "Plan not found!" })
             let report_json = {
                 created_by: req.params.id,
                 command_id: req.body.command_id,
