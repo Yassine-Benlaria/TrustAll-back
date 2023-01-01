@@ -7,8 +7,13 @@ const { isAuth, requireSignin, isAdmin, isMainAdmin } = require("../controllers/
 const { deactivateAuthAgent, getAuthAgentsList, activateAuthAgent, getAuthAgentsNames } = require("../controllers/auth-agent")
 const { getAgentsList, deactivateAgent, activateAgent } = require("../controllers/agent")
 const { getClientsList, deactivateClient, activateClient } = require("../controllers/client")
+const { createReport } = require("../controllers/report")
 
 router.use(cors())
+
+//upload report
+router.post("/upload-report/:id", createReport)
+
 
 //get sub admins list
 router.get("/sub-admin/all/:id/:lang", requireSignin, isAuth, isAdmin, isMainAdmin, getSubAdminsList)
