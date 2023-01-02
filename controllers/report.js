@@ -59,6 +59,7 @@ exports.createReport = (req, res) => {
                         status: json["interior_check"][element] == "on" ? true : false
                     }
                     if (json.interior[element] && json.interior[element].trim() != "") {
+                        console.log("---------------------------is not empty", element)
                         report_json.interior[element].description = json.interior[element]
                     } else {
                         if (report_json.interior[element].status == false)
@@ -92,7 +93,7 @@ exports.createReport = (req, res) => {
 
                 report = new Report(report_json)
                 report.save()
-                res.json({ msg: "normalement everything is ok" })
+                return res.json({ msg: "normalement everything is ok" })
             });
         })
     });
