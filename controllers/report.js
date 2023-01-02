@@ -90,7 +90,7 @@ exports.createReport = (req, res) => {
                     report_json.mechanical[element] = {
                         status: json["mechanical_check"][element] == "on" ? true : false
                     }
-                    if (json.mechanical[element] && json.interior[element].trim() != "") {
+                    if (json.mechanical[element] && json.mechanical[element].trim() != "") {
                         console.log("---------------------------is not empty", element)
                         report_json.mechanical[element].description = json.mechanical[element]
                     } else {
