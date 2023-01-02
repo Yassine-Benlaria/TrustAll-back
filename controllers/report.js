@@ -23,8 +23,8 @@ exports.createReport = (req, res) => {
         if (err) return res.status(400).json({ err })
 
 
-        console.log("body:---", req.body)
-        console.log("body.descriptions:---", typeof req.body.descriptions)
+        console.table(req.body)
+        console.table({ descriptions: typeof req.body.descriptions })
         console.log("files:---", req.files)
             // console.log("req:---", req)
         Command.findById(req.body.command_id, (err, command) => {
