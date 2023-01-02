@@ -24,9 +24,9 @@ exports.createReport = (req, res) => {
 
 
         console.table(req.body)
-        console.table({ descriptions: req.body.descriptions })
-        console.log("files:---", req.files)
-            // console.log("req:---", req)
+        console.log("files:---", req.files);
+        // console.log("req:---", req)
+        let json = JSON.parse(req.body.descriptions)
         Command.findById(req.body.command_id, (err, command) => {
 
             uploadFilesToImageKit(req.files)
@@ -48,14 +48,14 @@ exports.createReport = (req, res) => {
                 };
                 //car information
                 plan.car_information.forEach(element => {
-                    report_json.car_information[element] = req.body.descriptions.car_information[element]
+                    report_json.car_information[element] = json.car_information[element]
                 });
 
                 //interior
                 plan.interior.forEach(element => {
                     report_json.interior[element] = {
-                        description: req.body.descriptions.interior[element],
-                        status: req.body.descriptions["interior_check"][element] == "on" ? true : false
+                        description: json.interior[element],
+                        status: json["interior_check"][element] == "on" ? true : false
                     }
 
                 });
@@ -63,16 +63,16 @@ exports.createReport = (req, res) => {
                 //exterior
                 plan.exterior.forEach(element => {
                     report_json.exterior[element] = {
-                        description: req.body.descriptions.exterior[element],
-                        status: req.body.descriptions["exterior_check"][element] == "on" ? true : false
+                        description: json.exterior[element],
+                        status: json["exterior_check"][element] == "on" ? true : false
                     }
                 });
 
                 //mechanical
                 plan.mechanical.forEach(element => {
                     report_json.mechanical[element] = {
-                        description: req.body.descriptions.mechanical[element],
-                        status: req.body.descriptions["mechanical_check"][element] == "on" ? true : false
+                        description: json.mechanical[element],
+                        status: json["mechanical_check"][element] == "on" ? true : false
                     }
                 });
 
