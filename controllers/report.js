@@ -26,6 +26,7 @@ exports.createReport = (req, res) => {
         console.log("files:---", req.files);
         // console.log("req:---", req)
         let json = JSON.parse(req.body.descriptions)
+        let error = false
         Command.findById(req.body.command_id, (err, command) => {
 
             uploadFilesToImageKit(req.files)
@@ -62,28 +63,54 @@ exports.createReport = (req, res) => {
                         console.log("---------------------------is not empty", element)
                         report_json.interior[element].description = json.interior[element]
                     } else {
-                        if (report_json.interior[element].status == false)
-                            return res.status(400).
-                        json({ err: `"${element}" text field must not be empty when status is not good!` })
-                    }
+                        if (report_json.interior[element].status == false) {
+                            if (!error)
+                                return res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` });
+                            error = true
 
+                        }
+                    }
                 });
 
                 //exterior
                 plan.exterior.forEach(element => {
                     report_json.exterior[element] = {
-                        description: json.exterior[element],
                         status: json["exterior_check"][element] == "on" ? true : false
+                    }
+                    if (json.exterior[element] && json.exterior[element].trim() != "") {
+                        console.log("---------------------------is not empty", element)
+                        report_json.exterior[element].description = json.exterior[element]
+                    } else {
+                        if (report_json.exterior[element].status == false) {
+                            if (!error)
+                                return res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` })
+                            error = true
+                        }
                     }
                 });
 
                 //mechanical
                 plan.mechanical.forEach(element => {
                     report_json.mechanical[element] = {
-                        description: json.mechanical[element],
                         status: json["mechanical_check"][element] == "on" ? true : false
                     }
+                    if (json.mechanical[element] && json.interior[element].trim() != "") {
+                        console.log("---------------------------is not empty", element)
+                        report_json.mechanical[element].description = json.mechanical[element]
+                    } else {
+                        if (report_json.mechanical[element].status == false) {
+                            if (!error)
+                                return res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` })
+                            error = true
+                        }
+                    }
                 });
+
+                //if an error had been returned to the client
+                if (error) return;
 
                 //video url
                 report_json.video_url = descriptions.url;
