@@ -51,11 +51,33 @@ exports.getDirasList = (wilaya_code, language = "en") => {
 }
 
 //get communes list by daira
-exports.getCommunesList = (daira, language = "en") => {
+exports.getCommunesListByDaira = (daira, language = "en") => {
 
     let communes = readCitiesJson("communes");
     let communes_list = communes.filter((o) =>
         o.daira_name_ascii == daira
+    )
+
+    let result = []
+    if (language == "ar")
+        communes_list.map(o => {
+            result.push({ id: o.id, commune_name: o.commune_name })
+        })
+    else communes_list.map(o => {
+        result.push({ id: o.id, commune_name: o.commune_name_ascii })
+    })
+
+
+
+    return result
+}
+
+//get commules list by city
+exports.getCommunesListByCity = (wilaya_code, language = "en") => {
+
+    let communes = readCitiesJson("communes");
+    let communes_list = communes.filter((o) =>
+        o.wilaya_code == wilaya_code
     )
 
     let result = []
