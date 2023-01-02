@@ -24,7 +24,7 @@ exports.createReport = (req, res) => {
 
 
         console.table(req.body)
-        console.table({ descriptions: typeof req.body.descriptions })
+        console.table({ descriptions: req.body.descriptions })
         console.log("files:---", req.files)
             // console.log("req:---", req)
         Command.findById(req.body.command_id, (err, command) => {
