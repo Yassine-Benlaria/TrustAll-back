@@ -47,14 +47,14 @@ exports.createReport = (req, res) => {
                 };
                 //car information
                 plan.car_information.forEach(element => {
-                    report_json.car_information[element] = req.body.car_information[element]
+                    report_json.car_information[element] = req.body.descriptions.car_information[element]
                 });
 
                 //interior
                 plan.interior.forEach(element => {
                     report_json.interior[element] = {
-                        description: req.body.interior[element],
-                        status: req.body["interior_check"][element] == "on" ? true : false
+                        description: req.body.descriptions.interior[element],
+                        status: req.body.descriptions["interior_check"][element] == "on" ? true : false
                     }
 
                 });
@@ -62,16 +62,16 @@ exports.createReport = (req, res) => {
                 //exterior
                 plan.exterior.forEach(element => {
                     report_json.exterior[element] = {
-                        description: req.body.exterior[element],
-                        status: req.body["exterior_check"][element] == "on" ? true : false
+                        description: req.body.descriptions.exterior[element],
+                        status: req.body.descriptions["exterior_check"][element] == "on" ? true : false
                     }
                 });
 
                 //mechanical
                 plan.mechanical.forEach(element => {
                     report_json.mechanical[element] = {
-                        description: req.body.mechanical[element],
-                        status: req.body["mechanical_check"][element] == "on" ? true : false
+                        description: req.body.descriptions.mechanical[element],
+                        status: req.body.descriptions["mechanical_check"][element] == "on" ? true : false
                     }
                 });
 
