@@ -51,7 +51,7 @@ exports.createReport = (req, res) => {
                     if (json.car_information && json.car_information[element])
                         report_json.car_information[element] = json.car_information[element]
                     else
-                        return res.status(400).json({ err: `${element} field is empty!` })
+                        error = `${element} field is empty!`
                 });
 
                 //interior
@@ -64,10 +64,7 @@ exports.createReport = (req, res) => {
                         report_json.interior[element].description = json.interior[element]
                     } else {
                         if (report_json.interior[element].status == false) {
-                            if (!error)
-                                return res.status(400).
-                            json({ err: `"${element}" text field must not be empty when status is not good!` });
-                            error = true
+                            error = `"${element}" text field must not be empty when status is not good!`;
 
                         }
                     }
@@ -83,10 +80,7 @@ exports.createReport = (req, res) => {
                         report_json.exterior[element].description = json.exterior[element]
                     } else {
                         if (report_json.exterior[element].status == false) {
-                            if (!error)
-                                return res.status(400).
-                            json({ err: `"${element}" text field must not be empty when status is not good!` })
-                            error = true
+                            error = `"${element}" text field must not be empty when status is not good!`
                         }
                     }
                 });
@@ -101,16 +95,13 @@ exports.createReport = (req, res) => {
                         report_json.mechanical[element].description = json.mechanical[element]
                     } else {
                         if (report_json.mechanical[element].status == false) {
-                            if (!error)
-                                return res.status(400).
-                            json({ err: `"${element}" text field must not be empty when status is not good!` })
-                            error = true
+                            error = `"${element}" text field must not be empty when status is not good!`
                         }
                     }
                 });
 
                 //if an error had been returned to the client
-                if (error) return;
+                if (error != false) return res.status(400).json({ err: error });
 
                 //video url
                 report_json.video_url = descriptions.url;
