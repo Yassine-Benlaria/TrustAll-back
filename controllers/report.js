@@ -36,7 +36,7 @@ exports.createReport = (req, res) => {
             if (err || !command) return res.status(400).json({ err: "Command not found!" })
 
             //if command found
-            Plan.findById(command.plan_id, (err, plan) => {
+            Plan.findById(command.plan_id, async(err, plan) => {
                 if (err || !plan) return res.status(400).json({ err: "Plan not found!" })
                 let report_json = {
                     created_by: req.params.id,
@@ -47,15 +47,18 @@ exports.createReport = (req, res) => {
                     mechanical: {}
                 };
                 //car information
-                plan.car_information.forEach(element => {
+                await plan.car_information.forEach(element => {
                     if (json.car_information && json.car_information[element])
                         report_json.car_information[element] = json.car_information[element]
-                    else
-                        error = `${element} field is empty!`
+                    else {
+                        if (!error)
+                            res.status(400).json({ err: `${element} field is empty!` })
+                        error = true
+                    }
                 });
 
                 //interior
-                plan.interior.forEach(element => {
+                await plan.interior.forEach(element => {
                     report_json.interior[element] = {
                         status: json["interior_check"][element] == "on" ? true : false
                     }
@@ -64,14 +67,17 @@ exports.createReport = (req, res) => {
                         report_json.interior[element].description = json.interior[element]
                     } else {
                         if (report_json.interior[element].status == false) {
-                            error = `"${element}" text field must not be empty when status is not good!`;
+                            if (!error)
+                                res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` });
+                            error = true
 
                         }
                     }
                 });
 
                 //exterior
-                plan.exterior.forEach(element => {
+                await plan.exterior.forEach(element => {
                     report_json.exterior[element] = {
                         status: json["exterior_check"][element] == "on" ? true : false
                     }
@@ -80,13 +86,16 @@ exports.createReport = (req, res) => {
                         report_json.exterior[element].description = json.exterior[element]
                     } else {
                         if (report_json.exterior[element].status == false) {
-                            error = `"${element}" text field must not be empty when status is not good!`
+                            if (!error)
+                                res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` })
+                            error = true
                         }
                     }
                 });
 
                 //mechanical
-                plan.mechanical.forEach(element => {
+                await plan.mechanical.forEach(element => {
                     report_json.mechanical[element] = {
                         status: json["mechanical_check"][element] == "on" ? true : false
                     }
@@ -95,16 +104,19 @@ exports.createReport = (req, res) => {
                         report_json.mechanical[element].description = json.mechanical[element]
                     } else {
                         if (report_json.mechanical[element].status == false) {
-                            error = `"${element}" text field must not be empty when status is not good!`
+                            if (!error)
+                                res.status(400).
+                            json({ err: `"${element}" text field must not be empty when status is not good!` })
+                            error = true
                         }
                     }
                 });
 
                 //if an error had been returned to the client
-                if (error != false) return res.status(400).json({ err: error });
+                if (error) return;
 
                 //video url
-                report_json.video_url = json.url;
+                report_json.video_url = descriptions.url;
 
                 console.log("report_json", report_json);
 
