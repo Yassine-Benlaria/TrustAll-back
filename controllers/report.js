@@ -29,9 +29,6 @@ exports.createReport = (req, res) => {
         let error = false
         Command.findById(req.body.command_id, async(err, command) => {
 
-            let urls = await uploadFilesToImageKit(req.files, req.body.command_id);
-            console.log("urls");
-            console.log("urls:,", urls);
 
             // return res.send("images uploaded successfully")
             //if command not found
@@ -121,8 +118,11 @@ exports.createReport = (req, res) => {
                 report_json.video_url = json.url;
 
                 //uploading files to imagekit
-
-
+                let urls = await uploadFilesToImageKit(req.files, req.body.command_id);
+                await urls.forEach(url => {
+                    let [categorie, field] = url[0].split(".")
+                    report_json[categorie][field].image_url = url[1]
+                })
                 console.log("report_json", report_json);
 
 

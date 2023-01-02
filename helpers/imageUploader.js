@@ -14,6 +14,7 @@ exports.uploadFilesToImageKit = async(files, command_id) => {
 
     // console.log(files)
     await files.forEach(async(file) => {
+
         console.log("file:", file)
         await imagekit.upload({
             file: file.buffer.toString("base64"), //required
@@ -24,16 +25,16 @@ exports.uploadFilesToImageKit = async(files, command_id) => {
                 minConfidence: 95
             }]
         }, async function(error, result) {
-            count++;
             if (error) console.log("error: ", error);
             else {
                 console.log("result: ", result.url);
                 urls.push([file.originalname, result.url])
             }
+            count++;
         });
     });
 
-    while (count < files.length) await sleep(2000);
+    while (count < files.length) await sleep(1000);
     return urls;
 }
 
