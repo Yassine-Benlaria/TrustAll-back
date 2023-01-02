@@ -21,8 +21,6 @@ exports.uploadImages = (req, res) => {
 exports.createReport = (req, res) => {
     imagesUpload(req, res, (err) => {
         if (err) return res.status(400).json({ err })
-
-
         console.table(req.body)
         console.log("files:---", req.files);
         // console.log("req:---", req)
@@ -48,14 +46,23 @@ exports.createReport = (req, res) => {
                 };
                 //car information
                 plan.car_information.forEach(element => {
-                    report_json.car_information[element] = json.car_information[element]
+                    if (json.car_information && json.car_information[element])
+                        report_json.car_information[element] = json.car_information[element]
+                    else
+                        return res.status(400).json({ err: `${element} field is empty!` })
                 });
 
                 //interior
                 plan.interior.forEach(element => {
                     report_json.interior[element] = {
-                        description: json.interior[element],
                         status: json["interior_check"][element] == "on" ? true : false
+                    }
+                    if (json.interior[element] && json.interior[element].trim() != "") {
+                        report_json.interior[element].description = json.interior[element]
+                    } else {
+                        if (report_json.interior[element].status == false)
+                            return res.status(400).
+                        json({ err: `"${element}" text field must not be empty when status is not good!` })
                     }
 
                 });
@@ -76,6 +83,9 @@ exports.createReport = (req, res) => {
                     }
                 });
 
+                //video url
+                report_json.video_url = descriptions.url;
+
                 console.log("report_json", report_json);
 
 
@@ -83,7 +93,6 @@ exports.createReport = (req, res) => {
                 report.save()
                 res.json({ msg: "normalement everything is ok" })
             });
-
         })
     });
 }

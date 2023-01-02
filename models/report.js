@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 const reportSchema = new mongoose.Schema({
+    video_url: String,
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
