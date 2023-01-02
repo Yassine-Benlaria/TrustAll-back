@@ -27,9 +27,11 @@ exports.createReport = (req, res) => {
         // console.log("req:---", req)
         let json = JSON.parse(req.body.descriptions)
         let error = false
-        Command.findById(req.body.command_id, (err, command) => {
+        Command.findById(req.body.command_id, async(err, command) => {
 
-            uploadFilesToImageKit(req.files)
+            let urls = await uploadFilesToImageKit(req.files, req.body.command_id);
+            console.log("urls");
+            console.log("urls:,", urls);
 
             // return res.send("images uploaded successfully")
             //if command not found
@@ -117,6 +119,9 @@ exports.createReport = (req, res) => {
 
                 //video url
                 report_json.video_url = json.url;
+
+                //uploading files to imagekit
+
 
                 console.log("report_json", report_json);
 
