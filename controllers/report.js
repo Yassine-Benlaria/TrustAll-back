@@ -104,7 +104,7 @@ exports.createReport = (req, res) => {
                 if (error != false) return res.status(400).json({ err: error });
 
                 //video url
-                report_json.video_url = descriptions.url;
+                report_json.video_url = json.url;
 
                 console.log("report_json", report_json);
 
