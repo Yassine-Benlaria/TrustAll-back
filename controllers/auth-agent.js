@@ -97,3 +97,21 @@ exports.uploadProfilePicture = (req, res) => {
         }
     })
 }
+
+
+json = {
+    "_id": { "$oid": "63a96554bc5103f8fcbada0d" },
+    "first_name": "Mohammed El Amine",
+    "birth_date": { "$date": { "$numberLong": "886377600000" } },
+    "email": "chenafi@gmail.com",
+    "phone": "0674471451",
+    "city": "01",
+    "img": false,
+    "status": { "verified": false, "active": false, "_id": { "$oid": "63aad2b2c8189ee3fe4f9a26" } },
+    "salt": "53e2d3c0-84fd-11ed-bf0d-b16136fe9b35",
+    "hashed_password": "24a059efb63bd8dd9b3eb5e298bc441f9983819a",
+    "createdAt": { "$date": { "$numberLong": "1672045908750" } },
+    "updatedAt": { "$date": { "$numberLong": "1672139442767" } },
+    "__v": { "$numberInt": "0" },
+    "last_name": "Chenafi"
+}

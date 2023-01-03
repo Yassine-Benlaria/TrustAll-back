@@ -89,7 +89,7 @@ exports.createAuthAgent = (req, res) => {
         if (err) {
             console.log(err)
             return res.status(400).json({
-                err: "Email already exists!"
+                err: requireMessages(req.body.lang).emailAlreadyExist
             })
         }
 
