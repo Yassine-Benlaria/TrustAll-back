@@ -48,10 +48,10 @@ const agentSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    city: {
-        type: String,
-        required: true
-    },
+    // city: {
+    //     type: String,
+    //     required: true
+    // },
     auth_agent_ID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

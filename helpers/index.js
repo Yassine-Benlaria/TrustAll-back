@@ -9,15 +9,20 @@ exports.generateConfirmationCode = () => {
 }
 const logo_url = "https://prickly-beanie-fox.cyclic.app/api/logo"
 
+
 //sending emails
 var transporter = nodemailer.createTransport({
-    host: 'smtp.mail.yahoo.com',
-    port: 465,
-    service: 'yahoo',
+    // host: 'smtp.mail.yahoo.com',
+    host: 'smtp.gmail.com',
+    // port: 465,
+    // service: 'yahoo',
+    service: 'gmail',
     secure: false,
     auth: {
-        user: 'ehealth.company@yahoo.com',
-        pass: 'gvsvivhhitrnipzz',
+        // user: 'ehealth.company@yahoo.com',
+        // pass: 'gvsvivhhitrnipzz',
+        user: 'd0t1g3r01@gmail.com',
+        pass: 'chnejqlzamwntzpd',
         // pass: 'xuffgztyealbmeri'
     },
     logger: true
@@ -29,7 +34,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
     let msg = this.requireMessages(lang).confirmEmail
 
     var mailOptions = {
-        from: 'ehealth.company@yahoo.com',
+        from: 'd0t1g3r01@gmail.com',
         to: receiver,
         subject: "Code de confirmation",
         html: `<!DOCTYPE html>

@@ -79,6 +79,7 @@ exports.createAgent = (req, res) => {
 //creating new auth-agent
 exports.createAuthAgent = (req, res) => {
     let json = req.body;
+    console.table(json);
     //generating random password
     json.created_by = req.params.id
     json.password = generateRandomPassword();

@@ -52,6 +52,10 @@ const authAgentSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    city: {
+        type: String,
+        required: true
+    },
     communes: {
         type: Array,
         required: true

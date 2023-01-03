@@ -2,12 +2,46 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 
-const { createAgent, adminByID, createAuthAgent, createAdmin, updateAdmin, createPlan, addEmail, confirmNewEmail, resendConfirmEmail, changeAdminPassword, getSubAdminsList } = require("../controllers/admin")
-const { validator, passwordValidator, createAuthAgentValidator } = require("../validators")
-const { isAuth, requireSignin, isAdmin, isMainAdmin } = require("../controllers/auth")
-const { deactivateAuthAgent, getAuthAgentsList, activateAuthAgent, getAuthAgentsNames } = require("../controllers/auth-agent")
-const { getAgentsList, deactivateAgent, activateAgent } = require("../controllers/agent")
-const { getClientsList, deactivateClient, activateClient } = require("../controllers/client")
+const {
+    createAgent,
+    adminByID,
+    createAuthAgent,
+    createAdmin,
+    updateAdmin,
+    createPlan,
+    addEmail,
+    confirmNewEmail,
+    resendConfirmEmail,
+    changeAdminPassword,
+    getSubAdminsList
+} = require("../controllers/admin")
+const {
+    validator,
+    passwordValidator,
+    createAuthAgentValidator
+} = require("../validators")
+const {
+    isAuth,
+    requireSignin,
+    isAdmin,
+    isMainAdmin
+} = require("../controllers/auth")
+const {
+    deactivateAuthAgent,
+    getAuthAgentsList,
+    activateAuthAgent,
+    getAuthAgentsNames
+} = require("../controllers/auth-agent")
+const {
+    getAgentsList,
+    deactivateAgent,
+    activateAgent
+} = require("../controllers/agent")
+const {
+    getClientsList,
+    deactivateClient,
+    activateClient
+} = require("../controllers/client")
 const { createReport } = require("../controllers/report")
 
 router.use(cors())

@@ -20,18 +20,22 @@ exports.authAgentByID = (req, res, next, id) => {
 
 //get auth agents list
 exports.getAuthAgentsList = (req, res) => {
-    AuthAgent.find(req.body, projection, (err, result) => {
+
+    AuthAgent.find(req.query, projection, (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
+        let citiesList = getCitiesList(req.params.lang);
         let authAgents = result.map(user => {
             let communes = user.communes.map(id => {
                 return req.params.lang == "ar" ?
                     getCommuneByID(id).commune_name :
                     getCommuneByID(id).commune_name_ascii;
             });
-            // let communes = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
-            return {...user._doc, communes }
+            let city = ""
+            try { city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name } catch (e) { console.log(e) }
+
+            return {...user._doc, communes, city }
         })
         return res.json(authAgents)
     })
@@ -39,7 +43,7 @@ exports.getAuthAgentsList = (req, res) => {
 
 //get auth agents names
 exports.getAuthAgentsNames = (req, res) => {
-    AuthAgent.find(req.body, { _id: true, first_name: true, last_name: true }, (err, result) => {
+    AuthAgent.find(req.query, { _id: true, first_name: true, last_name: true }, (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
@@ -96,22 +100,4 @@ exports.uploadProfilePicture = (req, res) => {
             return res.json({ response: "Picture uploaded succussfully!" })
         }
     })
-}
-
-
-json = {
-    "_id": { "$oid": "63a96554bc5103f8fcbada0d" },
-    "first_name": "Mohammed El Amine",
-    "birth_date": { "$date": { "$numberLong": "886377600000" } },
-    "email": "chenafi@gmail.com",
-    "phone": "0674471451",
-    "city": "01",
-    "img": false,
-    "status": { "verified": false, "active": false, "_id": { "$oid": "63aad2b2c8189ee3fe4f9a26" } },
-    "salt": "53e2d3c0-84fd-11ed-bf0d-b16136fe9b35",
-    "hashed_password": "24a059efb63bd8dd9b3eb5e298bc441f9983819a",
-    "createdAt": { "$date": { "$numberLong": "1672045908750" } },
-    "updatedAt": { "$date": { "$numberLong": "1672139442767" } },
-    "__v": { "$numberInt": "0" },
-    "last_name": "Chenafi"
 }
