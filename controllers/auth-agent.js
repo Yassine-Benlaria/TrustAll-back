@@ -1,5 +1,5 @@
 const AuthAgent = require("../models/auth-agent");
-const { getCitiesList } = require("../validators/cities");
+const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const projection = {
     salt: false,
     hashed_password: false,
@@ -24,10 +24,14 @@ exports.getAuthAgentsList = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        let citiesList = getCitiesList(req.params.lang)
         let authAgents = result.map(user => {
-            let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
-            return {...user._doc, city }
+            let communes = user.communes.map(id => {
+                return req.params.lang == "ar" ?
+                    getCommuneByID(id).commune_name :
+                    getCommuneByID(id).commune_name_ascii;
+            });
+            // let communes = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+            return {...user._doc, communes }
         })
         return res.json(authAgents)
     })
