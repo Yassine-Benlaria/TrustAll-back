@@ -16,7 +16,21 @@ const projection = {
 };
 
 //create an admin
-exports.createAdmin = (req, res) => {
+exports.createAdmin = async(req, res) => {
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    });
+
+
     let json = req.body
     console.table(req.body)
 
@@ -26,11 +40,12 @@ exports.createAdmin = (req, res) => {
     let admin = new Admin({...json, created_by: req.params.id, password: password });
 
     admin.save((err, createdAdmin) => {
+
         if (err) {
             console.table({ err })
             return res.status(400).json({ err })
         }
-        return res.json(projectObject(createdAdmin, {
+        res.json(projectObject(createdAdmin, {
             _id: 1,
             first_name: 1,
             last_name: 1,
@@ -39,13 +54,30 @@ exports.createAdmin = (req, res) => {
             city: 1,
             birth_date: 1,
 
-        }))
+        }));
+        //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
     })
 }
 
 //creating new agent
-exports.createAgent = (req, res) => {
-    console.table(req.body)
+exports.createAgent = async(req, res) => {
+
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    });
+
+    // console.table(req.body)
     let json = req.body;
     //generating random password
     json.created_by = req.params.id
@@ -62,7 +94,7 @@ exports.createAgent = (req, res) => {
         //sending email to agent
         sendConfirmationMail(json.email, json.password)
 
-        return res.json({ msg: "Agent created successfully!" })
+        res.json({ msg: "Agent created successfully!" })
             ///saving to DB
             // res.json(projectObject(createdAgent, {
             //     _id: 1,
@@ -73,6 +105,9 @@ exports.createAgent = (req, res) => {
             //     city: 1,
             //     birth_date: 1
             // }))
+            //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
     })
 }
 
@@ -122,6 +157,10 @@ exports.createAuthAgent = async(req, res) => {
             city: 1,
             birth_date: 1
         }))
+
+        //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
     })
 }
 
