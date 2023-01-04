@@ -92,7 +92,7 @@ exports.getAllCommands = (req, res) => {
 exports.getCommandsByAuthAgent = (req, res) => {
     Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
         if (err || !result) { return res.json({ msg: [] }) }
-        return res.json({ result })
+        return res.json(result)
     })
 }
 
