@@ -15,7 +15,6 @@ exports.uploadImages = (req, res) => {
         uploadFilesToImageKit(req.files)
         return res.send("images uploaded successfully")
     });
-
 }
 
 exports.createReport = (req, res) => {

@@ -48,13 +48,15 @@ const commandSchema = new mongoose.Schema({
     status: {
         type: String,
         /*
-        -Processing
-        -Contacting car owner
-        -Payment in process
-        -Command in progress
-        -Done
+        -01 => Processing
+        -02 => Contacting car owner
+        -03 => Assignement to client-side Agent
+        -04 => Payment in process
+        -05 => Assignement to seller-side Agent
+        -06 => Command in progress (verification in process)
+        -07 => Done
         */
-        default: "Car Information"
+        default: "01"
     }
 }, { timestamps: true });
 
