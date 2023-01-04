@@ -4,12 +4,15 @@ const cors = require("cors")
 const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture } = require("../controllers/auth-agent")
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
+const { getCommandsByAuthAgent } = require("../controllers/command")
 router.use(cors())
 
 
 //get AuthAgents list (filtered)
 router.get("/all/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
+//get commands by auth_agent
+router.get("/commands/:id", getCommandsByAuthAgent)
 
 //update authAgent's info
 router.post("/update/:id", updateAuthAgent)

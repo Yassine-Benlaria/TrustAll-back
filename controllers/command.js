@@ -88,6 +88,14 @@ exports.getAllCommands = (req, res) => {
     })
 }
 
+//get commands by auth_agent ID
+exports.getCommandsByAuthAgent = (req, res) => {
+    Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
+        if (err || !result) { return res.json({ msg: [] }) }
+        return res.json({ msg: result })
+    })
+}
+
 //get commands by client ID
 exports.getCommandsByClientID = (req, res) => {
     // console.log(req.params)
