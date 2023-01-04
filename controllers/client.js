@@ -44,7 +44,7 @@ exports.signup = async(req, res) => {
     client.save((err, createdClient) => {
         if (err || !createdClient) {
             return res.status(400).json({
-                err: "requireMessages(req.body.lang).emailAlreadyExist"
+                err: err
             })
         }
 
