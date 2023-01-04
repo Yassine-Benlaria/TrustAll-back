@@ -39,7 +39,7 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirm
 router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail)
 
 //add new command
-router.post("/add-command/:id", requireSignin, isAuth, isVerified, addCommandValidator, addCommand)
+router.post("/add-command/:id", /*requireSignin, isAuth, isVerified,*/ addCommandValidator, addCommand)
 
 //get client info
 router.get("/:id/:lang", requireSignin, isAuth, isVerified, (req, res) => {

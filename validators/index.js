@@ -97,7 +97,7 @@ exports.addCommandValidator = async(req, res, next) => {
     req.check("car_name").trim().notEmpty().withMessage(messages.carName)
 
     //check address
-    req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(messages.commune)
+    // req.check("commune_id").isIn(getAllCommunes().map(o => o.id)).withMessage(messages.commune)
 
     //check phone number
     req.check("seller_phone", messages.phone).isMobilePhone().isLength({ min: 10, max: 10 });

@@ -6,22 +6,41 @@ const commandSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    car_name: {
-        type: String,
-        required: true
-    },
-    car_year: String,
-    commune_id: {
-        type: String,
-        required: true
+    //seller information
+    seller_name: {
+        type: String
     },
     seller_phone: {
         type: String,
         required: true
     },
-    seller_name: {
-        type: String
+    commune_id: {
+        type: String,
+        required: true
     },
+    //car information
+    car_name: {
+        type: String,
+        required: true
+    },
+    car_year: String,
+    //auth_agents
+    auth_agent_seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    auth_agent_client: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    //agents
+    agent_seller: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    agent_client: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    //plan
     plan_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -29,11 +48,10 @@ const commandSchema = new mongoose.Schema({
     status: {
         type: String,
         /*
-        -car informarion
-        -contacting car owner
-        -confirming
-        -payment
-        -In progress
+        -Processing
+        -Contacting car owner
+        -Payment in process
+        -Command in progress
         -Done
         */
         default: "Car Information"
