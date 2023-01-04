@@ -77,7 +77,22 @@ exports.createAgent = (req, res) => {
 }
 
 //creating new auth-agent
-exports.createAuthAgent = (req, res) => {
+exports.createAuthAgent = async(req, res) => {
+
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    })
+
+
     let json = req.body;
     console.table(json);
     //generating random password
