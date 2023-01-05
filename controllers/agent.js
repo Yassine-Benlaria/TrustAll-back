@@ -3,6 +3,7 @@ const multer = require("multer")
 const fs = require("fs")
 const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
 const { getCitiesList } = require("../validators/cities");
+const { default: mongoose } = require("mongoose");
 const projection = {
     salt: false,
     hashed_password: false,
@@ -38,7 +39,6 @@ exports.uploadPassport = (req, res) => {
         else console.log(result)
     })
 }
-
 
 //agentById
 exports.agentByID = (req, res, next, id) => {
@@ -130,7 +130,6 @@ exports.updateAgent = (req, res) => {
     })
 }
 
-
 //uploading profile picture
 exports.uploadProfilePicture = (req, res) => {
     profilePicUpload(req, res, (err) => {
@@ -143,4 +142,17 @@ exports.uploadProfilePicture = (req, res) => {
             return res.json({ response: "Picture uploaded succussfully!" })
         }
     })
+}
+
+//get agents by authagent
+exports.getAgentsByAuthAgent = (req, res) => {
+
+    Agent.find({ auth_agent_ID: mongoose.Types.ObjectId(req.params.id) }, { _id: true, first_name: true, last_name: true },
+        (err, result) => {
+            if (err || !result) {
+                return res.send({ err })
+            }
+
+            return res.json(result)
+        })
 }
