@@ -5,14 +5,14 @@ const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture 
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent } = require("../controllers/command")
-const { getAgentsByAuthAgent } = require("../controllers/agent")
+const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
 router.use(cors())
 
 //get AuthAgents list (filtered)
 router.get("/all/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
-//get agents by auth agent
-router.get("/agents/:id", getAgentsByAuthAgent)
+//get agents names by auth agent
+router.get("/agents/names/:id", getAgentsNamesByAuthAgent)
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", getCarCommandsByAuthAgent);
