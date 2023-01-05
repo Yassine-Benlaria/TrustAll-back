@@ -102,7 +102,7 @@ router.post("/activate-agent/:id", requireSignin, isAuth, isAdmin, activateAgent
 //add new email address
 router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 
-//confirm new email
+//confirm new email 
 router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 
 //resent confirmation code
