@@ -288,6 +288,7 @@ exports.assignSellerAgent = (req, res) => {
         if (command.auth_agent_seller != req.params.id)
             return res.status(400).json({ err: "You are not authorized to do this task" });
         command.agent_seller = req.body.agent_id;
+        command.status = "06"
         command.save()
         return res.json({ msg: "agent assigned" })
     }).catch(err => {
