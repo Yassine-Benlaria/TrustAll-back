@@ -281,3 +281,17 @@ exports.confirmCommandByAuthAgent = (req, res) => {
         return res.status(400).json({ err: "error occured" })
     })
 }
+
+//assign seller-side agent
+exports.assignSellerAgent = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.auth_agent_seller != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to do this task" });
+        command.agent_seller = req.body.agent_id;
+        command.save()
+        return res.json({ msg: "agent assigned" })
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
