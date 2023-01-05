@@ -245,3 +245,35 @@ exports.getCommandsByClientID = (req, res) => {
         return res.json(result)
     })
 }
+
+//confirm command by auth-agent
+exports.confirmCommandByAuthAgent = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.auth_agent_seller != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to confirm this command" });
+        if (command.status == "01") {
+            if (req.body.action == "yes") {
+                command.status = "02";
+                command.save();
+                return res.json({ msg: "command confirmed" })
+            } else if (req.body.action == "no") {
+                //delete from database
+                Command.findByIdAndDelete(command._id)
+                return res.json({ msg: "command declined" })
+            }
+        } else if (command.status == "02") {
+            if (req.body.action == "yes") {
+                command.status = "03";
+                command.save();
+                return res.json({ msg: "command confirmed" })
+            } else if (req.body.action == "no") {
+                //delete from database
+                Command.findByIdAndDelete(command._id)
+                return res.json({ msg: "command declined" })
+            }
+        }
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
