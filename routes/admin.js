@@ -93,10 +93,10 @@ router.post("/deactivate-agent/:id", requireSignin, isAuth, isAdmin, deactivateA
 router.post("/activate-agent/:id", requireSignin, isAuth, isAdmin, activateAgent)
 
 //deactivate client
-router.post("/deactivate-client/:id", requireSignin, isAuth, isAdmin, deactivateClient)
+// router.post("/deactivate-client/:id", requireSignin, isAuth, isAdmin, deactivateClient)
 
 //activate client
-router.post("/activate-client/:id", requireSignin, isAuth, isAdmin, activateClient)
+// router.post("/activate-client/:id", requireSignin, isAuth, isAdmin, activateClient)
 
 
 //add new email address

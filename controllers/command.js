@@ -90,10 +90,63 @@ exports.getAllCommands = (req, res) => {
 
 //get commands by auth_agent ID
 exports.getCommandsByAuthAgent = (req, res) => {
-    Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
-        if (err || !result) { return res.json({ msg: [] }) }
+    Command.aggregate([
+        // { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
+        {
+            $lookup: {
+                from: 'agents',
+                localField: 'agent_client',
+                foreignField: '_id',
+                as: 'agent_client'
+            }
+        }, {
+            $set: {
+                agent_client: {
+                    $concat: [{ $arrayElemAt: ["$agent_client.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$agent_client.last_name", 0] }
+                    ]
+                }
+                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+            }
+        },
+
+        //////////////////////////////////////////////////////////////////////////////
+        {
+            $lookup: {
+                from: 'agents',
+                localField: 'agent_seller',
+                foreignField: '_id',
+                as: 'agent_seller'
+            }
+        }, {
+            $set: {
+                agent_seller: {
+                    $concat: [{ $arrayElemAt: ["$agent_seller.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$agent_seller.last_name", 0] }
+                    ]
+                }
+                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+            }
+        },
+        //
+        { $match: { $or: [{ auth_agent_client: mongoose.Types.ObjectId(req.params.id) }, { auth_agent_seller: mongoose.Types.ObjectId(req.params.id) }] } }
+        // {
+        //     client_id: req.params.id
+        // }
+    ], (err, result) => {
+        if (err || !result) {
+            console.log(err);
+            return res.json({ msg: [] })
+        }
         return res.json(result)
     })
+
+    // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
+    //     if (err || !result) { return res.json({ msg: [] }) }
+    //     return res.json(result)
+    // })
 }
 
 //get commands by client ID
@@ -108,8 +161,7 @@ exports.getCommandsByClientID = (req, res) => {
                 foreignField: '_id',
                 as: 'plan'
             }
-        },
-        {
+        }, {
             $set: {
                 plan: { $arrayElemAt: ["$plan.title", 0] }
             }

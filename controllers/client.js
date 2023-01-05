@@ -1,5 +1,7 @@
 const Client = require("../models/client"),
-    UsedEmail = require("../models/used-email");
+    UsedEmail = require("../models/used-email"),
+    DeletedClient = require("../models/deleted/deleted-client");
+
 const crypto = require("crypto")
 const { generateConfirmationCode, sendConfirmationMail, projectObject, sendResetPasswordEmail, requireMessages } = require("../helpers");
 const { profilePicUpload } = require("../helpers/uploader");
@@ -263,21 +265,44 @@ exports.resendConfirmEmail = (req, res) => {
 }
 
 //set client Inactive
-exports.deactivateClient = (req, res) => {
-    console.table(req.body)
-    Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: false } } },
-        (err, result) => {
-            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
-            return res.json({ response: "Client deativated!" })
-        })
-}
+// exports.deactivateClient = (req, res) => {
+//     console.table(req.body)
+//     Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: false } } },
+//         (err, result) => {
+//             if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+//             return res.json({ response: "Client deativated!" })
+//         })
+// }
 
-//set client active
-exports.activateClient = (req, res) => {
-    console.log(req.body)
-    Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: true } } },
-        (err, result) => {
-            if (err || !result) return res.status(400).json({ err: "cannot find this user" })
-            return res.json({ response: "Client ativated!" })
+// //set client active
+// exports.activateClient = (req, res) => {
+//     console.log(req.body)
+//     Client.updateOne({ _id: req.body.client_id }, { $set: { status: { active: true } } },
+//         (err, result) => {
+//             if (err || !result) return res.status(400).json({ err: "cannot find this user" })
+//             return res.json({ response: "Client ativated!" })
+//         })
+// }
+
+//delete client account
+exports.deleteClient = (req, res) => {
+
+    Client.findById(req.params.id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted clients
+        const deleted = new DeletedClient({...user })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("client account deleted!")
         })
+
+        //delete from clients table
+        Client.findByIdAndDelete(req.params.client_id).then((response, err) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "client accouts deleted" });
+        })
+    });
 }

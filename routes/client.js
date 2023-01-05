@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail } = require("../controllers/client")
+const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail, deleteClient } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
 const { addCommand, getCommandsByClientID } = require("../controllers/command")
@@ -45,6 +45,9 @@ router.post("/add-command/:id", /*requireSignin, isAuth, isVerified,*/ addComman
 router.get("/:id/:lang", requireSignin, isAuth, isVerified, (req, res) => {
     return res.json({ user: req.profile })
 });
+
+//delete client
+router.delete("/:id/", deleteClient)
 
 //clientById middlware
 router.param("id", clientByID)
