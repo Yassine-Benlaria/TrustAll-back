@@ -258,7 +258,9 @@ exports.confirmCommandByAuthAgent = (req, res) => {
                 return res.json({ msg: "command confirmed" })
             } else if (req.body.action == "no") {
                 //delete from database
-                Command.findByIdAndDelete(command._id)
+                Command.findByIdAndDelete(command._id, (err, result) => {
+                    if (err || !result) console.log(err)
+                })
                 return res.json({ msg: "command declined" })
             }
         } else if (command.status == "02") {
@@ -268,7 +270,9 @@ exports.confirmCommandByAuthAgent = (req, res) => {
                 return res.json({ msg: "command confirmed" })
             } else if (req.body.action == "no") {
                 //delete from database
-                Command.findByIdAndDelete(command._id)
+                Command.findByIdAndDelete(command._id, (err, result) => {
+                    if (err || !result) console.log(err)
+                })
                 return res.json({ msg: "command declined" })
             }
         }
