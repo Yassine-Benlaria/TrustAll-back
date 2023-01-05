@@ -300,9 +300,14 @@ exports.deleteClient = (req, res) => {
         })
 
         //delete from clients table
-        Client.findByIdAndDelete(req.params.client_id).then((response, err) => {
+        Client.findByIdAndDelete(req.params.id).then((response, err) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "client accouts deleted" });
-        })
+
+            //delete email from used emails
+            UsedEmail.deleteOne({ email: user.email })
+        });
+
+
     });
 }

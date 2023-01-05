@@ -1,7 +1,16 @@
-const Agent = require("../models/agent")
-const Admin = require("../models/admin")
-const Plan = require("../models/plan")
-const AuthAgent = require("../models/auth-agent")
+//models
+const Agent = require("../models/agent"),
+    Admin = require("../models/admin"),
+    Plan = require("../models/plan"),
+    AuthAgent = require("../models/auth-agent"),
+    Client = require("../models/client")
+
+//deleted-models
+const DeletedClient = require("../models/deleted/deleted-client"),
+    DeletedAgent = require("../models/deleted/deleted-agent"),
+    DeletedAuthAgent = require("../models/deleted/deleted-auth-agent");
+
+//#################
 const crypto = require("crypto")
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
@@ -330,4 +339,85 @@ exports.getSubAdminsList = (req, res) => {
         })
         return res.json(subAdmins)
     })
+}
+
+
+//delete User
+exports.deleteUser = (req, res) => {
+    if (req.query.client_id) deleteClient(req, res);
+    else if (req.query.agent_id) deleteAgent(req, res);
+    else if (req.query.agent_id) deleteAuthAgent(req, res);
+    else res.status(400).json({ err: "error while error is error so not error" });
+}
+
+//delete client account
+const deleteClient = (req, res) => {
+    Client.findById(req.query.client_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted clients
+        const deleted = new DeletedClient({...user })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("client account deleted!")
+        })
+
+        //delete from clients table
+        Client.findByIdAndDelete(req.query.client_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "client accouts deleted" });
+            //delete email from used emails
+            UsedEmail.deleteOne({ email: user.email })
+        })
+    });
+}
+
+//delete agent account
+const deleteAgent = (req, res) => {
+    Agent.findById(req.query.agent_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted clients
+        const deleted = new DeletedAgent({...user })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("Agent account deleted!")
+        })
+
+        //delete from clients table
+        Agent.findByIdAndDelete(req.query.agent_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "agent accouts deleted" });
+            //delete email from used emails
+            UsedEmail.deleteOne({ email: user.email })
+        })
+    });
+}
+
+//delete auth-agent account
+const deleteAuthAgent = (req, res) => {
+    AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted auth agents
+        const deleted = new DeletedAuthAgent({...user })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("Auth-agent account deleted!")
+        })
+
+        //delete from clients table
+        AuthAgent.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "Auth-agent accouts deleted" });
+            //delete email from used emails
+            UsedEmail.deleteOne({ email: user.email })
+        })
+    });
 }

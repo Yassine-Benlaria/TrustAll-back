@@ -15,8 +15,8 @@ const agentStatusSchema = new mongoose.Schema({
     },
     online: {
         type: Boolean,
-    }
-})
+    },
+}, { _id: false })
 
 //Agent schema
 const agentSchema = new mongoose.Schema({

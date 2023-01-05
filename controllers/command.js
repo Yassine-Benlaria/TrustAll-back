@@ -88,10 +88,74 @@ exports.getAllCommands = (req, res) => {
     })
 }
 
-//get commands by auth_agent ID
-exports.getCommandsByAuthAgent = (req, res) => {
+//get car commands by auth_agent ID
+exports.getCarCommandsByAuthAgent = (req, res) => {
     Command.aggregate([
-        // { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
+        // getting full name of seller-side agent
+        {
+            $lookup: {
+                from: 'agents',
+                localField: 'agent_seller',
+                foreignField: '_id',
+                as: 'agent_seller'
+            }
+        }, {
+            $set: {
+                agent_seller: {
+                    $concat: [{ $arrayElemAt: ["$agent_seller.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$agent_seller.last_name", 0] }
+                    ]
+                }
+                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+            }
+        },
+
+        // getting full name and phone number of client
+        {
+            $lookup: {
+                from: 'clients',
+                localField: 'client_id',
+                foreignField: '_id',
+                as: 'client'
+            }
+        }, {
+            $set: {
+                client_name: {
+                    $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$client.last_name", 0] }
+                    ]
+                },
+                client_phone: {
+                    $arrayElemAt: ["$client.phone", 0]
+                },
+                client: undefined
+            },
+        },
+        //
+        { $match: { auth_agent_seller: mongoose.Types.ObjectId(req.params.id) } }
+        // {
+        //     client_id: req.params.id
+        // }
+    ], (err, result) => {
+        if (err || !result) {
+            console.log(err);
+            return res.json({ msg: [] })
+        }
+        return res.json(result)
+    })
+
+    // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
+    //     if (err || !result) { return res.json({ msg: [] }) }
+    //     return res.json(result)
+    // })
+}
+
+//get money commands by auth_agent ID
+exports.getMoneyCommandsByAuthAgent = (req, res) => {
+    Command.aggregate([
+        // getting ful name of client-side agent
         {
             $lookup: {
                 from: 'agents',
@@ -111,27 +175,31 @@ exports.getCommandsByAuthAgent = (req, res) => {
             }
         },
 
-        //////////////////////////////////////////////////////////////////////////////
+
+        // getting full name and phone number of client
         {
             $lookup: {
-                from: 'agents',
-                localField: 'agent_seller',
+                from: 'clients',
+                localField: 'client_id',
                 foreignField: '_id',
-                as: 'agent_seller'
+                as: 'client'
             }
         }, {
             $set: {
-                agent_seller: {
-                    $concat: [{ $arrayElemAt: ["$agent_seller.first_name", 0] },
+                client_name: {
+                    $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
                         " ",
-                        { $arrayElemAt: ["$agent_seller.last_name", 0] }
+                        { $arrayElemAt: ["$client.last_name", 0] }
                     ]
-                }
-                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
-            }
+                },
+                client_phone: {
+                    $arrayElemAt: ["$client.phone", 0]
+                },
+                client: undefined
+            },
         },
         //
-        { $match: { $or: [{ auth_agent_client: mongoose.Types.ObjectId(req.params.id) }, { auth_agent_seller: mongoose.Types.ObjectId(req.params.id) }] } }
+        { $match: { auth_agent_client: mongoose.Types.ObjectId(req.params.id) } }
         // {
         //     client_id: req.params.id
         // }
