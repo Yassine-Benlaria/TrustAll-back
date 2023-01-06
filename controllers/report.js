@@ -127,6 +127,8 @@ exports.createReport = (req, res) => {
 
                 report = new Report(report_json)
                 report.save()
+                command.status = "07";
+                command.save();
                 return res.json({ msg: "normalement everything is ok" })
             });
         })
