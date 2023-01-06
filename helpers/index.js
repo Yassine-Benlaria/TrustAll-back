@@ -29,7 +29,7 @@ var transporter = nodemailer.createTransport({
 });
 
 //confirmation email
-exports.sendConfirmationMail = (receiver, code, lang) => {
+exports.sendConfirmationMail = async(receiver, code, lang) => {
 
     let msg = this.requireMessages(lang).confirmEmail
 
@@ -227,7 +227,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
     };
 
     let response = false
-    transporter.sendMail(mailOptions, function(error, info) {
+    await transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
             console.log("error:---------" + error);
         } else {
@@ -239,7 +239,7 @@ exports.sendConfirmationMail = (receiver, code, lang) => {
 }
 
 //confirmation email
-exports.sendResetPasswordEmail = (receiver, token) => {
+exports.sendResetPasswordEmail = async(receiver, token) => {
 
 
         var mailOptions = {
@@ -253,7 +253,7 @@ exports.sendResetPasswordEmail = (receiver, token) => {
         };
 
         let response = false
-        transporter.sendMail(mailOptions, function(error, info) {
+        await transporter.sendMail(mailOptions, function(error, info) {
             if (error) {
                 console.log("error:---------" + error);
             } else {
