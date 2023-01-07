@@ -1,4 +1,4 @@
-const { generateRandomPassword } = require("../helpers");
+const { generateRandomPassword, sendConfirmationMail } = require("../helpers");
 const AuthAgent = require("../models/auth-agent"),
     UsedEmail = require("../models/used-email"),
     Agent = require("../models/agent");
