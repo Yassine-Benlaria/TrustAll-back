@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture, createAgent } = require("../controllers/auth-agent")
+const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture, createAgent, getAgentsList } = require("../controllers/auth-agent")
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
@@ -26,6 +26,10 @@ router.post("/upload-report/:id", createReport);
 
 //get report
 router.get("/report/:id", getReport);
+
+//get agents list
+router.get("/agent/all/:id/:lang", /* requireSignin, isAuth, isAuthAgent,*/ getAgentsList)
+
 
 //update authAgent's info
 router.post("/update/:id", updateAuthAgent);
