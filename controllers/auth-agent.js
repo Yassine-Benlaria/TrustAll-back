@@ -121,7 +121,7 @@ exports.createAgent = async(req, res) => {
         err: requireMessages(req.body.lang).emailAlreadyExist
     });
 
-    let json = {...req.body, auth_agent_ID: req.params._id };
+    let json = {...req.body, auth_agent_ID: req.params.id };
     //generating random password
     json.created_by = req.params.id
     json.password = generateRandomPassword();
