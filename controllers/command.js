@@ -156,6 +156,7 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
 exports.getMoneyCommandsByAuthAgent = (req, res) => {
     Command.aggregate(
         [
+            { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
             // getting ful name of client-side agent
             {
                 $lookup: {
@@ -301,10 +302,30 @@ exports.confirmCommandByAuthAgent = (req, res) => {
 //assign seller-side agent
 exports.assignSellerAgent = (req, res) => {
     Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.status != "05")
+            return res.status(400).json({ err: "this task can't be done at this step!" });
+
         if (command.auth_agent_seller != req.params.id)
             return res.status(400).json({ err: "You are not authorized to do this task" });
         command.agent_seller = req.body.agent_id;
         command.status = "06"
+        command.save()
+        return res.json({ msg: "agent assigned" })
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
+
+//assign client-side agent
+exports.assignClientAgent = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.status != "03")
+            return res.status(400).json({ err: "this task can't be done at this step!" });
+        if (command.auth_agent_client != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to do this task" });
+        command.agent_client = req.body.agent_id;
+        command.status = "04"
         command.save()
         return res.json({ msg: "agent assigned" })
     }).catch(err => {
