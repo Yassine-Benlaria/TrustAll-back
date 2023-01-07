@@ -4,15 +4,25 @@ const path = require("path")
 //importing json file
 function readCitiesJson(f) {
     let file
-    if (f == "wilayas") file = "./dairas.json"
-    else if (f == "dairas") file = "./wilayas.json"
-    else file = "./communes.json"
+    if (f == "wilayas") {
+        // file = "./dairas.json"
+        file = require("./wilayas")
 
-    let bufferData = fs.readFileSync(path.resolve(__dirname, file))
-    let stData = bufferData.toString()
-    let data = JSON.parse(stData)
-        //console.log(data)
-    return data
+    } else if (f == "dairas") {
+        // file = "./wilayas.json"
+        file = require("./dairas")
+
+    } else {
+        // file = "./communes.json"
+        file = require("./communes")
+
+    }
+    return file;
+    // let bufferData = fs.readFileSync(path.resolve(__dirname, file))
+    // let stData = bufferData.toString()
+    // let data = JSON.parse(stData)
+    //     //console.log(data)
+    // return data
 }
 
 //get cities list

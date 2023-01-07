@@ -1,4 +1,4 @@
-[
+module.exports = [
     { "wilaya_code": "01", "daira_name": "Aoulef", "daira_name_ar": "أولف" },
     { "wilaya_code": "01", "daira_name": "Adrar", "daira_name_ar": "أدرار" },
     { "wilaya_code": "01", "daira_name": "Fenoughil", "daira_name_ar": "فنوغيل" },

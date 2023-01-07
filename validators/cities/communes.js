@@ -1,5 +1,4 @@
-[
-    {
+module.exports = [{
         "id": 22,
         "commune_name_ascii": "Timekten",
         "commune_name": "تيمقتن",
