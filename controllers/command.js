@@ -90,7 +90,19 @@ exports.getAllCommands = (req, res) => {
 
 //get car commands by auth_agent ID
 exports.getCarCommandsByAuthAgent = (req, res) => {
-    Command.aggregate([
+    Command.aggregate([{
+            $project: {
+                status: 1,
+                _id: 1,
+                createdAt: 1,
+                plan_id: 1,
+                client_id: 1,
+                auth_agent_client: 1,
+                auth_agent_seller: 1,
+                agent_client: 1,
+                agent_seller: 1
+            }
+        },
         // getting full name of seller-side agent
         {
             $lookup: {
@@ -155,8 +167,20 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
 //get money commands by auth_agent ID
 exports.getMoneyCommandsByAuthAgent = (req, res) => {
     Command.aggregate(
-        [
-            { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1, auth_agent_client: 1, auth_agent_seller: 1, agent_client: 1, agent_seller: 1 } },
+        [{
+                $project: {
+                    status: 1,
+
+                    _id: 1,
+                    createdAt: 1,
+                    plan_id: 1,
+                    client_id: 1,
+                    auth_agent_client: 1,
+                    auth_agent_seller: 1,
+                    agent_client: 1,
+                    agent_seller: 1
+                }
+            },
             // getting ful name of client-side agent
             {
                 $lookup: {
