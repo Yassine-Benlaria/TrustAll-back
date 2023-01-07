@@ -94,6 +94,7 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
             $project: {
                 status: 1,
                 _id: 1,
+                payed: 1,
                 createdAt: 1,
                 plan_id: 1,
                 client_id: 1,
@@ -170,7 +171,7 @@ exports.getMoneyCommandsByAuthAgent = (req, res) => {
         [{
                 $project: {
                     status: 1,
-
+                    payed: 1,
                     _id: 1,
                     createdAt: 1,
                     plan_id: 1,
