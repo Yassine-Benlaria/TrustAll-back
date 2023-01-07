@@ -4,8 +4,8 @@ const path = require("path")
 //importing json file
 function readCitiesJson(f) {
     let file
-    if (f == "wilayas") file = "./wilayas.json"
-    else if (f == "dairas") file = "./dairas.json"
+    if (f == "wilayas") file = "./dairas.json"
+    else if (f == "dairas") file = "./wilayas.json"
     else file = "./communes.json"
 
     let bufferData = fs.readFileSync(path.resolve(__dirname, file))
