@@ -1,12 +1,12 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture } = require("../controllers/auth-agent")
+const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture, createAgent } = require("../controllers/auth-agent")
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
-const { createReport } = require("../controllers/report")
+const { createReport, getReport } = require("../controllers/report")
 router.use(cors())
 
 //get AuthAgents list (filtered)
@@ -22,7 +22,10 @@ router.get("/car-commands/:id", getCarCommandsByAuthAgent);
 router.get("/money-commands/:id", getMoneyCommandsByAuthAgent);
 
 //upload report
-router.post("/upload-report/:id", createReport)
+router.post("/upload-report/:id", createReport);
+
+//get report
+router.get("/report/:id", getReport);
 
 //update authAgent's info
 router.post("/update/:id", updateAuthAgent);
@@ -42,12 +45,14 @@ router.post("/assign-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVeri
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmPaymentByAuthAgent);
 
+//create agent
+router.post("/create-agent/:id", createAgent);
+
 //get Authorized Agent by id
 router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
 });
-
 
 //authAgent by id middlware
 router.param("id", authAgentByID)

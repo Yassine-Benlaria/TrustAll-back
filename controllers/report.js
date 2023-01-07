@@ -142,3 +142,23 @@ exports.createReport = (req, res) => {
         })
     });
 }
+
+exports.getReport = (req, res) => {
+    Command.findById(req.body.command_id, (err, command) => {
+        // if command not found
+        if (err || !command) return res.status(400).json({ err: "command not found!" });
+
+        // if user is not authorized to view the report
+        if (req.profile.type != "admin" &&
+            req.params.id != command.auth_agent_seller &&
+            req.params.id != command.agent_seller)
+            return res.status(400).json({ err: "not authorized" });
+
+        //if user is authorized
+        Report.findOne({ command_id: req.body.command_id }, (err, report) => {
+            if (err || !report) return res.status(400).json({ err: "report not found" })
+
+            return res.json(report)
+        })
+    })
+}

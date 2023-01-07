@@ -1,4 +1,6 @@
-const AuthAgent = require("../models/auth-agent");
+const AuthAgent = require("../models/auth-agent"),
+    UsedEmail = require("../models/used-email"),
+    Agent = require("../models/agent");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const projection = {
     salt: false,
@@ -99,5 +101,54 @@ exports.uploadProfilePicture = (req, res) => {
         } else {
             return res.json({ response: "Picture uploaded succussfully!" })
         }
+    })
+}
+
+//creating new agent
+exports.createAgent = async(req, res) => {
+
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    });
+
+    let json = {...req.body, auth_agent_ID: req.params._id };
+    //generating random password
+    json.created_by = req.params.id
+    json.password = generateRandomPassword();
+    const agent = new Agent(json)
+    agent.save((err, createdAgent) => {
+        if (err) {
+            console.log(err)
+            return res.status(400).json({
+                err: "Email already exists!"
+            })
+        }
+
+        //sending email to agent
+        sendConfirmationMail(json.email, json.password)
+
+        res.json({ msg: "Agent created successfully!" })
+            ///saving to DB
+            // res.json(projectObject(createdAgent, {
+            //     _id: 1,
+            //     first_name: 1,
+            //     last_name: 1,
+            //     email: 1,
+            //     phone: 1,
+            //     city: 1,
+            //     birth_date: 1
+            // }))
+            //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
     })
 }
