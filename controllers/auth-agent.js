@@ -163,15 +163,6 @@ exports.getAgentsList = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        let citiesList = getCitiesList(req.params.lang)
-        let agents = result.map(user => {
-            console.table({ user })
-            console.table({ doc: user._doc })
-            console.table({ city: user.city })
-            console.table({ doccity: user._doc.city })
-            let city = citiesList.find(e => e.wilaya_code == user._doc.city).wilaya_name
-            return {...user._doc, city }
-        })
-        return res.json(agents)
+        return res.json(result)
     })
 }
