@@ -154,62 +154,78 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
 
 //get money commands by auth_agent ID
 exports.getMoneyCommandsByAuthAgent = (req, res) => {
-    Command.aggregate([
-        // getting ful name of client-side agent
-        {
-            $lookup: {
-                from: 'agents',
-                localField: 'agent_client',
-                foreignField: '_id',
-                as: 'agent_client'
-            }
-        }, {
-            $set: {
-                agent_client: {
-                    $concat: [{ $arrayElemAt: ["$agent_client.first_name", 0] },
-                        " ",
-                        { $arrayElemAt: ["$agent_client.last_name", 0] }
-                    ]
+    Command.aggregate(
+        [
+            // getting ful name of client-side agent
+            {
+                $lookup: {
+                    from: 'agents',
+                    localField: 'agent_client',
+                    foreignField: '_id',
+                    as: 'agent_client'
                 }
-                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
-            }
-        },
-
-
-        // getting full name and phone number of client
-        {
-            $lookup: {
-                from: 'clients',
-                localField: 'client_id',
-                foreignField: '_id',
-                as: 'client'
-            }
-        }, {
-            $set: {
-                client_name: {
-                    $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
-                        " ",
-                        { $arrayElemAt: ["$client.last_name", 0] }
-                    ]
-                },
-                client_phone: {
-                    $arrayElemAt: ["$client.phone", 0]
-                },
-                client: undefined
+            }, {
+                $set: {
+                    agent_client: {
+                        $concat: [{ $arrayElemAt: ["$agent_client.first_name", 0] },
+                            " ",
+                            { $arrayElemAt: ["$agent_client.last_name", 0] }
+                        ]
+                    }
+                    // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+                }
             },
-        },
-        //
-        { $match: { auth_agent_client: mongoose.Types.ObjectId(req.params.id) } }
-        // {
-        //     client_id: req.params.id
-        // }
-    ], (err, result) => {
-        if (err || !result) {
-            console.log(err);
-            return res.json({ msg: [] })
-        }
-        return res.json(result)
-    })
+
+
+            // getting full name and phone number of client
+            {
+                $lookup: {
+                    from: 'clients',
+                    localField: 'client_id',
+                    foreignField: '_id',
+                    as: 'client'
+                }
+            }, {
+                $set: {
+                    client_name: {
+                        $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
+                            " ",
+                            { $arrayElemAt: ["$client.last_name", 0] }
+                        ]
+                    },
+                    client_phone: {
+                        $arrayElemAt: ["$client.phone", 0]
+                    },
+                    client: undefined
+                },
+            },
+
+            // getting price of the plan
+            {
+                $lookup: {
+                    from: 'plans',
+                    localField: 'plan_id',
+                    foreignField: '_id',
+                    as: 'price'
+                }
+            }, {
+                $set: {
+                    price: { $arrayElemAt: ["$price.price", 0] }
+
+                }
+            },
+            //
+            { $match: { auth_agent_client: mongoose.Types.ObjectId(req.params.id) } }
+            // {
+            //     client_id: req.params.id
+            // }
+        ], (err, result) => {
+            if (err || !result) {
+                console.log(err);
+                return res.json({ msg: [] })
+            }
+            return res.json(result)
+        })
 
     // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
     //     if (err || !result) { return res.json({ msg: [] }) }

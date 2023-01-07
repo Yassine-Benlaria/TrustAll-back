@@ -7,7 +7,7 @@ exports.generateConfirmationCode = () => {
     }
     return code
 }
-const logo_url = "https://prickly-beanie-fox.cyclic.app/api/logo"
+const logo_url = "https://ik.imagekit.io/6jmfzel6y/logo.png?ik-sdk-version=javascript-1.4.3&updatedAt=1673086374338"
 
 
 //sending emails
