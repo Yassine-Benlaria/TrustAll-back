@@ -4,7 +4,7 @@ const cors = require("cors")
 const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture } = require("../controllers/auth-agent")
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
-const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent } = require("../controllers/command")
+const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
 const { createReport } = require("../controllers/report")
 router.use(cors())
@@ -38,6 +38,9 @@ router.post("/assign-verification/:id", /* requireSignin, isAuth, isAuthAgent, i
 
 //assign seller-client agent to command
 router.post("/assign-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ assignClientAgent);
+
+//confirm payment by auth agent
+router.post("/confirm-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmPaymentByAuthAgent);
 
 //get Authorized Agent by id
 router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {

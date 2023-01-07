@@ -358,3 +358,20 @@ exports.assignClientAgent = (req, res) => {
         return res.status(400).json({ err: "error occured" })
     })
 }
+
+//confirm payment by auth-agent
+exports.confirmPaymentByAuthAgent = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.status != "04")
+            return res.status(400).json({ err: "this task can't be done at this step!" });
+        if (command.auth_agent_client != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to do this task" });
+        command.payed.auth_agent = true;
+        command.status = "05"
+        command.save()
+        return res.json({ msg: "payment confirmed by authagent" })
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
