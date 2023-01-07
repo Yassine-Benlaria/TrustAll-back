@@ -9,7 +9,7 @@ const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
 router.use(cors())
 
 //get AuthAgents list (filtered)
-router.get("/all/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
+router.get("/all/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList);
 
 //get agents names by auth agent
 router.get("/agents/names/:id", getAgentsNamesByAuthAgent)
@@ -21,21 +21,21 @@ router.get("/car-commands/:id", getCarCommandsByAuthAgent);
 router.get("/money-commands/:id", getMoneyCommandsByAuthAgent);
 
 //update authAgent's info
-router.post("/update/:id", updateAuthAgent)
+router.post("/update/:id", updateAuthAgent);
 
 //upload profile picture
-router.post("/photo/:id", uploadProfilePicture)
+router.post("/photo/:id", uploadProfilePicture);
 
 //confirm command
-router.post("/confirm-command/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmCommandByAuthAgent)
+router.post("/confirm-command/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmCommandByAuthAgent);
 
 //assign seller-side agent to command
-router.post("/assign-verification/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ assignSellerAgent)
+router.post("/assign-verification/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ assignSellerAgent);
 
 //get Authorized Agent by id
 router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
-    return res.json({ user: {...req.profile, city } })
+    return res.json({ user: {...req.profile, city } });
 });
 
 

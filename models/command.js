@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
-//Client schema
+const payedSchema = new mongoose.Schema({
+    client: { type: Boolean },
+    agent: { type: Boolean },
+    auth_agent: { type: Boolean },
+}, { timestamps: false, _id: false });
+
+//Command schema
 const commandSchema = new mongoose.Schema({
     client_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -57,6 +63,14 @@ const commandSchema = new mongoose.Schema({
         -07 => Done
         */
         default: "01"
+    },
+    payed: {
+        type: payedSchema,
+        default: {
+            client: false,
+            agent: false,
+            auth_agent: false
+        }
     }
 }, { timestamps: true });
 

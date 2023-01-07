@@ -34,6 +34,14 @@ exports.createReport = (req, res) => {
             if (err || !command) return res.status(400).json({ err: "Command not found!" })
 
             //if command found
+            //if user is not authorized to fill the report
+            if (req.profile.type != "admin" &&
+                req.params.id != command.auth_agent_client &&
+                req.params.id != command.agent_client) {
+                return res.status(400).json({ err: "you are not authorized to complete this task!" })
+            }
+
+            //if user is authorized
             Plan.findById(command.plan_id, async(err, plan) => {
                 if (err || !plan) return res.status(400).json({ err: "Plan not found!" })
                 let report_json = {

@@ -16,7 +16,7 @@ const clientStatusSchema = new mongoose.Schema({
     online: {
         type: Boolean,
     }
-})
+}, { timestamps: false, _id: false });
 
 //Client schema
 const clientSchema = new mongoose.Schema({
@@ -56,7 +56,6 @@ const clientSchema = new mongoose.Schema({
     },
     confirmation_code: {
         type: String,
-
     },
     status: {
         type: clientStatusSchema,

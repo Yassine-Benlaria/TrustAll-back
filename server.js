@@ -13,10 +13,10 @@ require("dotenv").config();
 const clientRoutes = require("./routes/client"),
     adminRoutes = require("./routes/admin"),
     agentRoutes = require("./routes/agent"),
-    authAgentRoutes = require("./routes/auth-agent")
-authRoutes = require("./routes/auth"),
+    authAgentRoutes = require("./routes/auth-agent"),
+    authRoutes = require("./routes/auth"),
     commandRoutes = require("./routes/command"),
-    planRoutes = require("./routes/plan")
+    planRoutes = require("./routes/plan");
 
 //app
 const app = express();
