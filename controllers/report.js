@@ -36,8 +36,8 @@ exports.createReport = (req, res) => {
             //if command found
             //if user is not authorized to fill the report
             if (req.profile.type != "admin" &&
-                req.params.id != command.auth_agent_client &&
-                req.params.id != command.agent_client) {
+                req.params.id != command.auth_agent_seller &&
+                req.params.id != command.agent_seller) {
                 return res.status(400).json({ err: "you are not authorized to complete this task!" })
             }
 
