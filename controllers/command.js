@@ -156,7 +156,7 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
 exports.getMoneyCommandsByAuthAgent = (req, res) => {
     Command.aggregate(
         [
-            { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
+            { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1, auth_agent_client: 1, auth_agent_seller: 1, agent_client: 1, agent_seller: 1 } },
             // getting ful name of client-side agent
             {
                 $lookup: {
