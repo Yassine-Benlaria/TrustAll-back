@@ -6,6 +6,7 @@ const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, i
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
+const { createReport } = require("../controllers/report")
 router.use(cors())
 
 //get AuthAgents list (filtered)
@@ -19,6 +20,9 @@ router.get("/car-commands/:id", getCarCommandsByAuthAgent);
 
 //get money commands by auth_agent
 router.get("/money-commands/:id", getMoneyCommandsByAuthAgent);
+
+//upload report
+router.post("/upload-report/:id", createReport)
 
 //update authAgent's info
 router.post("/update/:id", updateAuthAgent);
