@@ -3,6 +3,7 @@ const Command = require("../models/command"),
     Plan = require("../models/plan")
 const { uploadFilesToImageKit } = require("../helpers/imageUploader");
 const { imagesUpload } = require("../helpers/uploader");
+const mongoose = require("mongoose");
 
 exports.uploadImages = (req, res) => {
 
@@ -19,7 +20,7 @@ exports.uploadImages = (req, res) => {
 
 
 exports.createReport = (req, res) => {
-    Report.findOne({ command_id: req.body.command_id }, (err, report) => {
+    Report.findOne({ command_id: mongoose.Types.ObjectId(req.body.command_id) }, (err, report) => {
         if (err || !report)
             return createNewReport(req, res)
         updateReport(req, res, report);
