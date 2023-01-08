@@ -1,4 +1,5 @@
-const Agent = require("../models/agent")
+const Agent = require("../models/agent"),
+    DeletedAgent = require("../models/deleted/deleted-agent")
 const multer = require("multer")
 const fs = require("fs")
 const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
