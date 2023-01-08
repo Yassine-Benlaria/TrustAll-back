@@ -120,44 +120,40 @@ exports.createAgent = async(req, res) => {
     if (usedEmail) return res.status(400).json({
         err: requireMessages(req.body.lang).emailAlreadyExist
     });
-    AuthAgent.findById(req.params.id, { city: true }, (err, result) => {
-        if (err || !result) {
-            return res.status(400).json(err)
+
+
+    let json = {...req.body, auth_agent_ID: req.params.id, city: req.profile.city };
+    //generating random password
+    json.created_by = req.params.id
+    json.password = generateRandomPassword();
+    const agent = new Agent(json)
+    agent.save((err, createdAgent) => {
+        if (err) {
+            console.log(err)
+            return res.status(400).json({
+                err: "error while creating agent!"
+            })
         }
-        console.table({ city: result.city })
-        let json = {...req.body, auth_agent_ID: req.params.id, city: result.city };
-        //generating random password
-        json.created_by = req.params.id
-        json.password = generateRandomPassword();
-        console.table(json)
-        const agent = new Agent(json)
-        agent.save((err, createdAgent) => {
-            if (err) {
-                console.log(err)
-                return res.status(400).json({
-                    err: "error while creating agent!"
-                })
-            }
 
-            //sending email to agent
-            sendConfirmationMail(json.email, json.password)
+        //sending email to agent
+        sendConfirmationMail(json.email, json.password)
 
-            res.json({ msg: "Agent created successfully!" })
-                ///saving to DB
-                // res.json(projectObject(createdAgent, {
-                //     _id: 1,
-                //     first_name: 1,
-                //     last_name: 1,
-                //     email: 1,
-                //     phone: 1,
-                //     city: 1,
-                //     birth_date: 1
-                // }))
-                //adding email to used emails
-            usedEmail = new UsedEmail({ email: req.body.email })
-            usedEmail.save();
-        })
+        res.json({ msg: "Agent created successfully!" })
+            ///saving to DB
+            // res.json(projectObject(createdAgent, {
+            //     _id: 1,
+            //     first_name: 1,
+            //     last_name: 1,
+            //     email: 1,
+            //     phone: 1,
+            //     city: 1,
+            //     birth_date: 1
+            // }))
+            //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
     })
+
 }
 
 
