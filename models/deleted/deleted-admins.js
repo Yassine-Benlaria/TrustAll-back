@@ -2,31 +2,19 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
-
-
 //Status schema
-const authAgentStatusSchema = new mongoose.Schema({
+const adminStatusSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         default: false
     },
-    active: {
-        type: Boolean,
-        default: true
-    },
     online: {
         type: Boolean,
     }
-}, {
-    _id: false
-})
+}, { timestamps: false, _id: false })
 
-//AuthAgent schema
-const DeletedAuthAgentSchema = new mongoose.Schema({
-    created_by: {
-        type: String,
-
-    },
+//Admin schema
+const adminSchema = new mongoose.Schema({
     first_name: {
         type: String,
         trim: true,
@@ -39,13 +27,10 @@ const DeletedAuthAgentSchema = new mongoose.Schema({
 
         maxlength: 32,
     },
-    birth_date: {
-        type: Date,
-
-    },
     email: {
         type: String,
         trim: true,
+
 
     },
     phone: {
@@ -57,24 +42,31 @@ const DeletedAuthAgentSchema = new mongoose.Schema({
         type: String,
 
     },
-    communes: {
-        type: Array,
-    },
-    img: {
-        type: Boolean,
-        default: false
+    birth_date: {
+        type: Date,
+
     },
     status: {
-        type: authAgentStatusSchema,
+        type: adminStatusSchema,
         default: {
             verified: false,
-            active: true,
         }
+    },
+    role: {
+        type: String,
+        require: true,
+        default: "sub_admin"
+    },
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId,
     },
     salt: { type: String },
     hashed_password: {
         type: String,
+
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model("DeletedAuthAgent", DeletedAuthAgentSchema);
+
+//export the model
+module.exports = mongoose.model("Admin", adminSchema);

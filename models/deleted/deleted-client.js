@@ -32,7 +32,6 @@ const deletedClientSchema = new mongoose.Schema({
         type: String,
         trim: true,
 
-        unique: true,
     },
     phone: {
         type: String,

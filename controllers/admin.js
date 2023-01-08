@@ -348,6 +348,7 @@ exports.deleteUser = (req, res) => {
     if (req.query.client_id) deleteClient(req, res);
     else if (req.query.agent_id) deleteAgent(req, res);
     else if (req.query.auth_agent_id) deleteAuthAgent(req, res);
+    else if (req.query.admin_id) deleteAdmin(req, res);
     else res.status(400).json({ err: "error while error is error so not error" });
 }
 
@@ -407,9 +408,35 @@ const deleteAgent = (req, res) => {
 }
 
 
-//nodejs mongodb deleteone?
 //delete auth-agent account
 const deleteAuthAgent = (req, res) => {
+    AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted auth agents
+        const deleted = new DeletedAuthAgent({...user._doc })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("Auth-agent account deleted!")
+        })
+
+        //delete from clients table
+        AuthAgent.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "Auth-agent accouts deleted" });
+            //delete email from used emails
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
+        })
+    });
+}
+
+
+//delete auth-agent account
+const deleteAdmin = (req, res) => {
     AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
         if (err || !user)
             return res.status(400).json({ err: "user not found!!" });
