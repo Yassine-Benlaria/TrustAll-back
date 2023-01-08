@@ -163,6 +163,7 @@ const updateReport = (req, res, report) => {
         let error = false
         Command.findById(req.body.command_id, async(err, command) => {
 
+
             // return res.send("images uploaded successfully")
             //if command not found
             if (err || !command) return res.status(400).json({ err: "Command not found!" })
