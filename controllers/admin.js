@@ -346,7 +346,7 @@ exports.getSubAdminsList = (req, res) => {
 exports.deleteUser = (req, res) => {
     if (req.query.client_id) deleteClient(req, res);
     else if (req.query.agent_id) deleteAgent(req, res);
-    else if (req.query.agent_id) deleteAuthAgent(req, res);
+    else if (req.query.auth_agent_id) deleteAuthAgent(req, res);
     else res.status(400).json({ err: "error while error is error so not error" });
 }
 
