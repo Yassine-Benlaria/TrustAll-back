@@ -30,7 +30,7 @@ const createNewReport = (req, res) => {
     imagesUpload(req, res, (err) => {
         if (err) return res.status(400).json({ err })
         console.table(req.body)
-        console.table({ descriptions: req.body.descriptions })
+        console.table({ descriptions: "new" })
         console.log("files:---", req.files);
         // console.log("req:---", req)
         let json = JSON.parse(req.body.descriptions)
@@ -156,7 +156,7 @@ const updateReport = (req, res, report) => {
     imagesUpload(req, res, (err) => {
         if (err) return res.status(400).json({ err })
         console.table(req.body)
-        console.table({ descriptions: req.body.descriptions })
+        console.table({ descriptions: "update" })
         console.log("files:---", req.files);
         // console.log("req:---", req)
         let json = JSON.parse(req.body.descriptions)
