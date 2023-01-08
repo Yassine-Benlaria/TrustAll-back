@@ -144,7 +144,7 @@ exports.createReport = (req, res) => {
 }
 
 exports.getReport = (req, res) => {
-    Command.findById(req.body.command_id, (err, command) => {
+    Command.findById(req.query.command_id, (err, command) => {
         // if command not found
         if (err || !command) return res.status(400).json({ err: "command not found!" });
 
@@ -155,7 +155,7 @@ exports.getReport = (req, res) => {
             return res.status(400).json({ err: "not authorized" });
 
         //if user is authorized
-        Report.findOne({ command_id: req.body.command_id }, (err, report) => {
+        Report.findOne({ command_id: req.query.command_id }, (err, report) => {
             if (err || !report) return res.status(400).json({ err: "report not found" })
 
             return res.json(report)

@@ -116,7 +116,7 @@ router.get("/:id/:lang", (req, res) => {
 })
 
 //delete user
-router.delete("/:id", requireSignin, isAuth, isAdmin, deleteUser)
+router.delete("/:id", /*requireSignin, isAuth, isAdmin,*/ deleteUser)
 
 //admin by id middlware
 router.param("id", adminByID)

@@ -370,7 +370,12 @@ const deleteClient = (req, res) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "client accouts deleted" });
             //delete email from used emails
-            UsedEmail.deleteOne({ email: user.email })
+            console.table({ doc: user._doc.email })
+            console.table({ doc: user._doc.email })
+            console.table({ email: user.email })
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
         })
     });
 }
@@ -394,11 +399,15 @@ const deleteAgent = (req, res) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "agent accouts deleted" });
             //delete email from used emails
-            UsedEmail.deleteOne({ email: user.email })
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
         })
     });
 }
 
+
+//nodejs mongodb deleteone?
 //delete auth-agent account
 const deleteAuthAgent = (req, res) => {
     AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
@@ -418,9 +427,9 @@ const deleteAuthAgent = (req, res) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "Auth-agent accouts deleted" });
             //delete email from used emails
-            console.table({ doc: user._doc.email })
-            console.table({ email: user.email })
-            UsedEmail.deleteOne({ email: user._doc.email })
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
         })
     });
 }

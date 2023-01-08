@@ -181,7 +181,9 @@ exports.deleteAgent = (req, res) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "agent accouts deleted" });
             //delete email from used emails
-            UsedEmail.deleteOne({ email: user.email })
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
         })
     });
 }
