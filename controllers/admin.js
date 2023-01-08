@@ -4,8 +4,7 @@ const Agent = require("../models/agent"),
     Plan = require("../models/plan"),
     AuthAgent = require("../models/auth-agent"),
     Client = require("../models/client"),
-    UsedEmail = require("../models/used-email"),
-;
+    UsedEmail = require("../models/used-email");
 
 //deleted-models
 const DeletedClient = require("../models/deleted/deleted-client"),
