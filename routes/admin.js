@@ -13,7 +13,8 @@ const {
     confirmNewEmail,
     resendConfirmEmail,
     changeAdminPassword,
-    getSubAdminsList
+    getSubAdminsList,
+    deleteUser
 } = require("../controllers/admin")
 const {
     validator,
@@ -113,6 +114,9 @@ router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
 router.get("/:id/:lang", (req, res) => {
     return res.json({ user: req.profile })
 })
+
+//delete user
+router.delete("/:id", requireSignin, isAuth, isAdmin, deleteUser)
 
 //admin by id middlware
 router.param("id", adminByID)
