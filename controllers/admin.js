@@ -3,7 +3,8 @@ const Agent = require("../models/agent"),
     Admin = require("../models/admin"),
     Plan = require("../models/plan"),
     AuthAgent = require("../models/auth-agent"),
-    Client = require("../models/client")
+    Client = require("../models/client"),
+    UsedEmail = require("../models/used-email");
 
 //deleted-models
 const DeletedClient = require("../models/deleted/deleted-client"),
