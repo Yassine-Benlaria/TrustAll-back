@@ -124,16 +124,18 @@ exports.createAgent = async(req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
+        console.table({ city: result.city })
         let json = {...req.body, auth_agent_ID: req.params.id, city: result.city };
         //generating random password
         json.created_by = req.params.id
         json.password = generateRandomPassword();
+        console.table(json)
         const agent = new Agent(json)
         agent.save((err, createdAgent) => {
             if (err) {
                 console.log(err)
                 return res.status(400).json({
-                    err: "Email already exists!"
+                    err: "error while creating agent!"
                 })
             }
 
