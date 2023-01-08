@@ -2,19 +2,8 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
-//Status schema
-const adminStatusSchema = new mongoose.Schema({
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    online: {
-        type: Boolean,
-    }
-}, { timestamps: false, _id: false })
-
 //Admin schema
-const adminSchema = new mongoose.Schema({
+const deletedAdminSchema = new mongoose.Schema({
     first_name: {
         type: String,
         trim: true,
@@ -30,8 +19,6 @@ const adminSchema = new mongoose.Schema({
     email: {
         type: String,
         trim: true,
-
-
     },
     phone: {
         type: String,
@@ -45,12 +32,6 @@ const adminSchema = new mongoose.Schema({
     birth_date: {
         type: Date,
 
-    },
-    status: {
-        type: adminStatusSchema,
-        default: {
-            verified: false,
-        }
     },
     role: {
         type: String,
@@ -69,4 +50,4 @@ const adminSchema = new mongoose.Schema({
 
 
 //export the model
-module.exports = mongoose.model("Admin", adminSchema);
+module.exports = mongoose.model("DeletedAdmin", deletedAdminSchema);
