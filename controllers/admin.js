@@ -420,7 +420,7 @@ const deleteAuthAgent = (req, res) => {
             //delete email from used emails
             console.table({ doc: user._doc.email })
             console.table({ email: user.email })
-            UsedEmail.deleteOne({ email: user.email })
+            UsedEmail.deleteOne({ email: user._doc.email })
         })
     });
 }
