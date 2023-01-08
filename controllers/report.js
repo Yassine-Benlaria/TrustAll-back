@@ -20,7 +20,7 @@ exports.uploadImages = (req, res) => {
 
 
 exports.createReport = (req, res) => {
-    Report.find({ command_id: mongoose.Types.ObjectId(req.body.command_id) }, (err, report) => {
+    Report.find({ command_id: req.body.command_id }, (err, report) => {
         if (err || !report || report.length == 0) {
             console.table({ err })
             console.log(report)
