@@ -87,7 +87,7 @@ exports.updateAuthAgent = (req, res) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        return res.json({ response: "Authorized Agent updated successfully!" })
+        return res.json({ msg: "Authorized Agent updated successfully!" })
     })
 }
 
@@ -155,8 +155,6 @@ exports.createAgent = async(req, res) => {
     })
 
 }
-
-
 
 //get agents list
 exports.getAgentsList = (req, res) => {
