@@ -156,3 +156,30 @@ exports.getAgentsNamesByAuthAgent = (req, res) => {
             return res.json(result)
         })
 }
+
+//delete agent account
+exports.deleteAgent = (req, res) => {
+    Agent.findById(req.query.agent_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        if (user.auth_agent_ID != req.params.id)
+            return res.statut(400).json({ err: "you are no authorized to complete this task" });
+
+        //insert into deleted clients
+        const deleted = new DeletedAgent({...user })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("Agent account deleted!")
+        })
+
+        //delete from clients table
+        Agent.findByIdAndDelete(req.query.agent_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "agent accouts deleted" });
+            //delete email from used emails
+            UsedEmail.deleteOne({ email: user.email })
+        })
+    });
+}

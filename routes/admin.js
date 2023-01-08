@@ -38,9 +38,7 @@ const {
     activateAgent
 } = require("../controllers/agent")
 const {
-    getClientsList,
-    deactivateClient,
-    activateClient
+    getClientsList
 } = require("../controllers/client")
 const { createReport } = require("../controllers/report")
 

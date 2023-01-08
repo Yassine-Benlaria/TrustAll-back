@@ -169,6 +169,12 @@ exports.getAgentsList = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        return res.json(result)
+
+        let citiesList = getCitiesList(req.params.lang)
+        let agents = result.map(user => {
+            let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+            return {...user._doc, city }
+        })
+        return res.json(agents)
     })
 }

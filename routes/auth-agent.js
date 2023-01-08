@@ -5,7 +5,7 @@ const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture,
 const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
-const { getAgentsNamesByAuthAgent } = require("../controllers/agent")
+const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
 const { createReport, getReport } = require("../controllers/report")
 router.use(cors())
 
@@ -49,6 +49,7 @@ router.post("/assign-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVeri
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmPaymentByAuthAgent);
 
+
 //create agent
 router.post("/create-agent/:id", createAgent);
 
@@ -57,6 +58,9 @@ router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
 });
+
+//delete agent
+router.delete("/agent/:id", deleteAgent)
 
 //authAgent by id middlware
 router.param("id", authAgentByID)
