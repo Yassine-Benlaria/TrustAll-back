@@ -169,7 +169,7 @@ exports.deleteAgent = (req, res) => {
             return res.statut(400).json({ err: "you are no authorized to complete this task" });
 
         //insert into deleted clients
-        const deleted = new DeletedAgent({...user })
+        const deleted = new DeletedAgent({...user._doc })
         deleted.save((err, result) => {
             if (err) {
                 console.log(err)
