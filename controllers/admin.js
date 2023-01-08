@@ -357,7 +357,7 @@ const deleteClient = (req, res) => {
             return res.status(400).json({ err: "user not found!!" });
 
         //insert into deleted clients
-        const deleted = new DeletedClient({...user })
+        const deleted = new DeletedClient({...user._doc })
         deleted.save((err, result) => {
             if (err) {
                 console.log(err)
@@ -381,7 +381,7 @@ const deleteAgent = (req, res) => {
             return res.status(400).json({ err: "user not found!!" });
 
         //insert into deleted clients
-        const deleted = new DeletedAgent({...user })
+        const deleted = new DeletedAgent({...user._doc })
         deleted.save((err, result) => {
             if (err) {
                 console.log(err)
@@ -405,7 +405,7 @@ const deleteAuthAgent = (req, res) => {
             return res.status(400).json({ err: "user not found!!" });
 
         //insert into deleted auth agents
-        const deleted = new DeletedAuthAgent({...user })
+        const deleted = new DeletedAuthAgent({...user._doc })
         deleted.save((err, result) => {
             if (err) {
                 console.log(err)
