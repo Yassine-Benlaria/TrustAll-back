@@ -43,7 +43,9 @@ exports.createReport = (req, res) => {
 }
 
 const createNewReport = (req, res) => {
-    try { let json = JSON.parse(req.body.descriptions) } catch (err) {
+    let json;
+
+    try { json = JSON.parse(req.body.descriptions) } catch (err) {
         return res.status(400).json({ err })
     }
     let error = false
@@ -165,8 +167,8 @@ const createNewReport = (req, res) => {
 }
 
 const updateReport = (req, res, report) => {
-
-    try { let json = JSON.parse(req.body.descriptions) } catch (err) {
+    let json;
+    try { json = JSON.parse(req.body.descriptions) } catch (err) {
         return res.status(400).json({ err })
     }
     let error = false
