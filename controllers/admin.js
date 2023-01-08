@@ -454,7 +454,7 @@ const deleteAdmin = (req, res) => {
         })
 
         //delete from clients table
-        Admin.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
+        Admin.findByIdAndDelete(req.query.admin_id, (err, response) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "Admin account deleted" });
             //delete email from used emails
