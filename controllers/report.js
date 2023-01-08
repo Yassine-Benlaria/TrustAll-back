@@ -23,10 +23,10 @@ exports.createReport = (req, res) => {
     Report.find({ command_id: mongoose.Types.ObjectId(req.body.command_id) }, (err, report) => {
         if (err || !report || report.length == 0) {
             console.table({ err })
-            console.table({ report })
+            console.log(report)
             return createNewReport(req, res)
         }
-        updateReport(req, res, report);
+        updateReport(req, res, report[0]);
     })
 }
 
