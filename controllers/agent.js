@@ -1,5 +1,6 @@
 const Agent = require("../models/agent"),
-    DeletedAgent = require("../models/deleted/deleted-agent")
+    DeletedAgent = require("../models/deleted/deleted-agent"),
+    UsedEmail = require("../models/used-email")
 const multer = require("multer")
 const fs = require("fs")
 const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
