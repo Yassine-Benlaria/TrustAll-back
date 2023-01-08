@@ -8,6 +8,7 @@ const reportSchema = new mongoose.Schema({
     },
     command_id: {
         type: mongoose.Schema.Types.ObjectId,
+        unique: true,
         required: true,
     },
     car_information: {

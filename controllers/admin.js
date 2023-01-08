@@ -4,12 +4,14 @@ const Agent = require("../models/agent"),
     Plan = require("../models/plan"),
     AuthAgent = require("../models/auth-agent"),
     Client = require("../models/client"),
-    UsedEmail = require("../models/used-email");
+    UsedEmail = require("../models/used-email"),
+;
 
 //deleted-models
 const DeletedClient = require("../models/deleted/deleted-client"),
     DeletedAgent = require("../models/deleted/deleted-agent"),
-    DeletedAuthAgent = require("../models/deleted/deleted-auth-agent");
+    DeletedAuthAgent = require("../models/deleted/deleted-auth-agent"),
+    DeletedAdmin = require("../models/deleted/deleted-admins");
 
 //#################
 const crypto = require("crypto")
@@ -369,7 +371,7 @@ const deleteClient = (req, res) => {
         //delete from clients table
         Client.findByIdAndDelete(req.query.client_id, (err, response) => {
             if (err) return res.status(400).json({ err: err });
-            res.json({ msg: "client accouts deleted" });
+            res.json({ msg: "client account deleted" });
             //delete email from used emails
             console.table({ doc: user._doc.email })
             console.table({ doc: user._doc.email })
@@ -398,7 +400,7 @@ const deleteAgent = (req, res) => {
         //delete from clients table
         Agent.findByIdAndDelete(req.query.agent_id, (err, response) => {
             if (err) return res.status(400).json({ err: err });
-            res.json({ msg: "agent accouts deleted" });
+            res.json({ msg: "agent account deleted" });
             //delete email from used emails
             UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
                 if (err) return console.table({ err: err });
@@ -425,7 +427,7 @@ const deleteAuthAgent = (req, res) => {
         //delete from clients table
         AuthAgent.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
             if (err) return res.status(400).json({ err: err });
-            res.json({ msg: "Auth-agent accouts deleted" });
+            res.json({ msg: "Auth-agent account deleted" });
             //delete email from used emails
             UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
                 if (err) return console.table({ err: err });
@@ -437,22 +439,25 @@ const deleteAuthAgent = (req, res) => {
 
 //delete auth-agent account
 const deleteAdmin = (req, res) => {
-    AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
+    if (req.profile.role != "main_admin")
+        return res.status(400).json({ err: "You are not authorized to complete this task!" })
+
+    Admin.findById(req.query.admin_id, (err, user) => {
         if (err || !user)
             return res.status(400).json({ err: "user not found!!" });
 
         //insert into deleted auth agents
-        const deleted = new DeletedAuthAgent({...user._doc })
+        const deleted = new DeletedAdmin({...user._doc })
         deleted.save((err, result) => {
             if (err) {
                 console.log(err)
-            } else console.log("Auth-agent account deleted!")
+            } else console.log("Admin account deleted!")
         })
 
         //delete from clients table
-        AuthAgent.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
+        Admin.findByIdAndDelete(req.query.auth_agent_id, (err, response) => {
             if (err) return res.status(400).json({ err: err });
-            res.json({ msg: "Auth-agent accouts deleted" });
+            res.json({ msg: "Admin account deleted" });
             //delete email from used emails
             UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
                 if (err) return console.table({ err: err });

@@ -2,20 +2,6 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 
-//Status schema
-const adminStatusSchema = new mongoose.Schema({
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    active: {
-        type: Boolean,
-        default: true
-    },
-    online: {
-        type: Boolean,
-    }
-})
 
 //Admin schema
 const adminSchema = new mongoose.Schema({
@@ -49,13 +35,6 @@ const adminSchema = new mongoose.Schema({
     birth_date: {
         type: Date,
         required: true
-    },
-    status: {
-        type: adminStatusSchema,
-        default: {
-            verified: false,
-            active: true,
-        }
     },
     //token for password resetting
     resetToken: String,
