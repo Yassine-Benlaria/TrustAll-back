@@ -418,6 +418,8 @@ const deleteAuthAgent = (req, res) => {
             if (err) return res.status(400).json({ err: err });
             res.json({ msg: "Auth-agent accouts deleted" });
             //delete email from used emails
+            console.table({ doc: user._doc.email })
+            console.table({ email: user.email })
             UsedEmail.deleteOne({ email: user.email })
         })
     });
