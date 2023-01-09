@@ -1,7 +1,19 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { uploadId, uploadPassport, agentByID, getAgentsList, updateAgent, uploadProfilePicture, changeAgentPassword, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/agent")
+const {
+    uploadId,
+    uploadPassport,
+    agentByID,
+    getAgentsList,
+    updateAgent,
+    uploadProfilePicture,
+    changeAgentPassword,
+    addEmail,
+    confirmNewEmail,
+    resendConfirmEmail
+} = require("../controllers/agent")
+const { requireSignin } = require("../controllers/auth")
 const { uploadImages, createReport } = require("../controllers/report");
 const { passwordValidator } = require("../validators")
 router.use(cors())
