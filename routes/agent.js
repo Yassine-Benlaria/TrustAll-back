@@ -21,7 +21,7 @@ router.use(cors());
 
 var multer = require('multer');
 const { getCitiesList } = require("../validators/cities")
-const { getCarCommandsByAgent, getMoneyCommandsByAgent } = require("../controllers/command")
+const { getCarCommandsByAgent, getMoneyCommandsByAgent, confirmPaymentByAgent } = require("../controllers/command")
 var upload = multer();
 
 //uploading report
@@ -50,6 +50,11 @@ router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 
 //confirm new email 
 router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
+
+
+//confirm payment by client
+router.post("/confirm-payment/:id", /* requireSignin, isAuth, isVerified, */ confirmPaymentByAgent);
+
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)

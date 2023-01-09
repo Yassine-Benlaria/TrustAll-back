@@ -426,6 +426,16 @@ exports.getCommandsByClientID = (req, res) => {
     })
 }
 
+//get command by id (by client)
+exports.getClientCommandByID = (req, res) => {
+
+    Command.findById(req.query.command_id, (err, command) => {
+        if (err || !command || command.client_id != req.params.id) return res.status(400).json({ err: "command not found!" });
+
+        return res.json(command)
+    })
+}
+
 //confirm command by auth-agent
 exports.confirmCommandByAuthAgent = (req, res) => {
     Command.findOne({ _id: req.body.command_id }).then(command => {
@@ -508,6 +518,38 @@ exports.confirmPaymentByAuthAgent = (req, res) => {
         command.status = "05"
         command.save()
         return res.json({ msg: "payment confirmed by authagent" })
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
+
+//confirm payment by agent
+exports.confirmPaymentByAgent = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.status != "04")
+            return res.status(400).json({ err: "this task can't be done at this step!" });
+        if (command.agent_client != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to do this task" });
+        command.payed.agent = true;
+        command.save()
+        return res.json({ msg: "payment confirmed by agent" })
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "error occured" })
+    })
+}
+
+//confirm payment by client
+exports.confirmPaymentByClient = (req, res) => {
+    Command.findOne({ _id: req.body.command_id }).then(command => {
+        if (command.status != "04")
+            return res.status(400).json({ err: "this task can't be done at this step!" });
+        if (command.client_id != req.params.id)
+            return res.status(400).json({ err: "You are not authorized to do this task" });
+        command.payed.client = true;
+        command.save()
+        return res.json({ msg: "payment confirmed by client" })
     }).catch(err => {
         console.log(err);
         return res.status(400).json({ err: "error occured" })

@@ -4,39 +4,41 @@ const cors = require("cors")
 const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail, deleteClient } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
-const { addCommand, getCommandsByClientID } = require("../controllers/command")
+const { addCommand, getCommandsByClientID, confirmPaymentByClient, getClientCommandByID } = require("../controllers/command")
 router.use(cors())
 
 //signup route
 router.post("/signup", validator, signup)
 
 //email confirmation route
-router.post("/confirm/:id", requireSignin, isAuth, confirmEmail)
+router.post("/confirm/:id", requireSignin, isAuth, confirmEmail);
 
 //get commands
-router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID)
+router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID);
 
-//get clients list
-// router.get("/all/:lang", getClientsList)
-
+//get command
+router.get("/command/:id", getClientCommandByID);
 
 //change password
 router.post("/change-password/:id", requireSignin, isAuth, isVerified, passwordValidator, changeClientPassword);
 
 //upload profile pic
-router.post("/photo/:id", requireSignin, isAuth, isVerified, uploadProfilePicture)
+router.post("/photo/:id", requireSignin, isAuth, isVerified, uploadProfilePicture);
 
 //update client's info (first_name, last_name or birth_date)
-router.post("/update/:id", requireSignin, isAuth, isVerified, clientUpdateValidator, updateClient)
+router.post("/update/:id", requireSignin, isAuth, isVerified, clientUpdateValidator, updateClient);
 
 //add new email address
-router.post("/new-email/:id", requireSignin, isAuth, isVerified, addEmail)
+router.post("/new-email/:id", requireSignin, isAuth, isVerified, addEmail);
 
 //confirm new email
-router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirmNewEmail)
+router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirmNewEmail);
 
 //resent confirmation code
-router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail)
+router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail);
+
+//confirm payment by client
+router.post("/confirm-payment/:id", /* requireSignin, isAuth, isVerified, */ confirmPaymentByClient);
 
 //add new command
 router.post("/add-command/:id", /*requireSignin, isAuth, isVerified,*/ addCommandValidator, addCommand)
