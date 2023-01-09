@@ -305,7 +305,7 @@ exports.getCarCommandsByAgent = (req, res) => {
             },
         },
         //
-        { $match: { agent_seller: mongoose.Types.ObjectId(req.params.id) } }
+        { $match: { agent_seller: mongoose.Types.ObjectId(req.params.id), or: [{ status: "06" }, { status: "07" }, { status: "08" }] } }
         // {
         //     client_id: req.params.id
         // }
