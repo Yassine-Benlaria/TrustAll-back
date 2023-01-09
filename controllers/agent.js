@@ -131,7 +131,7 @@ exports.updateAgent = (req, res) => {
         if (err || !result) {
             return res.status(400).json({ err })
         }
-        return res.json({ response: "Agent updated successfully!" })
+        return res.json({ msg: "Agent updated successfully!" })
     })
 }
 
