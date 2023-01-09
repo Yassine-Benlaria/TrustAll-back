@@ -20,6 +20,7 @@ router.use(cors())
 
 var multer = require('multer');
 const { getCitiesList } = require("../validators/cities")
+const { getCarCommandsByAgent } = require("../controllers/command")
 var upload = multer();
 
 //uploading report
@@ -37,6 +38,8 @@ router.post("/upload_ID/:id", /*require signin */ uploadId)
 //uploading passport
 router.post("/upload_passport/:id", /*require signin*/ uploadPassport)
 
+//get car commands by auth_agent
+router.get("/car-commands/:id", getCarCommandsByAgent);
 
 //add new email address
 router.post("/new-email/:id", requireSignin, isAuth, addEmail)
