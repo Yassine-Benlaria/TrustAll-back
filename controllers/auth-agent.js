@@ -2,6 +2,8 @@ const { generateRandomPassword, sendConfirmationMail, requireMessages, generateC
 const AuthAgent = require("../models/auth-agent"),
     UsedEmail = require("../models/used-email"),
     Agent = require("../models/agent");
+const crypto = require("crypto")
+const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const projection = {
     salt: false,
