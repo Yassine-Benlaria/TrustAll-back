@@ -19,6 +19,7 @@ const { passwordValidator } = require("../validators")
 router.use(cors())
 
 var multer = require('multer');
+const { getCitiesList } = require("../validators/cities")
 var upload = multer();
 
 //uploading report
