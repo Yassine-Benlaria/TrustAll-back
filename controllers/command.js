@@ -305,7 +305,7 @@ exports.getCarCommandsByAgent = (req, res) => {
             },
         },
         //
-        { $match: { agent_seller: mongoose.Types.ObjectId(req.params.id), or: [{ status: "06" }, { status: "07" }, { status: "08" }] } }
+        { $match: { agent_seller: mongoose.Types.ObjectId(req.params.id), status: { $in: ["06", "07", "08"] } } }
         // {
         //     client_id: req.params.id
         // }
@@ -379,7 +379,7 @@ exports.getMoneyCommandsByAgent = (req, res) => {
                 }
             },
             //
-            { $match: { agent_client: mongoose.Types.ObjectId(req.params.id) } }
+            { $match: { agent_client: mongoose.Types.ObjectId(req.params.id), status: { $in: ["04", "05", "06", "07", "08"] } } }
             // {
             //     client_id: req.params.id
             // }
