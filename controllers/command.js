@@ -359,32 +359,9 @@ exports.getMoneyCommandsByAgent = (req, res) => {
                     plan_id: 1,
                     client_id: 1,
                     car_name: 1,
-                    auth_agent_client: 1,
-                    auth_agent_seller: 1,
                     agent_client: 1,
-                    agent_seller: 1
                 }
             },
-            // getting ful name of client-side agent
-            {
-                $lookup: {
-                    from: 'agents',
-                    localField: 'agent_client',
-                    foreignField: '_id',
-                    as: 'agent_client'
-                }
-            }, {
-                $set: {
-                    agent_client: {
-                        $concat: [{ $arrayElemAt: ["$agent_client.first_name", 0] },
-                            " ",
-                            { $arrayElemAt: ["$agent_client.last_name", 0] }
-                        ]
-                    }
-                    // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
-                }
-            },
-
 
             // getting full name and phone number of client
             {
