@@ -201,8 +201,24 @@ exports.changeClientPassword = (req, res) => {
 }
 
 //add new email
-exports.addEmail = (req, res) => {
+exports.addEmail = async(req, res) => {
+
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    })
+
     const code = generateConfirmationCode()
+
+    //-----------
     Client.findById(req.params.id, (err, client) => {
         //if no account found
         if (err || !client) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });

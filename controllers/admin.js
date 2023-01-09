@@ -14,9 +14,9 @@ const DeletedClient = require("../models/deleted/deleted-client"),
 
 //#################
 const crypto = require("crypto")
+const { v1: uuidv1 } = require("uuid");
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
-const { v1: uuidv1 } = require("uuid");
 const { getCitiesList } = require("../validators/cities")
 
 const projection = {
@@ -238,7 +238,19 @@ exports.createPlan = (req, res) => {
 }
 
 //add new email
-exports.addEmail = (req, res) => {
+exports.addEmail = async(req, res) => {
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    })
     const code = generateConfirmationCode()
     Admin.findById(req.params.id, (err, admin) => {
         //if no account found
