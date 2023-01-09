@@ -45,7 +45,7 @@ exports.signIn = (req, res) => {
 
                                 //return response
                                 const { _id, first_name, last_name, status, email } = authAgent;
-                                return res.json({ token, user: { _id, first_name, last_name, status, email, type: "auth_agent" } })
+                                return res.json({ token, user: { _id, first_name, last_name, status, email, type: "auth-agent" } })
                             })
                         }
 
