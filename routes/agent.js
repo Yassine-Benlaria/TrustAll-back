@@ -14,9 +14,10 @@ const {
     resendConfirmEmail
 } = require("../controllers/agent")
 const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
-const { uploadImages, createReport } = require("../controllers/report");
+const { uploadImages, createReport, getReport } = require("../controllers/report");
 const { passwordValidator } = require("../validators")
-router.use(cors())
+router.use(cors());
+
 
 var multer = require('multer');
 const { getCitiesList } = require("../validators/cities")
@@ -53,6 +54,8 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
+//get report
+router.get("/report/:id", getReport);
 
 //update agent's info
 router.post("/update/:id", updateAgent)
