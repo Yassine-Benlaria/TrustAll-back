@@ -77,6 +77,11 @@ const agentSchema = new mongoose.Schema({
             active: true,
         }
     },
+    //for changing the email
+    newEmail: String,
+    newEmailConfirmation: String,
+    newEmailConfirmationExpiration: Date,
+    //hashed password
     salt: { type: String },
     hashed_password: {
         type: String,

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { uploadId, uploadPassport, agentByID, getAgentsList, updateAgent, uploadProfilePicture } = require("../controllers/agent")
+const { uploadId, uploadPassport, agentByID, getAgentsList, updateAgent, uploadProfilePicture, changeAgentPassword, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/agent")
 const { uploadImages, createReport } = require("../controllers/report")
 router.use(cors())
 
@@ -14,11 +14,25 @@ router.post("/upload-report/:id", createReport)
 //testing uploading multiple files
 router.post("/test-upload", /*upload.array('uploadedImages'),*/ uploadImages)
 
+//change password
+router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAgentPassword);
+
 //uploading id card / driving license
 router.post("/upload_ID/:id", /*require signin */ uploadId)
 
 //uploading passport
 router.post("/upload_passport/:id", /*require signin*/ uploadPassport)
+
+
+//add new email address
+router.post("/new-email/:id", requireSignin, isAuth, addEmail)
+
+//confirm new email 
+router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
+
+//resent confirmation code
+router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
+
 
 //update agent's info
 router.post("/update/:id", updateAgent)

@@ -1,4 +1,4 @@
-const { generateRandomPassword, sendConfirmationMail } = require("../helpers");
+const { generateRandomPassword, sendConfirmationMail, requireMessages, generateConfirmationCode } = require("../helpers");
 const AuthAgent = require("../models/auth-agent"),
     UsedEmail = require("../models/used-email"),
     Agent = require("../models/agent");
@@ -170,5 +170,90 @@ exports.getAgentsList = (req, res) => {
             return {...user._doc, city }
         })
         return res.json(agents)
+    })
+}
+
+//change password
+exports.changeAuthAgentPassword = (req, res) => {
+    const { noAccountFound, passwordNotCorrect, updatedSuccess } = requireMessages(req.body.lang)
+    AuthAgent.findById(req.params.id, (err, authAgent) => {
+        if (err || !authAgent)
+            return res.status(400).json({ err: noAccountFound });
+        if (!authAgent.authenticate(req.body.old_password))
+            return res.status(400).json({ err: passwordNotCorrect })
+        let salt = uuidv1(),
+            hashed_password = crypto
+            .createHmac('sha1', salt)
+            .update(req.body.password)
+            .digest("hex");
+        authAgent.hashed_password = hashed_password;
+        authAgent.salt = salt;
+        authAgent.save();
+        return res.json({ msg: updatedSuccess });
+    })
+}
+
+
+//add new email
+exports.addEmail = (req, res) => {
+    const code = generateConfirmationCode()
+    AuthAgent.findById(req.params.id, (err, authAgent) => {
+        //if no account found
+        if (err || !authAgent) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        if (authAgent.email == req.body.email) return res.status(400).json({ err: "You are already using this email!" })
+
+        //else
+        authAgent.newEmail = req.body.email;
+        authAgent.newEmailConfirmation = code;
+        authAgent.newEmailConfirmationExpiration = Date.now() + 180000;
+        authAgent.save()
+        sendConfirmationMail(req.body.email, code, req.body.lang);
+        return res.json({ msg: "confirmation code sent to email!" })
+    });
+}
+
+//confirm the new email
+exports.confirmNewEmail = (req, res) => {
+    AuthAgent.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
+        .then(authAgent => {
+            if (!authAgent) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
+            if (authAgent.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            authAgent.email = authAgent.newEmail;
+            authAgent.newEmail = undefined;
+            authAgent.newEmailConfirmation = undefined;
+            authAgent.newEmailConfirmationExpiration = undefined;
+            authAgent.save().then(result => {
+                return res.json({ msg: requireMessages(req.body.lang).emailModified })
+            }).catch(err => {
+                return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
+            });
+        })
+}
+
+//resend confirmation code
+exports.resendConfirmEmail = (req, res) => {
+    AuthAgent.findById(req.params.id, (err, authAgent) => {
+        if (err || !authAgent) return res.status(400).json({ msg: requireMessages(req.body.lang).noAccountFound });
+
+        //if an account found
+        var code = generateConfirmationCode();
+
+        if (req.body.type == "new-email") {
+            if (authAgent.newEmail) {
+                //if 60 seconds doesn't pass yet
+                if (Date.parse(authAgent.newEmailConfirmationExpiration) - 120000 > (Date.now()))
+                    return res.status(400).json({ err: "you have to wait 60 seconds!" });
+                //else
+                authAgent.newEmailConfirmation = code;
+                authAgent.newEmailConfirmationExpiration = Date.now() + 180000;
+                authAgent.save();
+                sendConfirmationMail(authAgent.newEmail, code, req.body.lang);
+            } else return res.status(400).json({ err: "want to resend code, but no newEmail found!" });
+        } else {
+            authAgent.confirmation_code = code;
+            authAgent.save();
+            sendConfirmationMail(authAgent.email, code, req.body.lang);
+        }
+        return res.json({ msg: requireMessages(req.body.lang).emailSent })
     })
 }

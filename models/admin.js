@@ -63,6 +63,7 @@ const adminSchema = new mongoose.Schema({
     newEmail: String,
     newEmailConfirmation: String,
     newEmailConfirmationExpiration: Date,
+    //hashed password
     salt: { type: String },
     hashed_password: {
         type: String,

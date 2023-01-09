@@ -6,6 +6,7 @@ const fs = require("fs")
 const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
 const { getCitiesList } = require("../validators/cities");
 const { default: mongoose } = require("mongoose");
+const { generateConfirmationCode, sendConfirmationMail, requireMessages } = require("../helpers");
 const projection = {
     salt: false,
     hashed_password: false,
@@ -186,4 +187,89 @@ exports.deleteAgent = (req, res) => {
             });
         })
     });
+}
+
+//change password
+exports.changeAgentPassword = (req, res) => {
+    const { noAccountFound, passwordNotCorrect, updatedSuccess } = requireMessages(req.body.lang)
+    Agent.findById(req.params.id, (err, agent) => {
+        if (err || !agent)
+            return res.status(400).json({ err: noAccountFound });
+        if (!agent.authenticate(req.body.old_password))
+            return res.status(400).json({ err: passwordNotCorrect })
+        let salt = uuidv1(),
+            hashed_password = crypto
+            .createHmac('sha1', salt)
+            .update(req.body.password)
+            .digest("hex");
+        agent.hashed_password = hashed_password;
+        agent.salt = salt;
+        agent.save();
+        return res.json({ msg: updatedSuccess });
+    })
+}
+
+
+//add new email
+exports.addEmail = (req, res) => {
+    const code = generateConfirmationCode()
+    Agent.findById(req.params.id, (err, agent) => {
+        //if no account found
+        if (err || !agent) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        if (agent.email == req.body.email) return res.status(400).json({ err: "You are already using this email!" })
+
+        //else
+        agent.newEmail = req.body.email;
+        agent.newEmailConfirmation = code;
+        agent.newEmailConfirmationExpiration = Date.now() + 180000;
+        agent.save()
+        sendConfirmationMail(req.body.email, code, req.body.lang);
+        return res.json({ msg: "confirmation code sent to email!" })
+    });
+}
+
+//confirm the new email
+exports.confirmNewEmail = (req, res) => {
+    Agent.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
+        .then(agent => {
+            if (!agent) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
+            if (agent.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            agent.email = agent.newEmail;
+            agent.newEmail = undefined;
+            agent.newEmailConfirmation = undefined;
+            agent.newEmailConfirmationExpiration = undefined;
+            agent.save().then(result => {
+                return res.json({ msg: requireMessages(req.body.lang).emailModified })
+            }).catch(err => {
+                return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
+            });
+        })
+}
+
+//resend confirmation code
+exports.resendConfirmEmail = (req, res) => {
+    Agent.findById(req.params.id, (err, agent) => {
+        if (err || !agent) return res.status(400).json({ msg: requireMessages(req.body.lang).noAccountFound });
+
+        //if an account found
+        var code = generateConfirmationCode();
+
+        if (req.body.type == "new-email") {
+            if (agent.newEmail) {
+                //if 60 seconds doesn't pass yet
+                if (Date.parse(agent.newEmailConfirmationExpiration) - 120000 > (Date.now()))
+                    return res.status(400).json({ err: "you have to wait 60 seconds!" });
+                //else
+                agent.newEmailConfirmation = code;
+                agent.newEmailConfirmationExpiration = Date.now() + 180000;
+                agent.save();
+                sendConfirmationMail(agent.newEmail, code, req.body.lang);
+            } else return res.status(400).json({ err: "want to resend code, but no newEmail found!" });
+        } else {
+            agent.confirmation_code = code;
+            agent.save();
+            sendConfirmationMail(agent.email, code, req.body.lang);
+        }
+        return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
 }

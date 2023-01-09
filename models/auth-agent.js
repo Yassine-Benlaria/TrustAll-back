@@ -75,13 +75,13 @@ const authAgentSchema = new mongoose.Schema({
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,
-    // confirmation_code: {
-    //     type: String,
-    // },
-    // verified: {
-    //     type: Boolean,
-    //     default: false
-    // },
+    // for changing email
+
+    //for changing the email
+    newEmail: String,
+    newEmailConfirmation: String,
+    newEmailConfirmationExpiration: Date,
+    //hashed password
     salt: { type: String },
     hashed_password: {
         type: String,
