@@ -13,7 +13,7 @@ const {
     confirmNewEmail,
     resendConfirmEmail
 } = require("../controllers/agent")
-const { requireSignin } = require("../controllers/auth")
+const { requireSignin, isAuth } = require("../controllers/auth")
 const { uploadImages, createReport } = require("../controllers/report");
 const { passwordValidator } = require("../validators")
 router.use(cors())
