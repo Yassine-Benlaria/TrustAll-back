@@ -11,6 +11,7 @@ const projection = {
 
 };
 
+
 exports.authAgentByID = (req, res, next, id) => {
     AuthAgent.findById(id, projection, (err, result) => {
         if (err || !result) {

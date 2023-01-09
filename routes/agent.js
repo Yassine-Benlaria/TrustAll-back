@@ -2,7 +2,8 @@ const express = require("express")
 const router = express.Router()
 const cors = require("cors")
 const { uploadId, uploadPassport, agentByID, getAgentsList, updateAgent, uploadProfilePicture, changeAgentPassword, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/agent")
-const { uploadImages, createReport } = require("../controllers/report")
+const { uploadImages, createReport } = require("../controllers/report");
+const { passwordValidator } = require("../validators")
 router.use(cors())
 
 var multer = require('multer');
