@@ -224,11 +224,22 @@ exports.confirmNewEmail = (req, res) => {
         .then(client => {
             if (!client) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
             if (client.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            ///////////////////////////////////////////
+            let newMail = client.newEmail,
+                oldMail = client.email;
+            ///////////////////////////////////////////
             client.email = client.newEmail;
             client.newEmail = undefined;
             client.newEmailConfirmation = undefined;
             client.newEmailConfirmationExpiration = undefined;
             client.save().then(result => {
+                //adding new email to used emails
+                usedEmail = new UsedEmail({ email: newMail })
+                usedEmail.save();
+                //delete old email from used emails
+                UsedEmail.findOneAndDelete({ email: oldMail }, (err, email) => {
+                    if (err) return console.table({ err: err });
+                });
                 return res.json({ msg: requireMessages(req.body.lang).emailModified })
             }).catch(err => {
                 return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
