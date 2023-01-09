@@ -13,7 +13,7 @@ const {
     confirmNewEmail,
     resendConfirmEmail
 } = require("../controllers/agent")
-const { requireSignin, isAuth } = require("../controllers/auth")
+const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
 const { uploadImages, createReport } = require("../controllers/report");
 const { passwordValidator } = require("../validators")
 router.use(cors())
@@ -60,6 +60,12 @@ router.get("/:id", (req, res) => {
 
 //upload profile pic
 router.post("/photo/:id", uploadProfilePicture)
+
+//get Authorized Agent by id
+router.get("/:id/:lang", requireSignin, isAuth, isAgent, (req, res) => {
+    let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
+    return res.json({ user: {...req.profile, city } });
+});
 
 //agentByID middlware
 router.param("id", agentByID)

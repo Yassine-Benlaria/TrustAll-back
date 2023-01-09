@@ -9,14 +9,10 @@ const agentStatusSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    active: {
-        type: Boolean,
-        default: true
-    },
     online: {
         type: Boolean,
     },
-}, { _id: false })
+}, { timestamps: false, _id: false })
 
 //Agent schema
 const agentSchema = new mongoose.Schema({
@@ -74,7 +70,6 @@ const agentSchema = new mongoose.Schema({
         type: agentStatusSchema,
         default: {
             verified: false,
-            active: true,
         }
     },
     //for changing the email
