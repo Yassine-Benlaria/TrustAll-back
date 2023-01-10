@@ -563,7 +563,8 @@ exports.confirmPaymentByClient = (req, res) => {
 //get car commands by admin
 exports.getCarCommandsByAdmin = (req, res) => {
 
-    if (req.profile.Type != "admin") return res.status(400).json({ err: "not authorized" })
+    console.log(req.profile)
+    if (req.profile.type != "admin") return res.status(400).json({ err: "not authorized" })
 
     Command.aggregate([{
             $project: {
@@ -660,6 +661,8 @@ exports.getCarCommandsByAdmin = (req, res) => {
 
 //get money commands by admin
 exports.getMoneyCommandsByAdmin = (req, res) => {
+    if (req.profile.type != "admin") return res.status(400).json({ err: "not authorized" })
+
     Command.aggregate(
         [{
                 $project: {
