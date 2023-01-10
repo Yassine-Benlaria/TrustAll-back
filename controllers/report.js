@@ -352,6 +352,7 @@ exports.getReportByClient = (req, res) => {
                             [texts.mechanical[option]]: report.mechanical[option]
                         }
                 }).filter(o => o != undefined),
+                video_url: report.video_url
             }
 
             return res.json(response)
