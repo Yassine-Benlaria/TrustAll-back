@@ -4,6 +4,7 @@ const Command = require("../models/command"),
 const { uploadFilesToImageKit } = require("../helpers/imageUploader");
 const { imagesUpload } = require("../helpers/uploader");
 const mongoose = require("mongoose");
+const { requireMessages } = require("../helpers");
 
 exports.uploadImages = (req, res) => {
 
@@ -286,6 +287,7 @@ const updateReport = (req, res, report) => {
 
 //get report
 exports.getReport = (req, res) => {
+
     Command.findById(req.query.command_id, (err, command) => {
         // if command not found
         if (err || !command) return res.status(400).json({ err: "command not found!" });
@@ -300,7 +302,6 @@ exports.getReport = (req, res) => {
         Report.findOne({ command_id: req.query.command_id }, (err, report) => {
             if (err || !report) return res.status(400).json({ err: "report not found" })
 
-            return res.json(report)
         })
     })
 }
@@ -322,7 +323,37 @@ exports.getReportByClient = (req, res) => {
         Report.findOne({ command_id: req.query.command_id }, (err, report) => {
             if (err || !report) return res.status(400).json({ err: "report not found" })
 
-            return res.json(report)
+            let texts = requireMessages(req.query.lang).options
+
+            console.log(report.interior.windows)
+            let response = {
+                car_information: Object.keys(report.car_information).map(option => {
+                    if (Object.keys(report.car_information[option]).length > 0)
+                        return {
+                            [texts.car_information[option]]: report.car_information[option]
+                        }
+                }),
+                interior: Object.keys(report.interior).map(option => {
+                    if (report.interior[option].status != undefined)
+                        return {
+                            [texts.interior[option]]: report.interior[option]
+                        }
+                }).filter(o => o != undefined),
+                exterior: Object.keys(report.exterior).map(option => {
+                    if (report.exterior[option].status != undefined)
+                        return {
+                            [texts.exterior[option]]: report.exterior[option]
+                        }
+                }).filter(o => o != undefined),
+                mechanical: Object.keys(report.mechanical).map(option => {
+                    if (report.mechanical[option].status != undefined)
+                        return {
+                            [texts.mechanical[option]]: report.mechanical[option]
+                        }
+                }).filter(o => o != undefined),
+            }
+
+            return res.json(response)
         })
     })
 }
