@@ -5,7 +5,7 @@ const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
 const { addCommand, getCommandsByClientID, confirmPaymentByClient, getClientCommandByID } = require("../controllers/command")
-const { getReportByClient } = require("../controllers/report")
+const { getCompletedReport } = require("../controllers/report")
 router.use(cors())
 
 //signup route
@@ -36,7 +36,7 @@ router.post("/new-email/:id", requireSignin, isAuth, isVerified, addEmail);
 router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirmNewEmail);
 
 //get report
-router.get("/get-report/:id", getReportByClient);
+router.get("/get-report/:id", getCompletedReport);
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail);

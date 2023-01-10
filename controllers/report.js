@@ -309,7 +309,8 @@ exports.getReport = (req, res) => {
 
 
 // get report by Client
-exports.getReportByClient = (req, res) => {
+exports.getCompletedReport = (req, res) => {
+    console.log("-------------")
     Command.findById(req.query.command_id, (err, command) => {
         // if command not found
         if (err || !command) return res.status(400).json({ err: "command not found!" });

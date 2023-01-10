@@ -6,7 +6,7 @@ const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, i
 const { getCitiesList } = require("../validators/cities")
 const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
-const { createReport, getReport, getReportByClient } = require("../controllers/report")
+const { createReport, getReport, getCompletedReport } = require("../controllers/report")
 const { passwordValidator } = require("../validators")
 router.use(cors())
 
@@ -29,7 +29,7 @@ router.post("/upload-report/:id", createReport);
 router.get("/report/:id", getReport);
 
 //
-router.get("/get-report/:id", getReportByClient);
+router.get("/get-report/:id", getCompletedReport);
 
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAuthAgent, getAgentsList)
