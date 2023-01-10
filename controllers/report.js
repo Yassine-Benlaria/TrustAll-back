@@ -161,6 +161,9 @@ const createNewReport = (req, res) => {
             report = new Report(report_json)
             report.save()
             command.status = "07";
+            if (req.profile.type == "auth-agent" || req.profile.type == "admin")
+                command.status = "08";
+
             command.save();
             return res.json({ msg: "report created successfully" })
         });
@@ -278,6 +281,8 @@ const updateReport = (req, res, report) => {
 
             report.save()
             command.status = "07";
+            if (req.profile.type == "auth-agent" || req.profile.type == "admin")
+                command.status = "08";
             command.save();
             return res.json({ msg: "report updated successfully" })
         });
