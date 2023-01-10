@@ -328,30 +328,30 @@ exports.getReportByClient = (req, res) => {
 
             console.log(report.interior.windows)
             let response = {
-                car_information: Object.keys(report.car_information).map(option => {
+                car_information: Object.assign({}, ...Object.keys(report.car_information).map(option => {
                     if (Object.keys(report.car_information[option]).length > 0)
                         return {
                             [texts.car_information[option]]: report.car_information[option]
                         }
-                }),
-                interior: Object.keys(report.interior).map(option => {
+                })),
+                interior: Object.assign({}, ...Object.keys(report.interior).map(option => {
                     if (report.interior[option].status != undefined)
                         return {
                             [texts.interior[option]]: report.interior[option]
                         }
-                }).filter(o => o != undefined),
-                exterior: Object.keys(report.exterior).map(option => {
+                }).filter(o => o != undefined)),
+                exterior: Object.assign({}, ...Object.keys(report.exterior).map(option => {
                     if (report.exterior[option].status != undefined)
                         return {
                             [texts.exterior[option]]: report.exterior[option]
                         }
-                }).filter(o => o != undefined),
-                mechanical: Object.keys(report.mechanical).map(option => {
+                }).filter(o => o != undefined)),
+                mechanical: Object.assign({}, ...Object.keys(report.mechanical).map(option => {
                     if (report.mechanical[option].status != undefined)
                         return {
                             [texts.mechanical[option]]: report.mechanical[option]
                         }
-                }).filter(o => o != undefined),
+                }).filter(o => o != undefined)),
             }
 
             return res.json(response)
