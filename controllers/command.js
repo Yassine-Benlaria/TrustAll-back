@@ -401,7 +401,7 @@ exports.getMoneyCommandsByAgent = (req, res) => {
 exports.getCommandsByClientID = (req, res) => {
     // console.log(req.params)
     Command.aggregate([
-        { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1 } },
+        { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1, car_name: 1, commune_id: 1 } },
         {
             $lookup: {
                 from: 'plans',
@@ -422,7 +422,11 @@ exports.getCommandsByClientID = (req, res) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
-        return res.json(result)
+
+        let response = result.map(command => {
+            return {...command, city: req.query.lang == "ar" ? getCommuneByID(command.commune_id).wilaya_name : getCommuneByID(command.commune_id).wilaya_name_ascii }
+        })
+        return res.json(response)
     })
 }
 

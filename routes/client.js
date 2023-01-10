@@ -15,7 +15,7 @@ router.post("/signup", validator, signup)
 router.post("/confirm/:id", requireSignin, isAuth, confirmEmail);
 
 //get commands
-router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID);
+router.get("/commands/:id", /* requireSignin, isAuth, isVerified, isActive,*/ getCommandsByClientID);
 
 //get command
 router.get("/command/:id", getClientCommandByID);
