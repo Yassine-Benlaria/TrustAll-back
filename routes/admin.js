@@ -41,13 +41,14 @@ const {
 const {
     getClientsList
 } = require("../controllers/client")
-const { createReport, getCompletedReport } = require("../controllers/report")
+const { createReport, getCompletedReport, getReport } = require("../controllers/report")
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin } = require("../controllers/command")
 
 router.use(cors())
 
 //upload report
 router.post("/upload-report/:id", createReport)
+
 
 
 //get car commands by auth_agent
@@ -68,6 +69,10 @@ router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAut
 
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
+
+
+//get report
+router.get("/report/:id", getReport);
 
 router.get("/get-report/:id", getCompletedReport);
 
