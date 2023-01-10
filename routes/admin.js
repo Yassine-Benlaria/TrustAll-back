@@ -41,7 +41,7 @@ const {
 const {
     getClientsList
 } = require("../controllers/client")
-const { createReport } = require("../controllers/report")
+const { createReport, getReportByClient } = require("../controllers/report")
 
 router.use(cors())
 
@@ -60,6 +60,8 @@ router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAut
 
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
+
+router.get("/get-report/:id", getReportByClient);
 
 //get clients list
 router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsList)

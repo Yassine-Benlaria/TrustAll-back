@@ -315,7 +315,13 @@ exports.getReportByClient = (req, res) => {
         if (err || !command) return res.status(400).json({ err: "command not found!" });
 
         // if user is not authorized to view the report
-        if (req.params.id != command.client_id)
+        if (req.params.id != command.client_id &&
+            req.params.id != command.auth_agent_client &&
+            req.params.id != command.auth_agent_seller &&
+            req.params.id != command.agent_seller &&
+            req.params.id != command.agent_client &&
+            req.profile.type != "admin"
+        )
             return res.status(400).json({ err: "not authorized" });
 
         if (command.status != "08") return res.status(400).json({ err: "report not found" })

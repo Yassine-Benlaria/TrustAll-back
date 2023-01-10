@@ -14,7 +14,7 @@ const {
     resendConfirmEmail
 } = require("../controllers/agent")
 const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
-const { uploadImages, createReport, getReport } = require("../controllers/report");
+const { uploadImages, createReport, getReport, getReportByClient } = require("../controllers/report");
 const { passwordValidator } = require("../validators")
 router.use(cors());
 
@@ -61,6 +61,9 @@ router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //get report
 router.get("/report/:id", getReport);
+
+router.get("/get-report/:id", getReportByClient);
+
 
 //update agent's info
 router.post("/update/:id", updateAgent)

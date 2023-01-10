@@ -36,7 +36,7 @@ router.post("/new-email/:id", requireSignin, isAuth, isVerified, addEmail);
 router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirmNewEmail);
 
 //get report
-router.get("/report/:id", getReportByClient);
+router.get("/get-report/:id", getReportByClient);
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail);
