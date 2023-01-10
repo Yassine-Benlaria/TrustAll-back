@@ -284,6 +284,7 @@ const updateReport = (req, res, report) => {
 
 }
 
+//get report
 exports.getReport = (req, res) => {
     Command.findById(req.query.command_id, (err, command) => {
         // if command not found
@@ -294,6 +295,28 @@ exports.getReport = (req, res) => {
             req.params.id != command.auth_agent_seller &&
             req.params.id != command.agent_seller)
             return res.status(400).json({ err: "not authorized" });
+
+        //if user is authorized
+        Report.findOne({ command_id: req.query.command_id }, (err, report) => {
+            if (err || !report) return res.status(400).json({ err: "report not found" })
+
+            return res.json(report)
+        })
+    })
+}
+
+
+// get report by Client
+exports.getReportByClient = (req, res) => {
+    Command.findById(req.query.command_id, (err, command) => {
+        // if command not found
+        if (err || !command) return res.status(400).json({ err: "command not found!" });
+
+        // if user is not authorized to view the report
+        if (req.params.id != command.client_id)
+            return res.status(400).json({ err: "not authorized" });
+
+        if (command.status != "08") return res.status(400).json({ err: "report not found" })
 
         //if user is authorized
         Report.findOne({ command_id: req.query.command_id }, (err, report) => {
