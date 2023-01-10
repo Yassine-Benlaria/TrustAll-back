@@ -287,7 +287,6 @@ const updateReport = (req, res, report) => {
 
 //get report
 exports.getReport = (req, res) => {
-
     Command.findById(req.query.command_id, (err, command) => {
         // if command not found
         if (err || !command) return res.status(400).json({ err: "command not found!" });
@@ -302,9 +301,11 @@ exports.getReport = (req, res) => {
         Report.findOne({ command_id: req.query.command_id }, (err, report) => {
             if (err || !report) return res.status(400).json({ err: "report not found" })
 
+            return res.json(report)
         })
     })
 }
+
 
 
 // get report by Client
