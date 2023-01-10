@@ -759,7 +759,6 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
                 }
             },
             //
-            { $match: { auth_agent_client: mongoose.Types.ObjectId(req.params.id) } }
             // {
             //     client_id: req.params.id
             // }

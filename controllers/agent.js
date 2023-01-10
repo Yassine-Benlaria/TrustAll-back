@@ -1,6 +1,7 @@
 const Agent = require("../models/agent"),
     DeletedAgent = require("../models/deleted/deleted-agent"),
-    UsedEmail = require("../models/used-email")
+    UsedEmail = require("../models/used-email"),
+    Command = require("../models/command");
 const multer = require("multer")
 const fs = require("fs")
 const crypto = require("crypto")
