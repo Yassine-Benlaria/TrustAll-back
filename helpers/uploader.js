@@ -43,7 +43,7 @@ var imagesUpload = multer({
     }
 }).array("uploadedImages");
 
-var authAgentPassportUpload = multer({
+var authAgentUpload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -120,8 +120,8 @@ var authAgentPassportUploadd = multer({
 exports.agentUploadPassprt = agentPassportUpload
 exports.agentUploadID = agentIDUpload
 
-exports.authAgentUploadPassprt = authAgentPassportUpload
-exports.authAgentUploadID = authAgentIDUpload
+exports.authAgentUploadPassprt = authAgentUpload
+exports.authAgentUploadID = authAgentUpload
 exports.imagesUpload = imagesUpload
 
 ///profile pictures upload
