@@ -2,7 +2,7 @@ const multer = require("multer")
 const fs = require("fs")
 
 ///ID documents upload
-var storage = multer.diskStorage({
+var agentStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         console.log("file:", file)
         const path = `./public/documents/agent/${req.params.id}`
@@ -15,20 +15,19 @@ var storage = multer.diskStorage({
     }
 })
 
-var IDUpload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
-            err.name = 'ExtensionError'
-            return cb(err);
-        }
+///ID documents upload
+var authAgentStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        console.log("file:", file)
+        const path = `./public/documents/auth-agent/${req.params.id}`
+        fs.mkdirSync(path, { recursive: true })
+        return callback(null, path)
+    },
+    filename: function(req, file, callback) {
+        let ext = file.mimetype.split("/")[1]
+        return callback(null, req.params.id + new Date().toISOString() + "." + ext)
     }
-}).array("images", 2)
+})
 
 var imagesUpload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
@@ -44,8 +43,23 @@ var imagesUpload = multer({
     }
 }).array("uploadedImages")
 
-var passportUpload = multer({
-    storage: storage,
+var agentIDUpload = multer({
+    storage: agentStorage,
+    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    }
+}).array("images", 2)
+
+var agentPassportUpload = multer({
+    storage: agentStorage,
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -59,8 +73,41 @@ var passportUpload = multer({
     }
 }).single("image");
 
-exports.agentUploadPassprt = passportUpload
-exports.agentUploadID = IDUpload
+var authAgentIDUpload = multer({
+    storage: authAgentStorage,
+    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    }
+}).array("images", 2)
+
+var authAgentPassportUpload = multer({
+    storage: authAgentStorage,
+    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    }
+}).single("image");
+
+exports.agentUploadPassprt = agentPassportUpload
+exports.agentUploadID = agentIDUpload
+
+exports.authAgentUploadPassprt = authAgentPassportUpload
+exports.authAgentUploadID = authAgentIDUpload
 exports.imagesUpload = imagesUpload
 
 ///profile pictures upload

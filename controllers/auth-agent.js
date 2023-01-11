@@ -5,6 +5,7 @@ const AuthAgent = require("../models/auth-agent"),
 const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
+const { authAgentUploadID, authAgentUploadPassprt } = require("../helpers/uploader");
 const projection = {
     salt: false,
     hashed_password: false,
@@ -283,5 +284,32 @@ exports.resendConfirmEmail = (req, res) => {
             sendConfirmationMail(authAgent.email, code, req.body.lang);
         }
         return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
+}
+
+//uploading ID card or Driving license
+exports.uploadId = (req, res) => {
+    authAgentUploadID(req, res, (err) => {
+        if (err) return res.status(400).json({ err })
+
+        return res.send("ID uploaded successfully")
+    });
+
+    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "ID" } }, (err, result) => {
+        if (err) console.log(err)
+        else console.log(result)
+    })
+}
+
+//uploading passport
+exports.uploadPassport = (req, res) => {
+    authAgentUploadPassprt(req, res, (err) => {
+        if (err) return res.status(400).json({ err })
+
+        return res.send("Passport uploaded successfully")
+    });
+    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
+        if (err) console.log(err)
+        else console.log(result)
     })
 }

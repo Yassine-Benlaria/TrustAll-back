@@ -37,7 +37,7 @@ router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, ch
 router.post("/upload_ID/:id", /*require signin */ uploadId)
 
 //uploading passport
-router.post("/upload_passport/:id", /*require signin*/ uploadPassport)
+router.post("/upload-passport/:id", /*require signin*/ uploadPassport)
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", getCarCommandsByAgent);

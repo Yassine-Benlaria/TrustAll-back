@@ -1,10 +1,38 @@
 const express = require("express")
 const router = express.Router()
 const cors = require("cors")
-const { authAgentByID, getAuthAgentsList, updateAuthAgent, uploadProfilePicture, createAgent, getAgentsList, changeAuthAgentPassword, addEmail, confirmNewEmail, resendConfirmEmail } = require("../controllers/auth-agent")
-const { requireSignin, isAuth, isAdmin, isAdminOrAgent, isAuthAgent, isActive, isVerified } = require("../controllers/auth")
+const {
+    authAgentByID,
+    getAuthAgentsList,
+    updateAuthAgent,
+    uploadProfilePicture,
+    createAgent,
+    getAgentsList,
+    changeAuthAgentPassword,
+    addEmail,
+    confirmNewEmail,
+    resendConfirmEmail,
+    uploadId,
+    uploadPassport
+} = require("../controllers/auth-agent")
+const {
+    requireSignin,
+    isAuth,
+    isAdmin,
+    isAdminOrAgent,
+    isAuthAgent,
+    isActive,
+    isVerified
+} = require("../controllers/auth")
 const { getCitiesList } = require("../validators/cities")
-const { getCarCommandsByAuthAgent, getMoneyCommandsByAuthAgent, confirmCommandByAuthAgent, assignSellerAgent, assignClientAgent, confirmPaymentByAuthAgent } = require("../controllers/command")
+const {
+    getCarCommandsByAuthAgent,
+    getMoneyCommandsByAuthAgent,
+    confirmCommandByAuthAgent,
+    assignSellerAgent,
+    assignClientAgent,
+    confirmPaymentByAuthAgent
+} = require("../controllers/command")
 const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
 const { createReport, getReport, getCompletedReport } = require("../controllers/report")
 const { passwordValidator } = require("../validators")
@@ -24,6 +52,13 @@ router.get("/money-commands/:id", getMoneyCommandsByAuthAgent);
 
 //upload report
 router.post("/upload-report/:id", createReport);
+
+//upload id
+router.post("/upload-ID/:id", /*require signin */ uploadId)
+
+//upload passport
+router.post("/upload-passport/:id", /*require signin */ uploadPassport)
+
 
 //get report
 router.get("/report/:id", getReport);
