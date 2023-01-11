@@ -289,6 +289,10 @@ exports.resendConfirmEmail = (req, res) => {
 
 //uploading ID card or Driving license
 exports.uploadId = (req, res) => {
+
+    if (!req.files || req.files.length != 3) {
+        return res.status(400).json({ err: "you have to upload 3 pictures" })
+    }
     authAgentUploadID(req, res, (err) => {
         if (err) return res.status(400).json({ err })
 
@@ -303,6 +307,9 @@ exports.uploadId = (req, res) => {
 
 //uploading passport
 exports.uploadPassport = (req, res) => {
+    if (!req.files || req.files.length != 2) {
+        return res.status(400).json({ err: "you have to upload 2 pictures" })
+    }
     authAgentUploadPassprt(req, res, (err) => {
         if (err) return res.status(400).json({ err })
 

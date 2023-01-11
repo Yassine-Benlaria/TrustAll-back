@@ -56,7 +56,7 @@ var agentIDUpload = multer({
             return cb(err);
         }
     }
-}).array("images", 2)
+}).array("images", 3)
 
 var agentPassportUpload = multer({
     storage: agentStorage,
@@ -71,7 +71,7 @@ var agentPassportUpload = multer({
             return cb(err);
         }
     }
-}).single("image");
+}).single("images", 2);
 
 var authAgentIDUpload = multer({
     storage: authAgentStorage,
@@ -86,7 +86,7 @@ var authAgentIDUpload = multer({
             return cb(err);
         }
     }
-}).array("images", 2)
+}).array("images", 3)
 
 var authAgentPassportUpload = multer({
     storage: authAgentStorage,
@@ -101,7 +101,7 @@ var authAgentPassportUpload = multer({
             return cb(err);
         }
     }
-}).single("image");
+}).single("image", 2);
 
 exports.agentUploadPassprt = agentPassportUpload
 exports.agentUploadID = agentIDUpload
