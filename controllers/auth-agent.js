@@ -309,7 +309,7 @@ exports.uploadId = (req, res) => {
 exports.uploadPassport = (req, res) => {
 
     authAgentUploadPassprt(req, res, (err) => {
-        console.log(req)
+        console.log(req.files)
         if (!req.files || req.files.length != 2) {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
