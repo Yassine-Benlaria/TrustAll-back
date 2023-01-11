@@ -295,7 +295,7 @@ exports.uploadId = (req, res) => {
         return res.send("ID uploaded successfully")
     });
 
-    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "ID" } }, (err, result) => {
+    AuthAgent.updateOne({ _id: req.params.id }, { $set: { identity_document: "ID" } }, (err, result) => {
         if (err) console.log(err)
         else console.log(result)
     })
@@ -308,7 +308,7 @@ exports.uploadPassport = (req, res) => {
 
         return res.send("Passport uploaded successfully")
     });
-    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
+    AuthAgent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
         if (err) console.log(err)
         else console.log(result)
     })
