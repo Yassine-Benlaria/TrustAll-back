@@ -44,8 +44,8 @@ exports.signIn = (req, res) => {
                                 res.cookie("token", token, { expire: new Date() + 9999 });
 
                                 //return response
-                                const { _id, first_name, last_name, status, email } = authAgent;
-                                return res.json({ token, user: { _id, first_name, last_name, status, email, type: "auth-agent" } })
+                                const { _id, first_name, last_name, status, id_uploaded, email } = authAgent;
+                                return res.json({ token, user: { _id, first_name, last_name, status, id_uploaded, email, type: "auth-agent" } })
                             })
                         }
 
