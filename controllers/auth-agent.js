@@ -328,6 +328,7 @@ exports.uploadPassport = (req, res) => {
 
     authAgentUploadPassprt(req, res, async(err) => {
 
+        if (err) console.log(err)
         console.log(req)
             // let file = Buffer.from(req.files[0].buffer).toString("base64")
             // console.log(file)
