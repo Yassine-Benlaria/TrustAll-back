@@ -62,7 +62,9 @@ const authAgentSchema = new mongoose.Schema({
     },
     identity_document: {
         type: { type: String },
-        images: { type: Array }
+        front_url: { type: String },
+        back_url: { type: String },
+        selfie_url: { type: String },
     },
     img: {
         type: Boolean,

@@ -55,7 +55,7 @@ var authAgentPassportUpload = multer({
             return cb(err);
         }
     }
-}).array("images");
+}).array("images", 2);
 
 var agentIDUpload = multer({
     storage: agentStorage,

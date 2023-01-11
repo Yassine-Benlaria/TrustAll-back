@@ -107,7 +107,7 @@ router.post("/confirm-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVer
 router.post("/create-agent/:id", createAgent);
 
 //get Authorized Agent by id
-router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
+router.get("/:id/:lang", /*requireSignin, isAuth, isAdminOrAgent, */ (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
 });

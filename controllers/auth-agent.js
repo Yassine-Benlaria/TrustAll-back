@@ -7,6 +7,7 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const { authAgentUploadID, authAgentUploadPassprt } = require("../helpers/uploader");
+const { uploadPassportID } = require('../helpers/imageUploader');
 const projection = {
     salt: false,
     hashed_password: false,
@@ -309,27 +310,31 @@ exports.uploadId = (req, res) => {
 //uploading passport
 exports.uploadPassport = (req, res) => {
 
-    authAgentUploadPassprt(req, res, (err) => {
+    authAgentUploadPassprt(req, res, async(err) => {
 
         console.log(req)
             // let file = Buffer.from(req.files[0].buffer).toString("base64")
-            //     // console.log(file)
+            // console.log(file)
         if (!req.files || req.files.length != 2) {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
-        if (err) return res.status(400).json({ err })
 
+        let urls = await uploadPassportID(req.files, req.params.id);
+
+        console.log(urls)
+        AuthAgent.updateOne({ _id: req.params.id }, {
+            $set: {
+                identity_document: {
+                    type: "passport",
+                    [urls[0][0]]: urls[0][1],
+                    [urls[1][0]]: urls[1][1],
+                }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
         return res.send("Passport uploaded successfully")
     });
-    AuthAgent.updateOne({ _id: req.params.id }, {
-        $set: {
-            identity_document: {
-                type: "Passport",
-                images: req.files.map(file => Buffer.from(req.file.buffer).toString("base64"))
-            }
-        }
-    }, (err, result) => {
-        if (err) console.log(err)
-        else console.log(result)
-    })
+
 }
