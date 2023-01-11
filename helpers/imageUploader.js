@@ -38,7 +38,7 @@ exports.uploadFilesToImageKit = async(files, command_id) => {
     return urls;
 }
 
-exports.uploadPassportID = async(files, id) => {
+exports.uploadID = async(files, id) => {
     let urls = [];
     let count = 0;
 

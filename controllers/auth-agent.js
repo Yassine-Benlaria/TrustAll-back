@@ -7,7 +7,7 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const { authAgentUploadID, authAgentUploadPassprt } = require("../helpers/uploader");
-const { uploadPassportID } = require('../helpers/imageUploader');
+const { uploadID } = require('../helpers/imageUploader');
 const projection = {
     salt: false,
     hashed_password: false,
@@ -292,19 +292,35 @@ exports.resendConfirmEmail = (req, res) => {
 //uploading ID card or Driving license
 exports.uploadId = (req, res) => {
 
-    if (!req.files || req.files.length != 3) {
-        return res.status(400).json({ err: "you have to upload 3 pictures" })
-    }
-    authAgentUploadID(req, res, (err) => {
-        if (err) return res.status(400).json({ err })
+    authAgentUploadID(req, res, async(err) => {
 
+        if (err)
+            return res.status(400).json({ err })
+        console.log(req)
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // console.log(file)
+        if (!req.files || req.files.length != 3) {
+            return res.status(400).json({ err: "you have to upload 3 pictures" })
+        }
+
+        let urls = await uploadID(req.files, req.params.id);
+
+        console.log(urls)
+        AuthAgent.updateOne({ _id: req.params.id }, {
+            $set: {
+                identity_document: {
+                    type: "ID",
+                    [urls[0][0]]: urls[0][1],
+                    [urls[1][0]]: urls[1][1],
+                    [urls[2][0]]: urls[2][1],
+                }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
         return res.send("ID uploaded successfully")
     });
-
-    AuthAgent.updateOne({ _id: req.params.id }, { $set: { identity_document: "ID" } }, (err, result) => {
-        if (err) console.log(err)
-        else console.log(result)
-    })
 }
 
 //uploading passport
@@ -319,7 +335,7 @@ exports.uploadPassport = (req, res) => {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
 
-        let urls = await uploadPassportID(req.files, req.params.id);
+        let urls = await uploadID(req.files, req.params.id);
 
         console.log(urls)
         AuthAgent.updateOne({ _id: req.params.id }, {
