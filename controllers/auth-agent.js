@@ -312,16 +312,16 @@ exports.uploadPassport = (req, res) => {
     authAgentUploadPassprt(req, res, (err) => {
 
         console.log(req)
-        let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
             // console.log(file)
-        fs.writeFile('file.txt', file, err => {
-            if (err) {
-                console.error(err)
-                return
-            }
-            console.log("done")
-                //file written successfully
-        })
+            // fs.writeFile('file.txt', file, err => {
+            //     if (err) {
+            //         console.error(err)
+            //         return
+            //     }
+            //     console.log("done")
+            //         //file written successfully
+            // })
         if (!req.files || req.files.length != 2) {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
@@ -329,8 +329,10 @@ exports.uploadPassport = (req, res) => {
 
         return res.send("Passport uploaded successfully")
     });
-    AuthAgent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
-        if (err) console.log(err)
-        else console.log(result)
-    })
+    return res.send("Passport uploaded successfully")
+
+    // AuthAgent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
+    //     if (err) console.log(err)
+    //     else console.log(result)
+    // })
 }
