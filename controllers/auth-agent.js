@@ -328,7 +328,8 @@ exports.uploadId = (req, res) => {
 //uploading passport
 exports.uploadPassport = (req, res) => {
 
-    if (!req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
+    console.log(!req.profile.id_uploaded)
+    if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     authAgentUploadPassprt(req, res, async(err) => {
 
         if (err) console.log(err)
