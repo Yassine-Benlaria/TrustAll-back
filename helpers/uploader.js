@@ -41,7 +41,21 @@ var imagesUpload = multer({
             return cb(err);
         }
     }
-}).array("uploadedImages")
+}).array("uploadedImages");
+
+var authAgentPassportUpload = multer({
+    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    }
+}).array("images");
 
 var agentIDUpload = multer({
     storage: agentStorage,
@@ -56,7 +70,7 @@ var agentIDUpload = multer({
             return cb(err);
         }
     }
-}).array("images", 3)
+}).array("images", 3);
 
 var agentPassportUpload = multer({
     storage: agentStorage,
@@ -88,7 +102,7 @@ var authAgentIDUpload = multer({
     }
 }).array("images", 3)
 
-var authAgentPassportUpload = multer({
+var authAgentPassportUploadd = multer({
     storage: authAgentStorage,
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
     fileFilter: (req, file, cb) => {
