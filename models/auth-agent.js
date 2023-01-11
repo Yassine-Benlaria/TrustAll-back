@@ -60,6 +60,7 @@ const authAgentSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
+    id_uploaded: Boolean,
     identity_document: {
         type: { type: String },
         front_url: { type: String },

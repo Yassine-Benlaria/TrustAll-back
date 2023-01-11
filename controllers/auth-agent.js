@@ -292,6 +292,7 @@ exports.resendConfirmEmail = (req, res) => {
 //uploading ID card or Driving license
 exports.uploadId = (req, res) => {
 
+    if (!req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     authAgentUploadID(req, res, async(err) => {
 
         if (err)
@@ -308,6 +309,7 @@ exports.uploadId = (req, res) => {
         console.log(urls)
         AuthAgent.updateOne({ _id: req.params.id }, {
             $set: {
+                id_uploaded: true,
                 identity_document: {
                     type: "ID",
                     [urls[0][0]]: urls[0][1],
@@ -326,6 +328,7 @@ exports.uploadId = (req, res) => {
 //uploading passport
 exports.uploadPassport = (req, res) => {
 
+    if (!req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     authAgentUploadPassprt(req, res, async(err) => {
 
         if (err) console.log(err)
@@ -341,6 +344,7 @@ exports.uploadPassport = (req, res) => {
         console.log(urls)
         AuthAgent.updateOne({ _id: req.params.id }, {
             $set: {
+                id_uploaded: true,
                 identity_document: {
                     type: "passport",
                     [urls[0][0]]: urls[0][1],
