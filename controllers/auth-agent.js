@@ -312,7 +312,7 @@ exports.uploadPassport = (req, res) => {
     authAgentUploadPassprt(req, res, (err) => {
 
         console.log(req)
-        console.log(req.body)
+        console.table(req.body)
             // let file = Buffer.from(req.files[0].buffer).toString("base64")
             // console.log(file)
             // fs.writeFile('file.txt', file, err => {
