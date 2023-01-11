@@ -61,8 +61,8 @@ const authAgentSchema = new mongoose.Schema({
         required: true
     },
     identity_document: {
-        type: String,
-        default: "None"
+        type: { type: String },
+        images: { type: array }
     },
     img: {
         type: Boolean,
