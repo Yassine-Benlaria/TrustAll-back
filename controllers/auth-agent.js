@@ -307,12 +307,14 @@ exports.uploadId = (req, res) => {
 
 //uploading passport
 exports.uploadPassport = (req, res) => {
-    console.log(req.files)
-    if (!req.files || req.files.length != 2) {
-        return res.status(400).json({ err: "you have to upload 2 pictures" })
-    }
+    c
     authAgentUploadPassprt(req, res, (err) => {
+        onsole.log(req.files)
+        if (!req.files || req.files.length != 2) {
+            return res.status(400).json({ err: "you have to upload 2 pictures" })
+        }
         if (err) return res.status(400).json({ err })
+
 
         return res.send("Passport uploaded successfully")
     });
