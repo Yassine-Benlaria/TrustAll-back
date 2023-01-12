@@ -17,7 +17,7 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
-const { getCitiesList } = require("../validators/cities")
+const { getCitiesList, getCommuneByID } = require("../validators/cities")
 
 const projection = {
     salt: false,
@@ -544,7 +544,26 @@ exports.getUnverifiedEmployees = (req, res) => {
 
         }], (err, authAgents) => {
             if (err || !agents) return res.status(400).json({ err });
-            return res.json([...agents, ...authAgents])
+
+            let result = [...agents, ...authAgents]
+            let citiesList = getCitiesList(req.params.lang)
+
+            result = result.map(user => {
+                if (user.type == "auth-agent") {
+                    let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+                    let communes = user.communes.map(id => {
+                        return req.params.lang == "ar" ?
+                            getCommuneByID(id).commune_name :
+                            getCommuneByID(id).commune_name_ascii;
+                    });
+                    return {...user, city, communes }
+                }
+
+                let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+                return {...user, city }
+
+            })
+            return res.json(result)
         })
     })
 }
