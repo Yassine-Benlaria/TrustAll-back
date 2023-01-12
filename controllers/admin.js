@@ -431,7 +431,6 @@ const deleteAgent = (req, res) => {
     });
 }
 
-
 //delete auth-agent account
 const deleteAuthAgent = (req, res) => {
     AuthAgent.findById(req.query.auth_agent_id, (err, user) => {
@@ -457,7 +456,6 @@ const deleteAuthAgent = (req, res) => {
         })
     });
 }
-
 
 //delete auth-agent account
 const deleteAdmin = (req, res) => {
@@ -491,14 +489,42 @@ const deleteAdmin = (req, res) => {
 //get unverified agents and authagents
 exports.getUnverifiedEmployees = (req, res) => {
     Agent.aggregate([{
-        $set: { type: "agent" }
+            $set: { type: "agent" }
 
-    }, {
-        $match: {
-            "status.verified": false
-        }
+        }, {
+            $match: {
+                "status.verified": false
+            }
 
-    }], projection, (err, agents) => {
+        },
+        {
+            $project: {
+                salt: 0,
+                hashed_password: 0,
+                updatedAt: 0,
+                __v: 0,
+            }
+
+        }, {
+            $lookup: {
+                from: "authagents",
+                localField: "auth_agent_ID",
+                foreignField: "_id",
+                as: "auth_agent"
+            },
+
+        },
+        {
+            $set: {
+                auth_agent: {
+                    $concat: [{ $arrayElemAt: ["$auth_agent.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$auth_agent.last_name", 0] }
+                    ]
+                }
+            }
+        },
+    ], (err, agents) => {
         if (err || !agents) return res.status(400).json({ err });
         AuthAgent.aggregate([{
             $set: { type: "auth-agent" }
@@ -508,7 +534,15 @@ exports.getUnverifiedEmployees = (req, res) => {
                 "status.verified": false
             }
 
-        }], projection, (err, authAgents) => {
+        }, {
+            $project: {
+                salt: 0,
+                hashed_password: 0,
+                updatedAt: 0,
+                __v: 0,
+            }
+
+        }], (err, authAgents) => {
             if (err || !agents) return res.status(400).json({ err });
             return res.json([...agents, ...authAgents])
         })
