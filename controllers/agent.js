@@ -87,7 +87,7 @@ exports.getAgentsList = (req, res) => {
             $set: {
                 auth_agent: undefined
             }
-        },
+        }, { $match: { "status.verified": true } }
     ], (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
