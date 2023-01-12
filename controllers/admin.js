@@ -569,10 +569,9 @@ exports.getUnverifiedEmployees = (req, res) => {
 }
 
 exports.acceptAuthAgentID = (req, res) => {
-    console.log('here')
+
     AuthAgent.findById(req.body.user_id, (err, authAgent) => {
         if (err || !authAgent) return res.status(400).json({ err })
-        console.table(authAgent)
         sendEmailMessage(authAgent.email, "ID Accepted", "Your Identity Document has been accepted by admin")
         authAgent.status.verified = true
         authAgent.save()
@@ -582,7 +581,6 @@ exports.acceptAuthAgentID = (req, res) => {
 
 
 exports.acceptAgentID = (req, res) => {
-    console.log('here')
     AuthAgent.findById(req.body.user_id, (err, agent) => {
         if (err || !agent) return res.status(400).json({ err })
         console.table(agent)

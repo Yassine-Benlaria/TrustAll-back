@@ -30,7 +30,7 @@ exports.authAgentByID = (req, res, next, id) => {
 //get auth agents list
 exports.getAuthAgentsList = (req, res) => {
 
-    AuthAgent.find(req.query, projection, (err, result) => {
+    AuthAgent.find({ "status.verified": true }, projection, (err, result) => {
         if (err || !result) {
             return res.status(400).json(err)
         }
@@ -41,7 +41,7 @@ exports.getAuthAgentsList = (req, res) => {
                     getCommuneByID(id).commune_name :
                     getCommuneByID(id).commune_name_ascii;
             });
-            let city = ""
+            let city = "";
             try { city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name } catch (e) { console.log(e) }
 
             return {...user._doc, communes, city }
