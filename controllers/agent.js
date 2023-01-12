@@ -153,7 +153,7 @@ exports.uploadProfilePicture = (req, res) => {
 //get agents by authagent
 exports.getAgentsNamesByAuthAgent = (req, res) => {
 
-    Agent.find({ auth_agent_ID: mongoose.Types.ObjectId(req.params.id) }, { _id: true, first_name: true, last_name: true },
+    Agent.find({ auth_agent_ID: mongoose.Types.ObjectId(req.params.id), "status.verified": true }, { _id: true, first_name: true, last_name: true },
         (err, result) => {
             if (err || !result) {
                 return res.send({ err })
