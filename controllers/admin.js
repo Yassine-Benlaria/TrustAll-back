@@ -567,3 +567,50 @@ exports.getUnverifiedEmployees = (req, res) => {
         })
     })
 }
+
+exports.acceptAuthAgentID = (req, res) => {
+    AuthAgent.updateOne({ _id: req.body.auth_agent_id }, {
+        $set: {
+            "status.verified": true
+        }
+    }, (err, response) => {
+        if (err) return res.status(400).json({ err })
+        return res.send("auth-agent ID accepted");
+    })
+}
+
+exports.acceptAgentID = (req, res) => {
+    Agent.updateOne({ _id: req.body.agent_id }, {
+        $set: {
+            "status.verified": true
+        }
+    }, (err, response) => {
+        if (err) return res.status(400).json({ err })
+        return res.send("agent ID accepted");
+    })
+}
+
+
+exports.declineAuthAgentID = (req, res) => {
+    AuthAgent.updateOne({ _id: req.body.auth_agent_id }, {
+        $set: {
+            id_uploaded: false,
+            identity_document: {}
+        }
+    }, (err, response) => {
+        if (err) return res.status(400).json({ err })
+        return res.send("auth-agent ID declined");
+    })
+}
+
+exports.declineAgentID = (req, res) => {
+    Agent.updateOne({ _id: req.body.agent_id }, {
+        $set: {
+            id_uploaded: false,
+            identity_document: {}
+        }
+    }, (err, response) => {
+        if (err) return res.status(400).json({ err })
+        return res.send("agent ID declined");
+    })
+}

@@ -53,8 +53,10 @@ const agentSchema = new mongoose.Schema({
         required: true
     },
     identity_document: {
-        type: String,
-        default: "None"
+        type: { type: String },
+        front_url: { type: String },
+        back_url: { type: String },
+        selfie_url: { type: String },
     },
     img: {
         type: Boolean,

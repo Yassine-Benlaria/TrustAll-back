@@ -239,31 +239,57 @@ exports.sendConfirmationMail = async(receiver, code, lang) => {
 }
 
 //confirmation email
+exports.sendEmailMessage = async(receiver, subject, message) => {
+
+
+    var mailOptions = {
+        from: 'd0t1g3r01@gmail.com',
+        to: receiver,
+        subject: subject,
+        html: `
+            ${message}
+        `
+    };
+
+    let response = false
+    await transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log("error:---------" + error);
+        } else {
+            response = true
+            console.log('Email sent: ' + info.response);
+        }
+    });
+    return response
+}
+
+//confirmation email
 exports.sendResetPasswordEmail = async(receiver, token) => {
 
 
-        var mailOptions = {
-            from: 'ehealth.company@yahoo.com',
-            to: receiver,
-            subject: "Password Reset",
-            html: `
+    var mailOptions = {
+        from: 'ehealth.company@yahoo.com',
+        to: receiver,
+        subject: "Password Reset",
+        html: `
             <p>Here's the link to reset your password</p>
             <p>Click <a href="https://trust-all.vercel.app/newpassword/${token}">here</a></p>
         `
-        };
+    };
 
-        let response = false
-        await transporter.sendMail(mailOptions, function(error, info) {
-            if (error) {
-                console.log("error:---------" + error);
-            } else {
-                response = true
-                console.log('Email sent: ' + info.response);
-            }
-        });
-        return response
-    }
-    //object projection
+    let response = false
+    await transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log("error:---------" + error);
+        } else {
+            response = true
+            console.log('Email sent: ' + info.response);
+        }
+    });
+    return response
+}
+
+//object projection
 exports.projectObject = (o, p) => {
     return Object.keys(p).reduce((r, k) => {
         r[k] = o[k] || '';

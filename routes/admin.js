@@ -15,7 +15,11 @@ const {
     changeAdminPassword,
     getSubAdminsList,
     deleteUser,
-    getUnverifiedEmployees
+    getUnverifiedEmployees,
+    acceptAuthAgentID,
+    declineAuthAgentID,
+    acceptAgentID,
+    declineAgentID
 } = require("../controllers/admin")
 const {
     validator,
@@ -127,6 +131,14 @@ router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //create new plan
 router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
+
+//accept and decline auth-agent
+router.post("/accept-auth-agent/:id", acceptAuthAgentID);
+router.post("/decline-auth-agent/:id", declineAuthAgentID);
+
+//accept and decline agent
+router.post("/accept-agent/:id", acceptAgentID);
+router.post("/decline-agent/:id", declineAgentID);
 
 //admin by id API
 router.get("/:id/:lang", (req, res) => {
