@@ -487,3 +487,18 @@ const deleteAdmin = (req, res) => {
         })
     });
 }
+
+//get unverified agents and authagents
+exports.getUnverifiedEmployees = (req, res) => {
+    Agent.find({
+        "status.verified": false
+    }, projection, (err, agents) => {
+        if (err || !agents) return res.status(400).json({ err });
+        AuthAgent.find({
+            "status.verified": false
+        }, projection, (err, authAgents) => {
+            if (err || !agents) return res.status(400).json({ err });
+            return res.json([...agents, ...authAgents])
+        })
+    })
+}

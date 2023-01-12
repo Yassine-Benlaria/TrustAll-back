@@ -14,7 +14,8 @@ const {
     resendConfirmEmail,
     changeAdminPassword,
     getSubAdminsList,
-    deleteUser
+    deleteUser,
+    getUnverifiedEmployees
 } = require("../controllers/admin")
 const {
     validator,
@@ -57,6 +58,8 @@ router.get("/car-commands/:id", getCarCommandsByAdmin);
 //get money commands by auth_agent
 router.get("/money-commands/:id", getMoneyCommandsByAdmin);
 
+//get unverified employees
+router.get("/unverified/:id/:lang", /* requireSignin, isAuth, isAdmin, */ getUnverifiedEmployees)
 
 //get sub admins list
 router.get("/sub-admin/all/:id/:lang", requireSignin, isAuth, isAdmin, isMainAdmin, getSubAdminsList)
