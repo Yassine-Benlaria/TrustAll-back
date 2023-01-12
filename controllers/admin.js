@@ -570,56 +570,51 @@ exports.getUnverifiedEmployees = (req, res) => {
 
 exports.acceptAuthAgentID = (req, res) => {
     console.log('here')
-    AuthAgent.updateOne({ _id: req.body.user_id }, {
-        $set: {
-            "status.verified": true
-        }
-    }, (err, updated) => {
-        if (err) return res.status(400).json({ err })
-
-        sendEmailMessage(updated.email, "ID Accepted", "Your Identity Document has been accepted by admin")
+    AuthAgent.findById(req.body.user_id, (err, authAgent) => {
+        if (err || !authAgent) return res.status(400).json({ err })
+        console.table(authAgent)
+        sendEmailMessage(authAgent.email, "ID Accepted", "Your Identity Document has been accepted by admin")
+        authAgent.status.verified = true
+        authAgent.save()
         return res.send("auth-agent ID accepted");
     })
 }
 
-exports.acceptAgentID = (req, res) => {
-    Agent.updateOne({ _id: req.body.user_id }, {
-        $set: {
-            "status.verified": true
-        }
-    }, (err, updated) => {
-        if (err) return res.status(400).json({ err })
-        sendEmailMessage(updated.email, "ID Accepted", "Your Identity Document has been accepted by admin")
 
+exports.acceptAgentID = (req, res) => {
+    console.log('here')
+    AuthAgent.findById(req.body.user_id, (err, agent) => {
+        if (err || !agent) return res.status(400).json({ err })
+        console.table(agent)
+        sendEmailMessage(agent.email, "ID Accepted", "Your Identity Document has been accepted by admin")
+        agent.status.verified = true
+        agent.save()
         return res.send("agent ID accepted");
     })
 }
 
-
 exports.declineAuthAgentID = (req, res) => {
-    AuthAgent.updateOne({ _id: req.body.user_id }, {
-        $set: {
-            id_uploaded: false,
-            identity_document: {}
-        }
-    }, (err, updated) => {
-        if (err) return res.status(400).json({ err })
-        sendEmailMessage(updated.email, "ID declined", "Your Identity Document has been by admin, please try to upload it again, and make sure to make it more clear and readable.")
+    AuthAgent.findById(req.body.user_id, (err, authAgent) => {
 
+        if (err) return res.status(400).json({ err })
+        sendEmailMessage(authAgent.email, "ID declined", "Your Identity Document has been declined by admin, please try to upload it again, and make sure to make it more clear and readable.")
+        authAgent.status.verified = false
+        authAgent.id_uploaded = false
+        authAgent.identity_document = {}
+        authAgent.save()
         return res.send("auth-agent ID declined");
     })
 }
 
 exports.declineAgentID = (req, res) => {
-    Agent.updateOne({ _id: req.body.user_id }, {
-        $set: {
-            id_uploaded: false,
-            identity_document: {}
-        }
-    }, (err, updated) => {
-        if (err) return res.status(400).json({ err })
-        sendEmailMessage(updated.email, "ID declined", "Your Identity Document has been by admin, please try to upload it again, and make sure to make it more clear and readable.")
+    Agent.findById(req.body.user_id, (err, agent) => {
 
+        if (err) return res.status(400).json({ err })
+        sendEmailMessage(agent.email, "ID declined", "Your Identity Document has been declined by admin, please try to upload it again, and make sure to make it more clear and readable.")
+        agent.status.verified = false
+        agent.id_uploaded = false
+        agent.identity_document = {}
+        agent.save()
         return res.send("agent ID declined");
     })
 }
