@@ -15,7 +15,7 @@ const DeletedClient = require("../models/deleted/deleted-client"),
 //#################
 const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
-const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages } = require("../helpers");
+const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages, sendEmailMessage } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
 const { getCitiesList, getCommuneByID } = require("../validators/cities")
 
@@ -569,48 +569,57 @@ exports.getUnverifiedEmployees = (req, res) => {
 }
 
 exports.acceptAuthAgentID = (req, res) => {
-    AuthAgent.updateOne({ _id: req.body.auth_agent_id }, {
+    console.log('here')
+    AuthAgent.updateOne({ _id: req.body.user_id }, {
         $set: {
             "status.verified": true
         }
-    }, (err, response) => {
+    }, (err, updated) => {
         if (err) return res.status(400).json({ err })
+
+        sendEmailMessage(updated.email, "ID Accepted", "Your Identity Document has been accepted by admin")
         return res.send("auth-agent ID accepted");
     })
 }
 
 exports.acceptAgentID = (req, res) => {
-    Agent.updateOne({ _id: req.body.agent_id }, {
+    Agent.updateOne({ _id: req.body.user_id }, {
         $set: {
             "status.verified": true
         }
-    }, (err, response) => {
+    }, (err, updated) => {
         if (err) return res.status(400).json({ err })
+        sendEmailMessage(updated.email, "ID Accepted", "Your Identity Document has been accepted by admin")
+
         return res.send("agent ID accepted");
     })
 }
 
 
 exports.declineAuthAgentID = (req, res) => {
-    AuthAgent.updateOne({ _id: req.body.auth_agent_id }, {
+    AuthAgent.updateOne({ _id: req.body.user_id }, {
         $set: {
             id_uploaded: false,
             identity_document: {}
         }
-    }, (err, response) => {
+    }, (err, updated) => {
         if (err) return res.status(400).json({ err })
+        sendEmailMessage(updated.email, "ID declined", "Your Identity Document has been by admin, please try to upload it again, and make sure to make it more clear and readable.")
+
         return res.send("auth-agent ID declined");
     })
 }
 
 exports.declineAgentID = (req, res) => {
-    Agent.updateOne({ _id: req.body.agent_id }, {
+    Agent.updateOne({ _id: req.body.user_id }, {
         $set: {
             id_uploaded: false,
             identity_document: {}
         }
-    }, (err, response) => {
+    }, (err, updated) => {
         if (err) return res.status(400).json({ err })
+        sendEmailMessage(updated.email, "ID declined", "Your Identity Document has been by admin, please try to upload it again, and make sure to make it more clear and readable.")
+
         return res.send("agent ID declined");
     })
 }
