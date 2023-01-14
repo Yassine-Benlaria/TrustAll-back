@@ -290,7 +290,7 @@ exports.resendConfirmEmail = (req, res) => {
 //uploading ID card or Driving license
 exports.uploadId = (req, res) => {
 
-    if (!req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
+    if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     authAgentUploadID(req, res, async(err) => {
 
         if (err)
@@ -334,7 +334,7 @@ exports.uploadPassport = (req, res) => {
         console.log(req)
             // let file = Buffer.from(req.files[0].buffer).toString("base64")
             // console.log(file)
-        if (!req.files || req.files.length != 2) {
+        if (!req.files || req.files.length < 2) {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
 

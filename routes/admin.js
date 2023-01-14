@@ -90,7 +90,7 @@ router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsLi
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
 
 //create an admin account
-router.post("/create-sub-admin/:id", requireSignin, isAuth, isAdmin, createAuthAgentValidator, createAdmin)
+router.post("/create-sub-admin", /*requireSignin, isAuth, isAdmin, createAuthAgentValidator,*/ createAdmin)
 
 //create agent account
 router.post("/create-agent/:id", createAgent)
