@@ -19,7 +19,6 @@ exports.uploadImages = (req, res) => {
     });
 }
 
-
 exports.createReport = (req, res) => {
     imagesUpload(req, res, (err) => {
         if (err) return res.status(400).json({ err })
@@ -310,8 +309,6 @@ exports.getReport = (req, res) => {
         })
     })
 }
-
-
 
 // get report by Client
 exports.getCompletedReport = (req, res) => {

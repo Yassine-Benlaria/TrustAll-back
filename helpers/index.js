@@ -227,18 +227,14 @@ exports.sendConfirmationMail = async(receiver, code, lang) => {
     };
 
     let response = false
-    await new Promise((resolve, reject) => {
 
-        transporter.sendMail(mailOptions, function(error, info) {
-            if (error) {
-                console.log("error:---------" + error);
-                reject(error)
-            } else {
-                response = true
-                console.log('Email sent: ' + info.response);
-                resolve(info);
-            }
-        });
+    await transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log("error:---------" + error);
+        } else {
+            response = true
+            console.log('Email sent: ' + info.response);
+        }
     });
     return response
 }

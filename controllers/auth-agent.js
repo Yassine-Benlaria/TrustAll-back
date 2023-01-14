@@ -16,7 +16,6 @@ const projection = {
 
 };
 
-
 exports.authAgentByID = (req, res, next, id) => {
     AuthAgent.findById(id, projection, (err, result) => {
         if (err || !result) {
@@ -199,7 +198,6 @@ exports.changeAuthAgentPassword = (req, res) => {
     })
 }
 
-
 //add new email
 exports.addEmail = async(req, res) => {
 
@@ -351,6 +349,11 @@ exports.uploadPassport = (req, res) => {
                     [urls[0][0]]: urls[0][1],
                     [urls[1][0]]: urls[1][1],
                 }
+                // {
+                //     type: "passport",
+                //     front_url: { photo: urls[0][1], key: urls[0][2] },
+                //     selfie_url: { photo: urls[1][1], key: urls[1][2] },
+                // }
             }
         }, (err, result) => {
             if (err) console.log(err)

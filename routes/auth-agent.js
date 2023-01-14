@@ -59,7 +59,6 @@ router.post("/upload-ID/:id", /*require signin */ uploadId)
 //upload passport
 router.post("/upload-passport/:id", /*require signin */ uploadPassport)
 
-
 //get report
 router.get("/report/:id", getReport);
 
@@ -69,10 +68,8 @@ router.get("/get-report/:id", getCompletedReport);
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAuthAgent, getAgentsList)
 
-
 //update authAgent's info
 router.post("/update/:id", updateAuthAgent);
-
 
 //add new email address
 router.post("/new-email/:id", requireSignin, isAuth, addEmail)
@@ -82,7 +79,6 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
-
 
 //upload profile picture
 router.post("/photo/:id", uploadProfilePicture);
@@ -101,7 +97,6 @@ router.post("/assign-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVeri
 
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmPaymentByAuthAgent);
-
 
 //create agent
 router.post("/create-agent/:id", createAgent);

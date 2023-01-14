@@ -52,7 +52,7 @@ const { getCarCommandsByAdmin, getMoneyCommandsByAdmin } = require("../controlle
 router.use(cors())
 
 //upload report
-router.post("/upload-report/:id", createReport)
+router.post("/upload-report/:id", requireSignin, isAuth, isAdmin, createReport)
 
 
 
