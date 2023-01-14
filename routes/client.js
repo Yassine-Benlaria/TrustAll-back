@@ -39,7 +39,7 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirm
 router.get("/get-report/:id", getCompletedReport);
 
 //resent confirmation code
-router.post("/resend-confirm/:id", requireSignin, isAuth, isVerified, resendConfirmEmail);
+router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail);
 
 //confirm payment by client
 router.post("/confirm-payment/:id", /* requireSignin, isAuth, isVerified, */ confirmPaymentByClient);
