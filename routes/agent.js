@@ -31,7 +31,7 @@ router.post("/upload-report/:id", requireSignin, isAuth, createReport)
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAgentPassword);
 
 //uploading id card / driving license
-router.post("/upload_ID/:id", requireSignin, isAuth, uploadId)
+router.post("/upload-ID/:id", requireSignin, isAuth, uploadId)
 
 //uploading passport
 router.post("/upload-passport/:id", requireSignin, isAuth, uploadPassport)

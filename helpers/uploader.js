@@ -139,7 +139,6 @@ var profilePicStorage = multer.diskStorage({
 })
 
 var profilePicUpload = multer({
-    storage: profilePicStorage,
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {

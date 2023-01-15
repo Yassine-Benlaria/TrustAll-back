@@ -51,7 +51,7 @@ const clientSchema = new mongoose.Schema({
         required: true
     },
     img: {
-        type: Boolean,
+        type: String,
         default: false
     },
     confirmation_code: {

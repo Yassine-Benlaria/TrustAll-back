@@ -311,7 +311,6 @@ exports.uploadId = (req, res) => {
 //uploading passport
 exports.uploadPassport = (req, res) => {
 
-    console.log(!req.profile.id_uploaded)
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     agentUploadPassprt(req, res, async(err) => {
 
