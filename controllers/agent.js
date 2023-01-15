@@ -18,34 +18,6 @@ const projection = {
 
 };
 
-//uploading ID card or Driving license
-exports.uploadId = (req, res) => {
-
-    agentUploadID(req, res, (err) => {
-        if (err) return res.status(400).json({ err })
-
-        return res.send("ID uploaded successfully")
-    });
-
-    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "ID" } }, (err, result) => {
-        if (err) console.log(err)
-        else console.log(result)
-    })
-}
-
-//uploading passport
-exports.uploadPassport = (req, res) => {
-    agentUploadPassprt(req, res, (err) => {
-        if (err) return res.status(400).json({ err })
-
-        return res.send("Passport uploaded successfully")
-    });
-    Agent.updateOne({ _id: req.params.id }, { $set: { identity_document: "Passport" } }, (err, result) => {
-        if (err) console.log(err)
-        else console.log(result)
-    })
-}
-
 //agentById
 exports.agentByID = (req, res, next, id) => {
 
@@ -212,7 +184,6 @@ exports.changeAgentPassword = (req, res) => {
     })
 }
 
-
 //add new email
 exports.addEmail = async(req, res) => {
     //test if email is used
@@ -299,4 +270,81 @@ exports.resendConfirmEmail = (req, res) => {
         }
         return res.json({ msg: requireMessages(req.body.lang).emailSent })
     })
+}
+
+//uploading ID card or Driving license
+exports.uploadId = (req, res) => {
+
+    if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
+    authAgentUploadID(req, res, async(err) => {
+
+        if (err)
+            return res.status(400).json({ err })
+        console.log(req)
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // console.log(file)
+        if (!req.files || req.files.length != 3) {
+            return res.status(400).json({ err: "you have to upload 3 pictures" })
+        }
+
+        let urls = await uploadID(req.files, req.params.id);
+
+        console.log(urls)
+        AuthAgent.updateOne({ _id: req.params.id }, {
+            $set: {
+                id_uploaded: true,
+                identity_document: {
+                    type: "ID",
+                    [urls[0][0]]: urls[0][1],
+                    [urls[1][0]]: urls[1][1],
+                    [urls[2][0]]: urls[2][1],
+                }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
+        return res.json({ msg: "ID uploaded successfully" })
+    });
+}
+
+//uploading passport
+exports.uploadPassport = (req, res) => {
+
+    console.log(!req.profile.id_uploaded)
+    if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
+    authAgentUploadPassprt(req, res, async(err) => {
+
+        if (err) console.log(err)
+        console.log(req)
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // console.log(file)
+        if (!req.files || req.files.length < 2) {
+            return res.status(400).json({ err: "you have to upload 2 pictures" })
+        }
+
+        let urls = await uploadID(req.files, req.params.id);
+
+        console.log(urls)
+        AuthAgent.updateOne({ _id: req.params.id }, {
+            $set: {
+                id_uploaded: true,
+                identity_document: {
+                    type: "passport",
+                    [urls[0][0]]: urls[0][1],
+                    [urls[1][0]]: urls[1][1],
+                }
+                // {
+                //     type: "passport",
+                //     front_url: { photo: urls[0][1], key: urls[0][2] },
+                //     selfie_url: { photo: urls[1][1], key: urls[1][2] },
+                // }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
+        return res.send({ msg: "Passport uploaded successfully" })
+    });
+
 }

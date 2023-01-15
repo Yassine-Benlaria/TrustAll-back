@@ -319,7 +319,7 @@ exports.uploadId = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.send("ID uploaded successfully")
+        return res.json({ msg: "ID uploaded successfully" })
     });
 }
 
@@ -359,7 +359,7 @@ exports.uploadPassport = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.send("Passport uploaded successfully")
+        return res.send({ msg: "Passport uploaded successfully" })
     });
 
 }
