@@ -352,7 +352,10 @@ exports.communesByCity = (req, res) => {
 
     AuthAgent.find({ city: req.params.city }, { communes: true }, (err, authAgents) => {
         let occupiedCommunes = []
-        authAgents.map(list => {})
+        authAgents.map(list => {
+            list.map(id => occupiedCommunes.push(id))
+        })
+        console.table(occupiedCommunes)
         communes = communes.map(commune => {
 
         })
