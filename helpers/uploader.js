@@ -57,8 +57,7 @@ var authAgentUpload = multer({
     }
 }).array("images");
 
-var agentIDUpload = multer({
-    storage: agentStorage,
+var agentUpload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -70,55 +69,10 @@ var agentIDUpload = multer({
             return cb(err);
         }
     }
-}).array("images", 3);
+}).array("images");
 
-var agentPassportUpload = multer({
-    storage: agentStorage,
-    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
-            err.name = 'ExtensionError'
-            return cb(err);
-        }
-    }
-}).array("images", 2);
-
-var authAgentIDUpload = multer({
-    storage: authAgentStorage,
-    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
-            err.name = 'ExtensionError'
-            return cb(err);
-        }
-    }
-}).array("images", 3)
-
-var authAgentPassportUploadd = multer({
-    storage: authAgentStorage,
-    limits: { fileSize: 5 * 1024 * 1024 }, //5MB max
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
-            err.name = 'ExtensionError'
-            return cb(err);
-        }
-    }
-}).array("images", 2);
-
-exports.agentUploadPassprt = agentPassportUpload
-exports.agentUploadID = agentIDUpload
+exports.agentUploadPassprt = agentUpload
+exports.agentUploadID = agentUpload
 
 exports.authAgentUploadPassprt = authAgentUpload
 exports.authAgentUploadID = authAgentUpload
