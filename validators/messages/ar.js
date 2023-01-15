@@ -61,7 +61,7 @@ msg.options = {
         fluid_leaks: "تسرب السائل",
         Brake_Arms_Shock_absorbs: "الفرامل / الاذرعه / المساعدات",
         AC_system: "نظام المكيف",
-        electricity_system: "electricity_system",
+        electricity_system: "نظام الكهرباء",
         computer_system_scanned: "نتيجة فحص نظام الكمبيوتر"
     }
 
