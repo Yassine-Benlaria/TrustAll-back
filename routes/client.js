@@ -15,10 +15,10 @@ router.post("/signup", validator, signup)
 router.post("/confirm/:id", requireSignin, isAuth, confirmEmail);
 
 //get commands
-router.get("/commands/:id", /* requireSignin, isAuth, isVerified, isActive,*/ getCommandsByClientID);
+router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getCommandsByClientID);
 
 //get command
-router.get("/command/:id", getClientCommandByID);
+router.get("/command/:id", requireSignin, isAuth, isVerified, getClientCommandByID);
 
 //change password
 router.post("/change-password/:id", requireSignin, isAuth, isVerified, passwordValidator, changeClientPassword);
@@ -36,16 +36,16 @@ router.post("/new-email/:id", requireSignin, isAuth, isVerified, addEmail);
 router.post("/confirm-new-email/:id", requireSignin, isAuth, isVerified, confirmNewEmail);
 
 //get report
-router.get("/get-report/:id", getCompletedReport);
+router.get("/get-report/:id", requireSignin, isAuth, isVerified, getCompletedReport);
 
 //resent confirmation code
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail);
 
 //confirm payment by client
-router.post("/confirm-payment/:id", /* requireSignin, isAuth, isVerified, */ confirmPaymentByClient);
+router.post("/confirm-payment/:id", requireSignin, isAuth, isVerified, confirmPaymentByClient);
 
 //add new command
-router.post("/add-command/:id", /*requireSignin, isAuth, isVerified,*/ addCommandValidator, addCommand)
+router.post("/add-command/:id", requireSignin, isAuth, isVerified, addCommandValidator, addCommand)
 
 //get client info
 router.get("/:id/:lang", requireSignin, isAuth, isVerified, (req, res) => {
@@ -53,7 +53,7 @@ router.get("/:id/:lang", requireSignin, isAuth, isVerified, (req, res) => {
 });
 
 //delete client
-router.delete("/:id/", deleteClient)
+router.delete("/:id/", requireSignin, isAuth, isVerified, deleteClient)
 
 //clientById middlware
 router.param("id", clientByID)
