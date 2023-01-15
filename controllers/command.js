@@ -23,7 +23,7 @@ exports.addCommand = async(req, res) => {
     try {
         auth_agent_seller = await AuthAgent.findOne({
             city: getCommuneByID(req.body.commune_id).wilaya_code,
-            communes: +req.body.commune_id
+            communes: req.body.commune_id
         }, { _id: true, communes: true });
     } catch (err) {
         console.table({ authagents_error: err })
@@ -38,7 +38,7 @@ exports.addCommand = async(req, res) => {
     try {
         auth_agent_client = await AuthAgent.findOne({
             city: getCommuneByID(+req.profile.commune_id).wilaya_code,
-            communes: +req.profile.commune_id
+            communes: req.profile.commune_id
         }, { _id: true, communes: true });
     } catch (err) {
         console.table({ authagents_error: err })
