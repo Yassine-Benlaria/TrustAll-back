@@ -47,7 +47,7 @@ const {
     getClientsList
 } = require("../controllers/client")
 const { createReport, getCompletedReport, getReport } = require("../controllers/report")
-const { getCarCommandsByAdmin, getMoneyCommandsByAdmin } = require("../controllers/command")
+const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
 
 router.use(cors())
 
@@ -118,6 +118,7 @@ router.post("/activate-agent/:id", requireSignin, isAuth, isAdmin, activateAgent
 
 //activate client
 // router.post("/activate-client/:id", requireSignin, isAuth, isAdmin, activateClient)
+router.post("/confirm-command/:id", /* requireSignin, isAuth, isAuthAgent, isVerified, */ confirmCommandByAuthAgent);
 
 
 //add new email address
