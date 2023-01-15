@@ -444,7 +444,7 @@ exports.getClientCommandByID = (req, res) => {
 //confirm command by auth-agent
 exports.confirmCommandByAuthAgent = (req, res) => {
     Command.findOne({ _id: req.body.command_id }).then(command => {
-        if (command.auth_agent_seller != req.params.id)
+        if (command.auth_agent_seller != req.params.id && req.profile.type != "admin")
             return res.status(400).json({ err: "You are not authorized to confirm this command" });
         if (command.status == "01") {
             if (req.body.action == "yes") {
