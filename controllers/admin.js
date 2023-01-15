@@ -17,7 +17,8 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages, sendEmailMessage } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
-const { getCitiesList, getCommuneByID } = require("../validators/cities")
+const { getCitiesList, getCommuneByID } = require("../validators/cities");
+const { profilePicUpload } = require("../helpers/uploader");
 
 const projection = {
     salt: false,

@@ -68,8 +68,8 @@ const authAgentSchema = new mongoose.Schema({
         selfie_url: { photo: { type: String }, key: { type: String } },
     },
     img: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: ""
     },
     status: {
         type: authAgentStatusSchema,

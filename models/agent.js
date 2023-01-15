@@ -60,8 +60,8 @@ const agentSchema = new mongoose.Schema({
         selfie_url: { type: String },
     },
     img: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: ""
     },
     //token for password resetting
     resetToken: String,

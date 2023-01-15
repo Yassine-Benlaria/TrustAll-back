@@ -6,7 +6,7 @@ const AuthAgent = require("../models/auth-agent"),
 const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
-const { authAgentUploadID, authAgentUploadPassprt } = require("../helpers/uploader");
+const { authAgentUploadID, authAgentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
 const { uploadID } = require('../helpers/imageUploader');
 const projection = {
     salt: false,

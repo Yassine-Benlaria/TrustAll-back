@@ -45,8 +45,8 @@ exports.signIn = (req, res) => {
                                 res.cookie("token", token, { expire: new Date() + 9999 });
 
                                 //return response
-                                const { _id, first_name, last_name, status, id_uploaded, email } = authAgent;
-                                return res.json({ token, user: { _id, first_name, last_name, status, id_uploaded, email, type: "auth-agent" } })
+                                const { _id, first_name, img, last_name, status, id_uploaded, email } = authAgent;
+                                return res.json({ token, user: { _id, first_name, img, last_name, status, id_uploaded, email, type: "auth-agent" } })
                             })
                         }
 
@@ -62,8 +62,8 @@ exports.signIn = (req, res) => {
                             res.cookie("token", token, { expire: new Date() + 9999 });
 
                             //return response
-                            const { _id, first_name, last_name, status, email } = agent;
-                            return res.json({ token, user: { _id, first_name, last_name, status, email, type: "agent" } })
+                            const { _id, first_name, img, last_name, status, email } = agent;
+                            return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "agent" } })
 
                         }
                     })
@@ -82,9 +82,9 @@ exports.signIn = (req, res) => {
                     res.cookie("token", token, { expire: new Date() + 9999 });
 
                     //return response
-                    const { _id, first_name, last_name, status, email } = client;
+                    const { _id, first_name, last_name, img, status, email } = client;
                     if (client.status.active == true)
-                        return res.json({ token, user: { _id, first_name, last_name, status, email, type: "client" } })
+                        return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "client" } })
                     return res.status(400).json({ err: "your account is deactivated, please contact support!" })
 
                 }
@@ -104,8 +104,8 @@ exports.signIn = (req, res) => {
             res.cookie("token", token, { expire: new Date() + 9999 });
 
             //return response
-            const { _id, first_name, last_name, email, role } = admin;
-            return res.json({ token, user: { _id, first_name, status: { verified: true }, last_name, email, type: "admin", role } })
+            const { _id, first_name, last_name, email, img, role } = admin;
+            return res.json({ token, user: { _id, first_name, status: { verified: true }, img, last_name, email, type: "admin", role } })
         }
     })
 }

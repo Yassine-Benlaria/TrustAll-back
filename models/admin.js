@@ -36,6 +36,10 @@ const adminSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    img: {
+        type: String,
+        default: ""
+    },
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,

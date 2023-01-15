@@ -52,7 +52,7 @@ const clientSchema = new mongoose.Schema({
     },
     img: {
         type: String,
-        default: false
+        default: ""
     },
     confirmation_code: {
         type: String,
