@@ -99,8 +99,6 @@ exports.getCommunesListByCity = (wilaya_code, language = "en") => {
         result.push({ id: o.id, commune_name: o.commune_name_ascii })
     })
 
-
-
     return result
 }
 

@@ -7,6 +7,7 @@ const { v1: uuidv1 } = require("uuid");
 const { expressjwt: express_jwt } = require("express-jwt");
 const crypto = require("crypto")
 const { requireMessages, sendResetPasswordEmail } = require("../helpers")
+const { getCommunesListByCity } = require("../validators/cities")
 
 
 //signin
@@ -343,4 +344,16 @@ exports.resetPassword = (req, res) => {
             return res.json({ msg: "user password have been updated successfully!" })
         }
     });
+}
+
+//communes by city
+exports.communesByCity = (req, res) => {
+    let communes = getCommunesListByCity(req.params.city, req.params.lang)
+
+    AuthAgent.find({ city: req.params.city }, { communes: true }, (err, authAgents) => {
+
+    })
+    return res.json({
+        communes
+    })
 }
