@@ -276,7 +276,7 @@ exports.resendConfirmEmail = (req, res) => {
 exports.uploadId = (req, res) => {
 
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
-    authAgentUploadID(req, res, async(err) => {
+    agentUploadID(req, res, async(err) => {
 
         if (err)
             return res.status(400).json({ err })
@@ -290,7 +290,7 @@ exports.uploadId = (req, res) => {
         let urls = await uploadID(req.files, req.params.id);
 
         console.log(urls)
-        AuthAgent.updateOne({ _id: req.params.id }, {
+        Agent.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {
@@ -313,7 +313,7 @@ exports.uploadPassport = (req, res) => {
 
     console.log(!req.profile.id_uploaded)
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
-    authAgentUploadPassprt(req, res, async(err) => {
+    agentUploadPassprt(req, res, async(err) => {
 
         if (err) console.log(err)
         console.log(req)
@@ -326,7 +326,7 @@ exports.uploadPassport = (req, res) => {
         let urls = await uploadID(req.files, req.params.id);
 
         console.log(urls)
-        AuthAgent.updateOne({ _id: req.params.id }, {
+        Agent.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {

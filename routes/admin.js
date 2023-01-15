@@ -90,7 +90,7 @@ router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsLi
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
 
 //create an admin account
-router.post("/create-sub-admin", /*requireSignin, isAuth, isAdmin, createAuthAgentValidator,*/ createAdmin)
+router.post("/create-sub-admin/:id", /*requireSignin, isAuth, isAdmin, createAuthAgentValidator,*/ createAdmin)
 
 //create agent account
 router.post("/create-agent/:id", createAgent)
@@ -130,7 +130,7 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //create new plan
-router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
+router.post("/create_plan/:id", /* requireSignin, isAuth, isAdmin,*/ createPlan)
 
 //accept and decline auth-agent
 router.post("/accept-auth-agent/:id", acceptAuthAgentID);
