@@ -98,17 +98,38 @@ exports.updateAuthAgent = (req, res) => {
 
 //uploading profile picture
 exports.uploadProfilePicture = (req, res) => {
-    profilePicUpload(req, res, (err) => {
-        if (err) return res.status(400).json({ err })
-    });
-    AuthAgent.updateOne({ _id: req.params.id }, { $set: { img: true } }, (err, result) => {
-        if (err) {
-            return res.status(400).json({ err: "Error occured while uploading picture!" })
-        } else {
-            return res.json({ response: "Picture uploaded succussfully!" })
+
+    profilePicUpload(req, res, async(err) => {
+
+        if (err) console.log(err)
+        console.log(req)
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // console.log(file)
+        if (!req.file) {
+            return res.status(400).json({ err: "you have to upload a picture" })
         }
-    })
+
+        let urls = await uploadProfilePic(req.file, req.params.id);
+
+        console.log(urls)
+        AuthAgent.updateOne({ _id: req.params.id }, {
+            $set: {
+                img: urls[0][1]
+
+                // {
+                //     type: "passport",
+                //     front_url: { photo: urls[0][1], key: urls[0][2] },
+                //     selfie_url: { photo: urls[1][1], key: urls[1][2] },
+                // }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
+        return res.send({ msg: "picture uploaded successfully" })
+    });
 }
+
 
 //creating new agent
 exports.createAgent = async(req, res) => {

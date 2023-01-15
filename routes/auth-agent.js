@@ -95,6 +95,7 @@ router.post("/assign-verification/:id", requireSignin, isAuth, isAuthAgent, isVe
 //assign seller-client agent to command
 router.post("/assign-payment/:id", requireSignin, isAuth, isAuthAgent, isVerified, assignClientAgent);
 
+
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", requireSignin, isAuth, isAuthAgent, isVerified, confirmPaymentByAuthAgent);
 

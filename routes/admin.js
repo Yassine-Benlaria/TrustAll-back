@@ -19,7 +19,8 @@ const {
     acceptAuthAgentID,
     declineAuthAgentID,
     acceptAgentID,
-    declineAgentID
+    declineAgentID,
+    uploadProfilePicture
 } = require("../controllers/admin")
 const {
     validator,
@@ -136,6 +137,10 @@ router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
 //accept and decline auth-agent
 router.post("/accept-auth-agent/:id", requireSignin, isAuth, isAdmin, acceptAuthAgentID);
 router.post("/decline-auth-agent/:id", requireSignin, isAuth, isAdmin, declineAuthAgentID);
+
+//upload profile picture
+router.post("/photo/:id", requireSignin, isAuth, isAdmin, uploadProfilePicture);
+
 
 //accept and decline agent
 router.post("/accept-agent/:id", requireSignin, isAuth, isAdmin, acceptAgentID);

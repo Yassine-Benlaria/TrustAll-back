@@ -7,7 +7,7 @@ const { generateConfirmationCode, sendConfirmationMail, projectObject, sendReset
 const { profilePicUpload } = require("../helpers/uploader");
 const { getCommuneByID } = require("../validators/cities");
 const { v1: uuidv1 } = require("uuid");
-const { uploadID, uploadFilesToImageKit } = require("../helpers/imageUploader");
+const { uploadID, uploadFilesToImageKit, uploadProfilePic } = require("../helpers/imageUploader");
 
 var projection = {
     salt: false,
@@ -156,11 +156,11 @@ exports.uploadProfilePicture = (req, res) => {
         console.log(req)
             // let file = Buffer.from(req.files[0].buffer).toString("base64")
             // console.log(file)
-        if (!req.files || req.files.length < 2) {
-            return res.status(400).json({ err: "you have to upload 2 pictures" })
+        if (!req.file) {
+            return res.status(400).json({ err: "you have to upload a picture" })
         }
 
-        let urls = await uploadID(req.files, req.params.id);
+        let urls = await uploadProfilePic(req.file, req.params.id);
 
         console.log(urls)
         Client.updateOne({ _id: req.params.id }, {

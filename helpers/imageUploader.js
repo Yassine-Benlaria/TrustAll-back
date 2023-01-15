@@ -169,3 +169,30 @@ const sleep = (milliseconds) => {
 
 //     return decryptedImage;
 // }
+
+
+exports.uploadProfilePic = async(file, id) => {
+    let urls = [];
+    let count = 0;
+
+    console.log("file:", file)
+    await imagekit.upload({
+        file: file.buffer.toString("base64"), //required
+        fileName: `${file.originalname}_${id}.${file.mimetype.split("/")[1]}`, //required
+        extensions: [{
+            name: "google-auto-tagging",
+            maxTags: 5,
+            minConfidence: 95
+        }]
+    }, async function(error, result) {
+        if (error) console.log("error: ", error);
+        else {
+            console.log("result: ", result.url);
+            urls.push([file.originalname + '_url', result.url])
+        }
+        count++;
+    });
+
+    while (count == 0) await sleep(1000);
+    return urls;
+}

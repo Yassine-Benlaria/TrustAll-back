@@ -24,7 +24,7 @@ router.get("/command/:id", requireSignin, isAuth, isVerified, getClientCommandBy
 router.post("/change-password/:id", requireSignin, isAuth, isVerified, passwordValidator, changeClientPassword);
 
 //upload profile pic
-router.post("/photo/:id", requireSignin, isAuth, isVerified, uploadProfilePicture);
+router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture);
 
 //update client's info (first_name, last_name or birth_date)
 router.post("/update/:id", requireSignin, isAuth, isVerified, clientUpdateValidator, updateClient);
