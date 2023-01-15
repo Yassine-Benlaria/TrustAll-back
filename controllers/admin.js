@@ -56,16 +56,7 @@ exports.createAdmin = async(req, res) => {
             console.table({ err })
             return res.status(400).json({ err })
         }
-        res.json(projectObject(createdAdmin, {
-            _id: 1,
-            first_name: 1,
-            last_name: 1,
-            email: 1,
-            phone: 1,
-            city: 1,
-            birth_date: 1,
-
-        }));
+        res.json({ msg: "Sub-Admin created successfully!" });
         //adding email to used emails
         usedEmail = new UsedEmail({ email: req.body.email })
         usedEmail.save();
