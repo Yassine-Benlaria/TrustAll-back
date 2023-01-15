@@ -7,6 +7,7 @@ const { getCommuneByID } = require("../validators/cities");
 //add new command
 exports.addCommand = async(req, res) => {
 
+    console.table(req.body)
     let plan;
     //check if plan exists
     try {
