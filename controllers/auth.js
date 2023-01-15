@@ -350,17 +350,21 @@ exports.resetPassword = (req, res) => {
 exports.communesByCity = (req, res) => {
     let communes = getCommunesListByCity(req.params.city, req.params.lang)
 
-    AuthAgent.find({ city: req.params.city }, { communes: true }, (err, authAgents) => {
+    AuthAgent.find({ city: req.params.city }, { communes: true }, async(err, authAgents) => {
         let occupiedCommunes = []
-        authAgents.map(list => {
-            list.map(id => occupiedCommunes.push(id))
+        authAgents.map(authAgent => {
+            authAgent.communes.map(id => occupiedCommunes.push(id))
         })
         console.table(occupiedCommunes)
-        communes = communes.map(commune => {
-
+            // console.log(communes.length)
+        communes = await communes.filter(commune => {
+                if (!occupiedCommunes.includes(commune.id))
+                    return true
+            })
+            // console.log(communes.length)
+        return res.json({
+            communes
         })
     })
-    return res.json({
-        communes
-    })
+
 }

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router()
 const cors = require("cors");
-const { signIn, signout, postReset, checkPasswordToken, resetPassword } = require("../controllers/auth");
+const { signIn, signout, postReset, checkPasswordToken, resetPassword, communesByCity } = require("../controllers/auth");
 router.use(cors());
 const { getCitiesList, getDirasList, getCommunesListByDaira, getCommunesListByCity } = require("../validators/cities");
 const { passwordValidator } = require("../validators");
@@ -47,13 +47,7 @@ router.get("/communes/:daira/:lang", (req, res) => {
 });
 
 //get communes by daira
-router.get("/communes-by-city/:city/:lang", (req, res) => {
-
-    let communes = getCommunesListByCity(req.params.city, req.params.lang)
-    return res.json({
-        communes
-    })
-});
+router.get("/communes-by-city/:city/:lang", communesByCity);
 
 //get logo
 router.get("/logo", (req, res) => {
