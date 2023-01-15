@@ -19,6 +19,7 @@ const { generateRandomPassword, sendConfirmationMail, projectObject, generateCon
 const { scanOptions } = require("../helpers/options")
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const { profilePicUpload } = require("../helpers/uploader");
+const { uploadProfilePic } = require("../helpers/imageUploader");
 
 const projection = {
     salt: false,

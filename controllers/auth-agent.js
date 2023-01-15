@@ -7,7 +7,7 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const { authAgentUploadID, authAgentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
-const { uploadID } = require('../helpers/imageUploader');
+const { uploadID, uploadProfilePic } = require('../helpers/imageUploader');
 const projection = {
     salt: false,
     hashed_password: false,

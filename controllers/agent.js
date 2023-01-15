@@ -10,7 +10,7 @@ const { agentUploadID, agentUploadPassprt, profilePicUpload } = require("../help
 const { getCitiesList } = require("../validators/cities");
 const { default: mongoose } = require("mongoose");
 const { generateConfirmationCode, sendConfirmationMail, requireMessages } = require("../helpers");
-const { uploadID } = require("../helpers/imageUploader");
+const { uploadID, uploadProfilePic } = require("../helpers/imageUploader");
 const projection = {
     salt: false,
     hashed_password: false,
