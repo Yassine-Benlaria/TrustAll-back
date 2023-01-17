@@ -804,7 +804,7 @@ exports.clientE_Payment = async(req, res) => {
     ]);
 
     axios
-        .post('http://127.0.0.1:5000', {
+        .post(process.env.PYTHON_SERVER, {
             API_KEY: process.env.CHARGILY_APP_KEY,
             client: req.profile.first_name + " " + req.profile.last_name,
             email: req.profile.email,
