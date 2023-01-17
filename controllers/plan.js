@@ -1,6 +1,5 @@
 const { requireMessages } = require("../helpers")
 const Plan = require("../models/plan")
-const { options } = require("../routes/plan")
 
 
 exports.getPlans = (req, res) => {
@@ -71,4 +70,16 @@ exports.getPlansFormatted = (req, res) => {
         })
         return res.json({ msg: response })
     })
+}
+
+exports.getPlanOptions = (req, res) => {
+
+    let options = requireMessages(req.params.lang).options;
+
+    let response = {}
+    Object.keys(options).map(key => {
+        response[key] = Object.keys(options[key]).map(option => options[key][option])
+    })
+
+    res.json(response)
 }

@@ -49,13 +49,15 @@ const {
 } = require("../controllers/client")
 const { createReport, getCompletedReport, getReport } = require("../controllers/report")
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
+const { getPlanOptions } = require("../controllers/plan")
 
 router.use(cors())
 
 //upload report
 router.post("/upload-report/:id", requireSignin, isAuth, isAdmin, createReport)
 
-
+//get plan options
+router.get("/plan-options/:id/:lang", requireSignin, isAuth, isAdmin, getPlanOptions)
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", requireSignin, isAuth, isAdmin, getCarCommandsByAdmin);

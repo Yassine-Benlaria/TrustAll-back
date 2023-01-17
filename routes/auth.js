@@ -5,6 +5,7 @@ const { signIn, signout, postReset, checkPasswordToken, resetPassword, communesB
 router.use(cors());
 const { getCitiesList, getDirasList, getCommunesListByDaira, getCommunesListByCity } = require("../validators/cities");
 const { passwordValidator } = require("../validators");
+const axios = require('axios')
 
 
 //SignIn api
@@ -35,6 +36,21 @@ router.post("/reset", postReset)
 router.post("/test", (req, res) => {
     console.log(req)
     res.send("test")
+})
+
+//
+router.post("/chargilih", (req, res) => {
+    axios
+        .post('http://127.0.0.1:5000', {
+            todo: 'Buy the milk'
+        })
+        .then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+        })
+        .catch(error => {
+            console.error(error)
+        })
 })
 
 //check reset password token
