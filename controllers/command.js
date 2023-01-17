@@ -813,7 +813,7 @@ exports.clientE_Payment = async(req, res) => {
             amount: parseFloat(plan[0].price),
             discount: 0,
             comment: `paying for command N: ${req.body.command_id}`,
-            back_url: "https://trust-all.vercel.app/client/commands",
+            back_url: `https://trust-all.vercel.app/client/commands/request-status/${req.body.command_id}`,
             webhook_url: "https://iffhass-back.vercel.app/api/test"
         })
         .then(response => {
