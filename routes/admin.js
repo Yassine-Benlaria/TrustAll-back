@@ -66,7 +66,7 @@ router.get("/car-commands/:id", requireSignin, isAuth, isAdmin, getCarCommandsBy
 router.get("/money-commands/:id", requireSignin, isAuth, isAdmin, getMoneyCommandsByAdmin);
 
 //get unverified employees
-router.get("/unverified/:id/:lang", /* requireSignin, isAuth, isAdmin, */ getUnverifiedEmployees)
+router.get("/unverified/:id/:lang", requireSignin, isAuth, isAdmin, getUnverifiedEmployees)
 
 //get sub admins list
 router.get("/sub-admin/all/:id/:lang", requireSignin, isAuth, isAdmin, isMainAdmin, getSubAdminsList)

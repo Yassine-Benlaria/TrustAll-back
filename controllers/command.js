@@ -3,6 +3,8 @@ const Command = require("../models/command"),
 const Plan = require("../models/plan");
 const mongoose = require("mongoose");
 const { getCommuneByID } = require("../validators/cities");
+const axios = require('axios')
+require("dotenv").config();
 
 //add new command
 exports.addCommand = async(req, res) => {
@@ -775,4 +777,52 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
     //     if (err || !result) { return res.json({ msg: [] }) }
     //     return res.json(result)
     // })
+}
+
+//client epay
+exports.clientE_Payment = async(req, res) => {
+
+    let plan = await Command.aggregate([{
+            $project: {
+                plan_id: 1,
+                _id: 1
+            }
+        }, {
+            $lookup: {
+                from: "plans",
+                localField: "plan_id",
+                foreignField: "_id",
+                as: "price"
+            }
+        },
+        {
+            $set: { price: { $arrayElemAt: ["$price.price_baridi_mob", 0] } }
+        },
+        {
+            $match: { _id: mongoose.Types.ObjectId(req.body.command_id) }
+        }
+    ]);
+
+    axios
+        .post('http://127.0.0.1:5000', {
+            API_KEY: process.env.CHARGILY_APP_KEY,
+            client: req.profile.first_name + " " + req.profile.last_name,
+            email: req.profile.email,
+            invoice_number: req.body.command_id,
+            mode: req.body.mode,
+            amount: parseFloat(plan[0].price),
+            discount: 0,
+            comment: `paying for command N: ${req.body.command_id}`,
+            back_url: "https://trust-all.vercel.app/client/",
+            webhook_url: "https://iffhass-back.vercel.app/api/test"
+        })
+        .then(response => {
+            console.log(`statusCode: ${response.statusCode}`)
+            console.log(response.data)
+            res.redirect(response.data.checkout_url)
+        })
+        .catch(error => {
+            console.error(error)
+            res.status(400).json({ err: "error occured when requesting payment" })
+        })
 }
