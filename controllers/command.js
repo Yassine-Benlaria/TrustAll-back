@@ -782,6 +782,7 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
 //client epay
 exports.clientE_Payment = async(req, res) => {
 
+    return res.redirect("http://youtube.com")
     let plan = await Command.aggregate([{
             $project: {
                 plan_id: 1,
