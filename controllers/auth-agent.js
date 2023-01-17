@@ -130,7 +130,6 @@ exports.uploadProfilePicture = (req, res) => {
     });
 }
 
-
 //creating new agent
 exports.createAgent = async(req, res) => {
 

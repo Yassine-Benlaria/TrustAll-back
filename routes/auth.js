@@ -31,6 +31,12 @@ router.get("/dairas/:wilaya_code/:lang", (req, res) => {
 //request to reset password
 router.post("/reset", postReset)
 
+//
+router.post("/test", (req, res) => {
+    console.log(req)
+    res.send("test")
+})
+
 //check reset password token
 router.get("/check-token/:token", checkPasswordToken);
 
