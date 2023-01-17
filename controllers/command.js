@@ -782,7 +782,6 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
 //client epay
 exports.clientE_Payment = async(req, res) => {
 
-    return res.redirect("https://youtube.com")
     let plan = await Command.aggregate([{
             $project: {
                 plan_id: 1,
@@ -820,7 +819,7 @@ exports.clientE_Payment = async(req, res) => {
         .then(response => {
             console.log(`statusCode: ${response.statusCode}`)
             console.log(response.data)
-            res.redirect(response.data.checkout_url)
+            res.send({ msg: response.data.checkout_url })
         })
         .catch(error => {
             console.error(error)
