@@ -134,7 +134,7 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail)
 
 //create new plan
-router.post("/create_plan/:id", requireSignin, isAuth, isAdmin, createPlan)
+router.post("/create-plan/:id", requireSignin, isAuth, isAdmin, createPlan)
 
 //accept and decline auth-agent
 router.post("/accept-auth-agent/:id", requireSignin, isAuth, isAdmin, acceptAuthAgentID);

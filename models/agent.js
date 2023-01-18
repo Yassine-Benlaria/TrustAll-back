@@ -75,6 +75,21 @@ const agentSchema = new mongoose.Schema({
             verified: false,
         }
     },
+
+    notifications: [{
+        subject: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        isRead: {
+            type: Boolean,
+            default: false
+        },
+    }],
     //for changing the email
     newEmail: String,
     newEmailConfirmation: String,

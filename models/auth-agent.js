@@ -78,6 +78,21 @@ const authAgentSchema = new mongoose.Schema({
             active: true,
         }
     },
+
+    notifications: [{
+        subject: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        isRead: {
+            type: Boolean,
+            default: false
+        },
+    }],
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,

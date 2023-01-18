@@ -9,7 +9,6 @@ require("dotenv").config();
 //add new command
 exports.addCommand = async(req, res) => {
 
-    console.table(req.body)
     let plan;
     //check if plan exists
     try {
@@ -50,8 +49,12 @@ exports.addCommand = async(req, res) => {
     //if auth_agent_client does not exist
     if (!auth_agent_client) return res.status(400).json({ err: "Service is not available in your city!" });
 
-
-
+    auth_agent_seller.notifications.push({
+        subject: "New Command!",
+        description: `${req.profile.first_name} ${req.profile.last_name} have placed a new command, go check it to confirm or decline.`,
+        isRead: false
+    })
+    auth_agent_seller.save();
     let json = {...req.body,
         client_id: req.params.id,
         auth_agent_client: auth_agent_client._doc._id,
