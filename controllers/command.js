@@ -1,6 +1,8 @@
 const Command = require("../models/command"),
-    AuthAgent = require("../models/auth-agent");
-const Plan = require("../models/plan");
+    AuthAgent = require("../models/auth-agent"),
+    Notification = require("../models/notification"),
+    Plan = require("../models/plan"),
+    Agent = require("../models/agent");
 const mongoose = require("mongoose");
 const { getCommuneByID } = require("../validators/cities");
 const axios = require('axios')
@@ -26,12 +28,12 @@ exports.addCommand = async(req, res) => {
         auth_agent_seller = await AuthAgent.findOne({
             city: getCommuneByID(req.body.commune_id).wilaya_code,
             communes: +req.body.commune_id
-        }, { _id: true, communes: true });
+        }, { _id: true, communes: true, notifications: true });
     } catch (err) {
         console.table({ authagents_error: err })
         return res.status(400).json({ err: "Could not find seller's authagents!" })
     }
-    console.table({ auth_agent_seller });
+
     //if auth_agent_seller does not exist
     if (!auth_agent_seller) return res.status(400).json({ err: "Service is not available in this region!" });
 
@@ -49,12 +51,6 @@ exports.addCommand = async(req, res) => {
     //if auth_agent_client does not exist
     if (!auth_agent_client) return res.status(400).json({ err: "Service is not available in your city!" });
 
-    auth_agent_seller.notifications.push({
-        subject: "New Command!",
-        description: `${req.profile.first_name} ${req.profile.last_name} have placed a new command, go check it to confirm or decline.`,
-        isRead: false
-    })
-    auth_agent_seller.save();
     let json = {...req.body,
         client_id: req.params.id,
         auth_agent_client: auth_agent_client._doc._id,
@@ -68,7 +64,19 @@ exports.addCommand = async(req, res) => {
             return res.status(400).json({ err: "Error occured while creating command!" });
         }
         return res.json({ msg: "Created successfully!!!" });
-    })
+    });
+
+    //notifications
+    let notification = new Notification({
+        subject: "New Command!",
+        description: `${req.profile.first_name} ${req.profile.last_name} have placed a new command, go check it to confirm or decline.`
+    });
+
+
+    AuthAgent.updateOne({ _id: auth_agent_seller._id }, { $push: { notifications: notification } })
+        .then(result => console.log("done"))
+        .catch(err => console.log(err));
+
 }
 
 //get all commands
@@ -467,7 +475,17 @@ exports.confirmCommandByAuthAgent = (req, res) => {
             if (req.body.action == "yes") {
                 command.status = "03";
                 command.save();
-                return res.json({ msg: "command confirmed" })
+                res.json({ msg: "command confirmed" })
+
+                //notifications
+                let notification = new Notification({
+                    subject: "New mission!",
+                    description: `You have a new mission to complete the payment of command n: ${command._id}, go check it!`
+                });
+
+                return AuthAgent.updateOne({ _id: req.body.auth_agent_client }, { $push: { notifications: notification } })
+                    .then(result => console.log("done"))
+                    .catch(err => console.log(err));
             } else if (req.body.action == "no") {
                 //delete from database
                 Command.findByIdAndDelete(command._id, (err, result) => {
@@ -493,7 +511,17 @@ exports.assignSellerAgent = (req, res) => {
         command.agent_seller = req.body.agent_id;
         command.status = "06"
         command.save()
-        return res.json({ msg: "agent assigned" })
+        res.json({ msg: "agent assigned" })
+
+        //notifications
+        let notification = new Notification({
+            subject: "New mission!",
+            description: `You have a new mission to verify a car and fill a report, go check it!`
+        });
+
+        Agent.updateOne({ _id: req.body.agent_id }, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     }).catch(err => {
         console.log(err);
         return res.status(400).json({ err: "error occured" })
@@ -510,7 +538,17 @@ exports.assignClientAgent = (req, res) => {
         command.agent_client = req.body.agent_id;
         command.status = "04"
         command.save()
-        return res.json({ msg: "agent assigned" })
+        res.json({ msg: "agent assigned" })
+
+        //notifications
+        let notification = new Notification({
+            subject: "New mission!",
+            description: `You have a new mission to complete the payment of a command, go check it!`
+        });
+
+        Agent.updateOne({ _id: req.body.agent_id }, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     }).catch(err => {
         console.log(err);
         return res.status(400).json({ err: "error occured" })
@@ -527,7 +565,27 @@ exports.confirmPaymentByAuthAgent = (req, res) => {
         command.payed.auth_agent = true;
         command.status = "05"
         command.save()
-        return res.json({ msg: "payment confirmed by authagent" })
+        res.json({ msg: "payment confirmed by authagent" })
+
+        //notifications
+        let notification = new Notification({
+            subject: "Payment confirmed!",
+            description: `The payment of the comand ${req.body.command_id} has been confirmed by the auth-agent!`
+        });
+
+        Agent.updateOne({ _id: command.agent_client }, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
+
+        //notifications
+        let notification1 = new Notification({
+            subject: "Payment completed!",
+            description: `The payment of the comand ${req.body.command_id} has been completed, you can start the process of verification!`
+        });
+
+        AuthAgent.updateOne({ _id: command.auth_agent_seller }, { $push: { notifications: notification1 } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     }).catch(err => {
         console.log(err);
         return res.status(400).json({ err: "error occured" })
@@ -543,7 +601,18 @@ exports.confirmPaymentByAgent = (req, res) => {
             return res.status(400).json({ err: "You are not authorized to do this task" });
         command.payed.agent = true;
         command.save()
-        return res.json({ msg: "payment confirmed by agent" })
+        res.json({ msg: "payment confirmed by agent" })
+
+        //notifications
+        let notification = new Notification({
+            subject: "Payment done!",
+            description: `The payment of the command ${command._id} has been completed by the agent!`
+        });
+
+        return AuthAgent.updateOne({ _id: command.auth_agent_client }, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
+
     }).catch(err => {
         console.log(err);
         return res.status(400).json({ err: "error occured" })

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
 const { truncate } = require("fs");
+const Notification = require("./notification").schema
 
 //Client status schema
 const clientStatusSchema = new mongoose.Schema({
@@ -65,20 +66,7 @@ const clientSchema = new mongoose.Schema({
             active: true,
         }
     },
-    notifications: [{
-        subject: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        isRead: {
-            type: Boolean,
-            default: false
-        },
-    }],
+    notifications: [Notification],
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,

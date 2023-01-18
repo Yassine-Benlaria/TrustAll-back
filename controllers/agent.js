@@ -1,7 +1,9 @@
 const Agent = require("../models/agent"),
     DeletedAgent = require("../models/deleted/deleted-agent"),
     UsedEmail = require("../models/used-email"),
-    Command = require("../models/command");
+    Command = require("../models/command"),
+    Admin = require("../models/admin"),
+    Notification = require("../models/notification");
 const multer = require("multer")
 const fs = require("fs")
 const crypto = require("crypto")
@@ -326,7 +328,17 @@ exports.uploadId = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.json({ msg: "ID uploaded successfully" })
+        res.json({ msg: "ID uploaded successfully" });
+
+        //notifications
+        let notification = new Notification({
+            subject: `${req.profile.first_name} ${req.profile.last_name} uploaded his ID!`,
+            description: `The agent ${req.profile.first_name} ${req.profile.last_name} has uploaded his Identity Document, go check it!`
+        });
+
+        return Admin.updateMany({}, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     });
 }
 
@@ -365,7 +377,16 @@ exports.uploadPassport = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.send({ msg: "Passport uploaded successfully" })
+        res.send({ msg: "Passport uploaded successfully" });
+        //notifications
+        let notification = new Notification({
+            subject: `${req.profile.first_name} ${req.profile.last_name} uploaded his passport!`,
+            description: `The agent ${req.profile.first_name} ${req.profile.last_name} has uploaded his passport, go check it!`
+        });
+
+        return Admin.updateMany({}, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     });
 
 }

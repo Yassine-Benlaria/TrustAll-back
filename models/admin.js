@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
+const Notification = require("./notification").schema
 
 
 //Admin schema
@@ -63,20 +64,7 @@ const adminSchema = new mongoose.Schema({
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    notifications: [{
-        subject: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        isRead: {
-            type: Boolean,
-            default: false
-        },
-    }],
+    notifications: [Notification],
     //for changing the email
     newEmail: String,
     newEmailConfirmation: String,

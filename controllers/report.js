@@ -1,6 +1,8 @@
 const Command = require("../models/command"),
     Report = require("../models/report"),
-    Plan = require("../models/plan")
+    Plan = require("../models/plan"),
+    Notification = require("../models/notification"),
+    Agent = require("../models/agent");
 const { uploadFilesToImageKit } = require("../helpers/imageUploader");
 const { imagesUpload } = require("../helpers/uploader");
 const mongoose = require("mongoose");
@@ -160,8 +162,19 @@ const createNewReport = (req, res) => {
             report = new Report(report_json)
             report.save()
             command.status = "07";
-            if (req.profile.type == "auth-agent" || req.profile.type == "admin")
+            if (req.profile.type == "auth-agent" || req.profile.type == "admin") {
                 command.status = "08";
+            } else {
+                //notifications
+                let notification = new Notification({
+                    subject: "Report filled!",
+                    description: `The report of the command ${command._id} has been created by the agent!`
+                });
+
+                AuthAgent.updateOne({ _id: command.auth_agent_seller }, { $push: { notifications: notification } })
+                    .then(result => console.log("done"))
+                    .catch(err => console.log(err));
+            }
 
             command.save();
             return res.json({ msg: "report created successfully" })
@@ -280,8 +293,28 @@ const updateReport = (req, res, report) => {
 
             report.save()
             command.status = "07";
-            if (req.profile.type == "auth-agent" || req.profile.type == "admin")
+            if (req.profile.type == "auth-agent" || req.profile.type == "admin") {
                 command.status = "08";
+                //notifications
+                let notification = new Notification({
+                    subject: "Report confirmed!",
+                    description: `The report of the command ${command._id} has been confirmed!`
+                });
+
+                Agent.updateOne({ _id: command.agent_seller }, { $push: { notifications: notification } })
+                    .then(result => console.log("done"))
+                    .catch(err => console.log(err));
+            } else {
+                //notifications
+                let notification = new Notification({
+                    subject: "Report updated!",
+                    description: `The report of the command ${command._id} has been updated by the agent!`
+                });
+
+                AuthAgent.updateOne({ _id: command.auth_agent_seller }, { $push: { notifications: notification } })
+                    .then(result => console.log("done"))
+                    .catch(err => console.log(err));
+            }
             command.save();
             return res.json({ msg: "report updated successfully" })
         });

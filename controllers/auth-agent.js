@@ -2,7 +2,8 @@ const fs = require('fs')
 const { generateRandomPassword, sendConfirmationMail, requireMessages, generateConfirmationCode } = require("../helpers");
 const AuthAgent = require("../models/auth-agent"),
     UsedEmail = require("../models/used-email"),
-    Agent = require("../models/agent");
+    Agent = require("../models/agent"),
+    Admin = require("../models/admin");
 const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
@@ -179,6 +180,15 @@ exports.createAgent = async(req, res) => {
         usedEmail.save();
     })
 
+    //notifications
+    let notification = new Notification({
+        subject: `${req.profile.first_name} ${req.profile.last_name} added a new agent!`,
+        description: `The auth-agent ${req.profile.first_name} ${req.profile.last_name} has a new agent!`
+    });
+
+    return Admin.updateMany({}, { $push: { notifications: notification } })
+        .then(result => console.log("done"))
+        .catch(err => console.log(err));
 }
 
 //get agents list
@@ -339,7 +349,17 @@ exports.uploadId = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.json({ msg: "ID uploaded successfully" })
+        res.json({ msg: "ID uploaded successfully" })
+
+        //notifications
+        let notification = new Notification({
+            subject: `${req.profile.first_name} ${req.profile.last_name} uploaded his ID!`,
+            description: `The auth-agent ${req.profile.first_name} ${req.profile.last_name} has uploaded his Identity Document, go check it!`
+        });
+
+        return Admin.updateMany({}, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     });
 }
 
@@ -379,7 +399,17 @@ exports.uploadPassport = (req, res) => {
             if (err) console.log(err)
             else console.log(result)
         })
-        return res.send({ msg: "Passport uploaded successfully" })
+        res.send({ msg: "Passport uploaded successfully" })
+
+        //notifications
+        let notification = new Notification({
+            subject: `${req.profile.first_name} ${req.profile.last_name} uploaded his Passport!`,
+            description: `The auth-agent ${req.profile.first_name} ${req.profile.last_name} has uploaded his Passport, go check it!`
+        });
+
+        return Admin.updateMany({}, { $push: { notifications: notification } })
+            .then(result => console.log("done"))
+            .catch(err => console.log(err));
     });
 
 }

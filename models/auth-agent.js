@@ -1,25 +1,23 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
-
-
+const Notification = require("./notification").schema
 
 //Status schema
 const authAgentStatusSchema = new mongoose.Schema({
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    active: {
-        type: Boolean,
-        default: true
-    },
-    online: {
-        type: Boolean,
-    }
-})
-
-//AuthAgent schema
+        verified: {
+            type: Boolean,
+            default: false
+        },
+        active: {
+            type: Boolean,
+            default: true
+        },
+        online: {
+            type: Boolean,
+        }
+    })
+    //AuthAgent schema
 const authAgentSchema = new mongoose.Schema({
     created_by: {
         type: String,
@@ -79,20 +77,7 @@ const authAgentSchema = new mongoose.Schema({
         }
     },
 
-    notifications: [{
-        subject: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        isRead: {
-            type: Boolean,
-            default: false
-        },
-    }],
+    notifications: [Notification],
     //token for password resetting
     resetToken: String,
     resetTokenExpiration: Date,
