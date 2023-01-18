@@ -1,0 +1,16 @@
+Notifications:
+    Agent:
+        -new mission
+        -payment confirmed by auth-agent
+        -report confirmed by auth-agent
+    AuthAgent:
+        -new command posted by client (seller side auth-agent)
+        -new command payment mission (client side auth-agent)
+        -Report filled by agent
+        -Payment done by agent
+        -Payment completed (from client side auth-agent)
+    Admin:
+        -Document uploaded by agent
+        -Document uploaded by auth-agent
+        -new agent created
+        -(suggestions and complains)

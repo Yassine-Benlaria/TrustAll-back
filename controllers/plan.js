@@ -76,10 +76,5 @@ exports.getPlanOptions = (req, res) => {
 
     let options = requireMessages(req.params.lang).options;
 
-    let response = {}
-    Object.keys(options).map(key => {
-        response[key] = Object.keys(options[key]).map(option => options[key][option])
-    })
-
-    res.json(response)
+    res.json(options)
 }
