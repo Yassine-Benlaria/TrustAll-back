@@ -391,6 +391,7 @@ exports.uploadPassport = (req, res) => {
 
 }
 
+//get notifications list
 exports.getNotificationList = (req, res) => {
     Agent.findById(req.params.id, {
         notifications: {
@@ -405,4 +406,9 @@ exports.getNotificationList = (req, res) => {
         }
         return res.json(user.notifications)
     })
+}
+
+//get notification by id
+exports.getNotificationByID = (req, res) => {
+
 }
