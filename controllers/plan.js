@@ -60,7 +60,7 @@ exports.getPlansFormatted = (req, res) => {
                 title: plan.title,
                 price: plan.price,
                 price_baridi_mob: plan.price_baridi_mob,
-                description: plan.description,
+                description: plan.description[req.params.lang],
                 options: [plan.car_information.map(option => { return texts.car_information[option] }).join(" - "),
                     plan.interior.map(option => { return texts.interior[option] }).join(" - "),
                     plan.exterior.map(option => { return texts.exterior[option] }).join(" - "),
