@@ -217,8 +217,9 @@ exports.updateAdmin = (req, res) => {
 
 //create new plan
 exports.createPlan = (req, res) => {
-    let json = {...req.body,
-        car_information: scanOptions.car_information
+    let json = {...req.body
+        /* ,
+                car_information: scanOptions.car_information */
     }
     console.log(json)
     let plan = new Plan(json)

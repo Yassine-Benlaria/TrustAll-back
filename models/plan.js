@@ -13,6 +13,7 @@ const planSchema = new mongoose.Schema({
         fr: { type: String, required: true },
         en: { type: String, required: true }
     },
+    video: Boolean
 }, {
     timestamps: true
 })
