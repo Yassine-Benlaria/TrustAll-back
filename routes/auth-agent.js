@@ -14,7 +14,8 @@ const {
     resendConfirmEmail,
     uploadId,
     uploadPassport,
-    getNotificationList
+    getNotificationList,
+    getNotificationByID
 } = require("../controllers/auth-agent")
 const {
     requireSignin,
@@ -100,6 +101,8 @@ router.post("/assign-payment/:id", requireSignin, isAuth, isAuthAgent, isVerifie
 //get notifications list
 router.get("/notifications/:id", requireSignin, isAuth, isAuthAgent, getNotificationList)
 
+//get notification by id
+router.get("/notification/:id/:notification_id", getNotificationByID)
 
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", requireSignin, isAuth, isAuthAgent, isVerified, confirmPaymentByAuthAgent);

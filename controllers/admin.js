@@ -232,6 +232,16 @@ exports.createPlan = (req, res) => {
     })
 }
 
+//delete plan
+exports.deletePlan = (req, res) => {
+    Plan.findByIdAndDelete(req.params.plan_id, (err, deleted) => {
+        if (err || !deleted) {
+            console.log(err)
+            return res.status(400).json({ err: 'err' })
+        }
+        return res.json({ msg: "plan deleted" })
+    })
+}
 
 //uploading profile picture
 exports.uploadProfilePicture = (req, res) => {
@@ -647,6 +657,7 @@ exports.declineAgentID = (req, res) => {
     })
 }
 
+//get notifications list
 exports.getNotificationList = (req, res) => {
     Admin.findById(req.params.id, {
         notifications: {
@@ -660,5 +671,30 @@ exports.getNotificationList = (req, res) => {
             res.status(400).json({ err: "err" })
         }
         return res.json(user.notifications)
+    })
+}
+
+
+//get notification by id
+exports.getNotificationByID = (req, res) => {
+    Admin.findOne({
+        _id: req.params.id,
+        "notifications._id": req.params.notification_id
+    }, { notifications: true }, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            return res.status(400).json({ err: "err" })
+        }
+        res.json(user.notifications.find(({ _id }) => _id.toString() == req.params.notification_id))
+
+        user._doc = {...user._doc,
+            notifications: user.notifications.map(notf => {
+                if (notf._id.toString() == req.params.notification_id)
+                    return {...notf._doc, isRead: true }
+                return notf
+            })
+        }
+        console.log(user)
+        user.save()
     })
 }

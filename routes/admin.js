@@ -21,7 +21,8 @@ const {
     acceptAgentID,
     declineAgentID,
     uploadProfilePicture,
-    getNotificationList
+    getNotificationList,
+    deletePlan
 } = require("../controllers/admin")
 const {
     validator,
@@ -157,6 +158,9 @@ router.post("/decline-agent/:id", requireSignin, isAuth, isAdmin, declineAgentID
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
     return res.json({ user: req.profile })
 })
+
+//delete a plan
+router.delete("/plan/:id/:plan_id", requireSignin, isAuth, isAdmin, deletePlan)
 
 //delete user
 router.delete("/:id", requireSignin, isAuth, isAdmin, deleteUser)

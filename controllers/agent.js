@@ -410,5 +410,24 @@ exports.getNotificationList = (req, res) => {
 
 //get notification by id
 exports.getNotificationByID = (req, res) => {
+    Agent.findOne({
+        _id: req.params.id,
+        "notifications._id": req.params.notification_id
+    }, { notifications: true }, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            return res.status(400).json({ err: "err" })
+        }
+        res.json(user.notifications.find(({ _id }) => _id.toString() == req.params.notification_id))
 
+        user._doc = {...user._doc,
+            notifications: user.notifications.map(notf => {
+                if (notf._id.toString() == req.params.notification_id)
+                    return {...notf._doc, isRead: true }
+                return notf
+            })
+        }
+        console.log(user)
+        user.save()
+    })
 }

@@ -44,7 +44,7 @@ exports.planById = (req, res) => {
         exterior.map(element => { exterior_object[element] = texts.exterior[element] })
         mechanical.map(element => { mechanical_object[element] = texts.mechanical[element] })
 
-        return res.json({ msg: {...plan._doc, car_information: car_information_object, interior: interior_object, exterior: exterior_object, mechanical: mechanical_object } })
+        return res.json({ msg: {...plan._doc, description: plan.description[req.params.lang], car_information: car_information_object, interior: interior_object, exterior: exterior_object, mechanical: mechanical_object } })
     })
 }
 

@@ -9,6 +9,7 @@ const { v1: uuidv1 } = require("uuid");
 const { getCitiesList, getCommuneByID } = require("../validators/cities");
 const { authAgentUploadID, authAgentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
 const { uploadID, uploadProfilePic } = require('../helpers/imageUploader');
+const mongoose = require('mongoose');
 const projection = {
     salt: false,
     hashed_password: false,
@@ -433,5 +434,24 @@ exports.getNotificationList = (req, res) => {
 
 //get notification by id
 exports.getNotificationByID = (req, res) => {
-    AuthAgent.findOne({ _id: req.params.id })
+    AuthAgent.findOne({
+        _id: req.params.id,
+        "notifications._id": req.params.notification_id
+    }, { notifications: true }, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            return res.status(400).json({ err: "err" })
+        }
+        res.json(user.notifications.find(({ _id }) => _id.toString() == req.params.notification_id))
+
+        user._doc = {...user._doc,
+            notifications: user.notifications.map(notf => {
+                if (notf._id.toString() == req.params.notification_id)
+                    return {...notf._doc, isRead: true }
+                return notf
+            })
+        }
+        console.log(user)
+        user.save()
+    })
 }
