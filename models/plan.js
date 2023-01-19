@@ -8,7 +8,11 @@ const planSchema = new mongoose.Schema({
     mechanical: { type: Array },
     price: { type: String, required: true },
     price_baridi_mob: { type: String, required: true },
-    description: { type: String, required: true },
+    description: {
+        ar: { type: String, required: true },
+        fr: { type: String, required: true },
+        en: { type: String, required: true }
+    },
 }, {
     timestamps: true
 })

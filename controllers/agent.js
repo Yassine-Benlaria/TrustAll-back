@@ -390,3 +390,19 @@ exports.uploadPassport = (req, res) => {
     });
 
 }
+
+exports.getNotificationList = (req, res) => {
+    Agent.findById(req.params.id, {
+        notifications: {
+            subject: true,
+            isRead: true,
+            createdAt: true
+        }
+    }, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            res.status(400).json({ err: "err" })
+        }
+        return res.json(user.notifications)
+    })
+}

@@ -20,7 +20,8 @@ const {
     declineAuthAgentID,
     acceptAgentID,
     declineAgentID,
-    uploadProfilePicture
+    uploadProfilePicture,
+    getNotificationList
 } = require("../controllers/admin")
 const {
     validator,
@@ -79,6 +80,10 @@ router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAut
 
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
+
+
+//get notifications list
+router.get("/notifications/:id", requireSignin, isAuth, isAdmin, getNotificationList)
 
 
 //get report

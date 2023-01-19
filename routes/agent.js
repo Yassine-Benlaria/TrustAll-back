@@ -11,7 +11,8 @@ const {
     changeAgentPassword,
     addEmail,
     confirmNewEmail,
-    resendConfirmEmail
+    resendConfirmEmail,
+    getNotificationList
 } = require("../controllers/agent")
 const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
 const { uploadImages, createReport, getReport, getCompletedReport } = require("../controllers/report");
@@ -48,6 +49,8 @@ router.post("/new-email/:id", requireSignin, isAuth, addEmail)
 //confirm new email 
 router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 
+//get notifications list
+router.get("/notifications/:id", requireSignin, isAuth, getNotificationList)
 
 //confirm payment by client
 router.post("/confirm-payment/:id", requireSignin, isAuth, confirmPaymentByAgent);

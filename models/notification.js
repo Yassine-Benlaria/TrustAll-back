@@ -14,7 +14,7 @@ const notificationSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-}, { timestamps: { createdAt: true, updatedAt: false }, _id: false })
+}, { timestamps: { createdAt: true, updatedAt: false } })
 
 
 module.exports = mongoose.model("Notification", notificationSchema)

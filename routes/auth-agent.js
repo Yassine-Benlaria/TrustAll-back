@@ -13,7 +13,8 @@ const {
     confirmNewEmail,
     resendConfirmEmail,
     uploadId,
-    uploadPassport
+    uploadPassport,
+    getNotificationList
 } = require("../controllers/auth-agent")
 const {
     requireSignin,
@@ -94,6 +95,10 @@ router.post("/assign-verification/:id", requireSignin, isAuth, isAuthAgent, isVe
 
 //assign seller-client agent to command
 router.post("/assign-payment/:id", requireSignin, isAuth, isAuthAgent, isVerified, assignClientAgent);
+
+
+//get notifications list
+router.get("/notifications/:id", requireSignin, isAuth, isAuthAgent, getNotificationList)
 
 
 //confirm payment by auth agent
