@@ -85,10 +85,10 @@ router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList
 
 
 //get notifications list
-router.get("/notifications/:id", requireSignin, isAuth, isAdmin, getNotificationList)
+router.get("/notifications/:id", /*  requireSignin, isAuth, isAdmin, */ getNotificationList)
 
 //get notification by id
-router.get("/notification/:id/:notification_id", requireSignin, isAuth, isAdmin, getNotificationByID)
+router.get("/notification/:id/:notification_id", /* requireSignin, isAuth, isAdmin, */ getNotificationByID)
 
 //get report
 router.get("/report/:id", requireSignin, isAuth, isAdmin, getReport);

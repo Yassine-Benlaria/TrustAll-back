@@ -397,6 +397,7 @@ exports.getNotificationList = (req, res) => {
         notifications: {
             subject: true,
             isRead: true,
+            _id: true,
             createdAt: true
         }
     }, (err, user) => {

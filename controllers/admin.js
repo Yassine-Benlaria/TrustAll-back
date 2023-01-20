@@ -663,7 +663,8 @@ exports.getNotificationList = (req, res) => {
         notifications: {
             subject: true,
             isRead: true,
-            createdAt: true
+            createdAt: true,
+            _id: true
         }
     }, (err, user) => {
         if (err || !user) {
