@@ -622,7 +622,7 @@ exports.acceptAuthAgentID = (req, res) => {
 
 exports.acceptAgentID = (req, res) => {
     console.log(req.body)
-    AuthAgent.findById(req.body.user_id, (err, agent) => {
+    Agent.findById(req.body.user_id, (err, agent) => {
         if (err || !agent) return res.status(400).json({ err })
         console.table(agent)
         sendEmailMessage(agent.email, "ID Accepted", "Your Identity Document has been accepted by admin")
