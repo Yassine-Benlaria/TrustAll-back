@@ -621,6 +621,7 @@ exports.acceptAuthAgentID = (req, res) => {
 
 
 exports.acceptAgentID = (req, res) => {
+    console.log(req.body)
     AuthAgent.findById(req.body.user_id, (err, agent) => {
         if (err || !agent) return res.status(400).json({ err })
         console.table(agent)
