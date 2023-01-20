@@ -699,3 +699,20 @@ exports.getNotificationByID = (req, res) => {
         user.save()
     })
 }
+
+
+
+//delete notification
+exports.deleteNotification = (req, res) => {
+    Admin.findById(req.params.id, { notifications: true }, (err, admin) => {
+        if (err || !admin) {
+            console.log(err);
+            res.status(400).json({ err: "err" });
+        }
+
+        admin.notifications = admin.notifications.filter(({ _id }) => _id != req.params.notification_id)
+        admin.save()
+            .then(response => { res.json({ msg: "Notification deleted!" }) })
+            .catch(err => { return res.status(400).json({ err: "err" }) })
+    })
+}

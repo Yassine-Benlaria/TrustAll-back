@@ -15,7 +15,8 @@ const {
     uploadId,
     uploadPassport,
     getNotificationList,
-    getNotificationByID
+    getNotificationByID,
+    deleteNotification
 } = require("../controllers/auth-agent")
 const {
     requireSignin,
@@ -115,6 +116,9 @@ router.get("/:id/:lang", requireSignin, isAuth, isAdminOrAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
 });
+
+//delete notification
+router.delete("/notification/:id/:notification_id", requireSignin, isAuth, deleteNotification)
 
 //delete agent
 router.delete("/agent/:id", requireSignin, isAuth, isAuthAgent, isVerified, deleteAgent)

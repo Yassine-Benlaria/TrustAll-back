@@ -23,7 +23,8 @@ const {
     uploadProfilePicture,
     getNotificationList,
     deletePlan,
-    getNotificationByID
+    getNotificationByID,
+    deleteNotification
 } = require("../controllers/admin")
 const {
     validator,
@@ -164,6 +165,9 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 
 //delete a plan
 router.delete("/plan/:id/:plan_id", requireSignin, isAuth, isAdmin, deletePlan)
+
+//delete notification
+router.delete("/notification/:id/:notification_id", requireSignin, isAuth, deleteNotification)
 
 //delete user
 router.delete("/:id", requireSignin, isAuth, isAdmin, deleteUser)

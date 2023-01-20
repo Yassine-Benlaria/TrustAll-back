@@ -432,3 +432,19 @@ exports.getNotificationByID = (req, res) => {
         user.save()
     })
 }
+
+
+//delete notification
+exports.deleteNotification = (req, res) => {
+    Agent.findById(req.params.id, { notifications: true }, (err, agent) => {
+        if (err || !agent) {
+            console.log(err);
+            res.status(400).json({ err: "err" });
+        }
+
+        agent.notifications = agent.notifications.filter(({ _id }) => _id != req.params.notification_id)
+        agent.save()
+            .then(response => { res.json({ msg: "Notification deleted!" }) })
+            .catch(err => { return res.status(400).json({ err: "err" }) })
+    })
+}

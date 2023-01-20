@@ -13,7 +13,8 @@ const {
     confirmNewEmail,
     resendConfirmEmail,
     getNotificationList,
-    getNotificationByID
+    getNotificationByID,
+    deleteNotification
 } = require("../controllers/agent")
 const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
 const { uploadImages, createReport, getReport, getCompletedReport } = require("../controllers/report");
@@ -88,6 +89,10 @@ router.get("/:id/:lang", requireSignin, isAuth, isAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
 });
+
+
+//delete notification
+router.delete("/notification/:id/:notification_id", requireSignin, isAuth, deleteNotification)
 
 //agentByID middlware
 router.param("id", agentByID)
