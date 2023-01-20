@@ -102,7 +102,7 @@ router.post("/assign-payment/:id", requireSignin, isAuth, isAuthAgent, isVerifie
 router.get("/notifications/:id", requireSignin, isAuth, isAuthAgent, getNotificationList)
 
 //get notification by id
-router.get("/notification/:id/:notification_id", getNotificationByID)
+router.get("/notification/:id/:notification_id", requireSignin, isAuth, isAuthAgent, getNotificationByID)
 
 //confirm payment by auth agent
 router.post("/confirm-payment/:id", requireSignin, isAuth, isAuthAgent, isVerified, confirmPaymentByAuthAgent);

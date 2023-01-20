@@ -12,7 +12,8 @@ const {
     addEmail,
     confirmNewEmail,
     resendConfirmEmail,
-    getNotificationList
+    getNotificationList,
+    getNotificationByID
 } = require("../controllers/agent")
 const { requireSignin, isAuth, isAgent } = require("../controllers/auth")
 const { uploadImages, createReport, getReport, getCompletedReport } = require("../controllers/report");
@@ -51,6 +52,9 @@ router.post("/confirm-new-email/:id", requireSignin, isAuth, confirmNewEmail)
 
 //get notifications list
 router.get("/notifications/:id", requireSignin, isAuth, getNotificationList)
+
+//get notification by id
+router.get("/notification/:id/:notification_id", requireSignin, isAuth, getNotificationByID)
 
 //confirm payment by client
 router.post("/confirm-payment/:id", requireSignin, isAuth, confirmPaymentByAgent);

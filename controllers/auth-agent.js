@@ -185,7 +185,7 @@ exports.createAgent = async(req, res) => {
     //notifications
     let notification = new Notification({
         subject: `${req.profile.first_name} ${req.profile.last_name} added a new agent!`,
-        description: `The auth-agent ${req.profile.first_name} ${req.profile.last_name} has a new agent!`
+        description: `The auth-agent ${req.profile.first_name} ${req.profile.last_name} has added a new agent!`
     });
 
     return Admin.updateMany({}, { $push: { notifications: notification } })
