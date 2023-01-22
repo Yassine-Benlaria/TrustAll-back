@@ -24,7 +24,8 @@ const {
     getNotificationList,
     deletePlan,
     getNotificationByID,
-    deleteNotification
+    deleteNotification,
+    getStatistics
 } = require("../controllers/admin")
 const {
     validator,
@@ -98,6 +99,9 @@ router.get("/get-report/:id", requireSignin, isAuth, isAdmin, getCompletedReport
 
 //get clients list
 router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsList)
+
+//get statistics
+router.get("/statistics/:id", getStatistics)
 
 //change password
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);

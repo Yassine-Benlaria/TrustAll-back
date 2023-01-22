@@ -4,7 +4,8 @@ const Agent = require("../models/agent"),
     Plan = require("../models/plan"),
     AuthAgent = require("../models/auth-agent"),
     Client = require("../models/client"),
-    UsedEmail = require("../models/used-email");
+    UsedEmail = require("../models/used-email"),
+    Command = require("../models/command");
 
 //deleted-models
 const DeletedClient = require("../models/deleted/deleted-client"),
@@ -621,10 +622,8 @@ exports.acceptAuthAgentID = (req, res) => {
 
 
 exports.acceptAgentID = (req, res) => {
-    console.log(req.body)
     Agent.findById(req.body.user_id, (err, agent) => {
         if (err || !agent) return res.status(400).json({ err })
-        console.table(agent)
         sendEmailMessage(agent.email, "ID Accepted", "Your Identity Document has been accepted by admin")
         agent.status.verified = true
         agent.save()
@@ -716,4 +715,14 @@ exports.deleteNotification = (req, res) => {
             .then(response => { res.json({ msg: "Notification deleted!" }) })
             .catch(err => { return res.status(400).json({ err: "err" }) })
     })
+}
+
+///get statistics
+exports.getStatistics = async(req, res) => {
+    //auery params: city - auth-agent - begin-date - end-date
+    //get completed commands
+    let completed_commands = await Command.count({ status: "08" }),
+        not_completed_commands = await Command.count({ status: { $ne: "08" } });
+
+    res.json({ completed_commands, not_completed_commands })
 }

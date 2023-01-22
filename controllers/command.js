@@ -563,6 +563,7 @@ exports.confirmPaymentByAuthAgent = (req, res) => {
         if (command.auth_agent_client != req.params.id)
             return res.status(400).json({ err: "You are not authorized to do this task" });
         command.payed.auth_agent = true;
+        command.payed.type = "hand";
         command.status = "05"
         command.save()
         res.json({ msg: "payment confirmed by authagent" })

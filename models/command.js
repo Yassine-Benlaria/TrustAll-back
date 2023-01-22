@@ -4,6 +4,7 @@ const payedSchema = new mongoose.Schema({
     client: { type: Boolean },
     agent: { type: Boolean },
     auth_agent: { type: Boolean },
+    type: String
 }, { timestamps: false, _id: false });
 
 //Command schema
