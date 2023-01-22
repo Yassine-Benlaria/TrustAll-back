@@ -727,11 +727,14 @@ exports.getStatistics = async(req, res) => {
 
     let commands_filter = {},
         cars_filter = {},
-        money_filter = {};
+        money_filter = {},
+        auth_agent_communes = commune_ids;
     if (req.query.auth_agent_id) {
         commands_filter.auth_agent_client = mongoose.Types.ObjectId(req.query.auth_agent_id);
-        cars_filter.auth_agent_seller = mongoose.Types.ObjectId(req.query.auth_agent_id)
+        cars_filter.auth_agent_seller = mongoose.Types.ObjectId(req.query.auth_agent_id);
         money_filter.auth_agent_client = mongoose.Types.ObjectId(req.query.auth_agent_id);
+        auth_agent_communes = await AuthAgent.findById(req.query.auth_agent_id, { communes: true });
+        auth_agent_communes = auth_agent_communes.communes;
     }
 
     let date_start = req.query.date_start ? new Date(req.query.date_start) : new Date("2021-10-31"),
@@ -807,7 +810,13 @@ exports.getStatistics = async(req, res) => {
 
     ]);
 
+    console.log(auth_agent_communes);
     //get clients count
+    let clients = await Client.count({
+        commune_id: { $in: commune_ids },
+        commune_id: { $in: auth_agent_communes },
+        createdAt: { $gt: date_start, $lt: date_end }
+    })
 
     //returning response
     res.json({
@@ -816,6 +825,7 @@ exports.getStatistics = async(req, res) => {
         checked_cars,
         unchecked_cars,
         hand_payed: (hand_payed[0] && hand_payed[0].totalPrice) || 0,
-        e_payed: (e_payed[0] && e_payed[0].totalPrice) || 0
+        e_payed: (e_payed[0] && e_payed[0].totalPrice) || 0,
+        clients
     })
 }
