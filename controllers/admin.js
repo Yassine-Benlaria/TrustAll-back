@@ -18,9 +18,10 @@ const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { generateRandomPassword, sendConfirmationMail, projectObject, generateConfirmationCode, requireMessages, sendEmailMessage } = require("../helpers");
 const { scanOptions } = require("../helpers/options")
-const { getCitiesList, getCommuneByID } = require("../validators/cities");
+const { getCitiesList, getCommuneByID, getCommunesListByCity, getAllCommunes } = require("../validators/cities");
 const { profilePicUpload } = require("../helpers/uploader");
 const { uploadProfilePic } = require("../helpers/imageUploader");
+const { default: mongoose } = require("mongoose");
 
 const projection = {
     salt: false,
@@ -719,10 +720,102 @@ exports.deleteNotification = (req, res) => {
 
 ///get statistics
 exports.getStatistics = async(req, res) => {
-    //auery params: city - auth-agent - begin-date - end-date
-    //get completed commands
-    let completed_commands = await Command.count({ status: "08" }),
-        not_completed_commands = await Command.count({ status: { $ne: "08" } });
+    //query params: city - auth-agent - begin-date - end-date
+    let commune_ids = [];
+    if (req.query.city) commune_ids = getCommunesListByCity(req.query.city).map(({ id }) => `${id}`);
+    else commune_ids = await getAllCommunes().map(({ id }) => `${id}`);
 
-    res.json({ completed_commands, not_completed_commands })
+    let commands_filter = {},
+        cars_filter = {},
+        money_filter = {};
+    if (req.query.auth_agent_id) {
+        commands_filter.auth_agent_client = mongoose.Types.ObjectId(req.query.auth_agent_id);
+        cars_filter.auth_agent_seller = mongoose.Types.ObjectId(req.query.auth_agent_id)
+        money_filter.auth_agent_client = mongoose.Types.ObjectId(req.query.auth_agent_id);
+    }
+
+    let date_start = req.query.date_start ? new Date(req.query.date_start) : new Date("2021-10-31"),
+        date_end = req.query.date_end ? new Date(req.query.date_end) : new Date();
+    console.log(date_start)
+    console.log(date_end)
+
+    //get completed commands
+    let completed_commands = await Command.count({
+            ...commands_filter,
+            status: "08",
+            commune_id: { $in: commune_ids },
+            createdAt: { $gt: date_start, $lt: date_end }
+        }),
+        not_completed_commands = await Command.count({
+            ...commands_filter,
+            status: { $ne: "08" },
+            commune_id: { $in: commune_ids },
+            createdAt: { $gt: date_start, $lt: date_end }
+        });
+
+
+    //get checked cars
+    let checked_cars = await Command.count({
+            ...cars_filter,
+            status: "08",
+            commune_id: { $in: commune_ids },
+            createdAt: { $gt: date_start, $lt: date_end }
+        }),
+        unchecked_cars = await Command.count({
+            ...cars_filter,
+            status: { $ne: "08" },
+            commune_id: { $in: commune_ids },
+            createdAt: { $gt: date_start, $lt: date_end }
+        });
+
+    //calculate the sum of money ammounts
+    let hand_payed = await Command.aggregate([{
+            $match: {
+                ...money_filter,
+                "payed.type": "hand",
+                commune_id: { $in: commune_ids },
+                createdAt: { $gt: date_start, $lt: date_end }
+            }
+        },
+        {
+            $lookup: {
+                from: "plans",
+                localField: "plan_id",
+                foreignField: "_id",
+                as: "price"
+            }
+        }, { $set: { price: { $arrayElemAt: ["$price.price", 0] } } }, { $group: { _id: null, totalPrice: { $sum: "$price" } } }
+    ]);
+    let e_payed = await Command.aggregate([{
+            $match: {
+                ...money_filter,
+                "payed.type": "e-payment",
+                commune_id: { $in: commune_ids },
+                createdAt: { $gt: date_start, $lt: date_end }
+            }
+        },
+        {
+            $lookup: {
+                from: "plans",
+                localField: "plan_id",
+                foreignField: "_id",
+                as: "price"
+            }
+        },
+        { $set: { price: { $arrayElemAt: ["$price.price_baridi_mob", 0] } } },
+        { $group: { _id: null, totalPrice: { $sum: "$price" } } }
+
+    ]);
+
+    //get clients count
+
+    //returning response
+    res.json({
+        completed_commands,
+        not_completed_commands,
+        checked_cars,
+        unchecked_cars,
+        hand_payed: (hand_payed[0] && hand_payed[0].totalPrice) || 0,
+        e_payed: (e_payed[0] && e_payed[0].totalPrice) || 0
+    })
 }

@@ -6,8 +6,8 @@ const planSchema = new mongoose.Schema({
     interior: { type: Array },
     exterior: { type: Array },
     mechanical: { type: Array },
-    price: { type: String, required: true },
-    price_baridi_mob: { type: String, required: true },
+    price: { type: Number, required: true },
+    price_baridi_mob: { type: Number, required: true },
     description: {
         ar: { type: String, required: true },
         fr: { type: String, required: true },
