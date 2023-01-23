@@ -5,6 +5,8 @@ const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
     Notification = require("../models/notification"),
     UsedEmail = require("../models/used-email");
+const { v1: uuidv1 } = require("uuid");
+const crypto = require("crypto")
 const { getCitiesList } = require("../validators/cities");
 const projection = {
     salt: false,
