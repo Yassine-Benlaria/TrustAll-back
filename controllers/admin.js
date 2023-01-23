@@ -594,8 +594,14 @@ const deleteAdmin = (req, res) => {
 }
 
 //get unverified agents and authagents
-exports.getUnverifiedEmployees = (req, res) => {
-    Agent.aggregate([{
+exports.getUnverifiedEmployees = async(req, res) => {
+
+    let agents = [],
+        authAgents = [],
+        bloggers = [];
+
+    //agents
+    agents = await Agent.aggregate([{
             $set: { type: "agent" }
 
         }, {
@@ -631,48 +637,63 @@ exports.getUnverifiedEmployees = (req, res) => {
                 }
             }
         },
-    ], (err, agents) => {
-        if (err || !agents) return res.status(400).json({ err });
-        AuthAgent.aggregate([{
-            $set: { type: "auth-agent" }
+    ]);
 
-        }, {
-            $match: {
-                "status.verified": false
-            }
+    //auth-agents
+    authAgents = await AuthAgent.aggregate([{
+        $set: { type: "auth-agent" }
 
-        }, {
-            $project: {
-                salt: 0,
-                hashed_password: 0,
-                updatedAt: 0,
-                __v: 0,
-            }
+    }, {
+        $match: {
+            "status.verified": false
+        }
 
-        }], (err, authAgents) => {
-            if (err || !agents) return res.status(400).json({ err });
+    }, {
+        $project: {
+            salt: 0,
+            hashed_password: 0,
+            updatedAt: 0,
+            __v: 0,
+        }
 
-            let result = [...agents, ...authAgents]
-            let citiesList = getCitiesList(req.params.lang)
+    }]);
 
-            result = result.map(user => {
-                if (user.type == "auth-agent") {
-                    let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
-                    let communes = user.communes.map(id => {
-                        return req.params.lang == "ar" ?
-                            getCommuneByID(id).commune_name :
-                            getCommuneByID(id).commune_name_ascii;
-                    });
-                    return {...user, city, communes }
-                }
+    //bloggers
+    bloggers = await Blogger.aggregate([{
+        $set: { type: "blogger" }
+    }, {
+        $match: {
+            "status.verified": false
+        }
+    }, {
+        $project: {
+            salt: 0,
+            hashed_password: 0,
+            updatedAt: 0,
+            __v: 0,
+        }
 
-                let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
-                return {...user, city }
+    }]);
 
-            })
-            return res.json(result)
-        })
+    let result = [...agents, ...authAgents, ...bloggers]
+    let citiesList = getCitiesList(req.params.lang)
+
+    result = result.map(user => {
+        if (user.type == "auth-agent") {
+            let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+            let communes = user.communes.map(id => {
+                return req.params.lang == "ar" ?
+                    getCommuneByID(id).commune_name :
+                    getCommuneByID(id).commune_name_ascii;
+            });
+            return {...user, city, communes }
+        }
+
+        let city = citiesList.find(e => e.wilaya_code == user.city).wilaya_name
+        return {...user, city }
+
     })
+    return res.json(result);
 }
 
 exports.acceptAuthAgentID = (req, res) => {
