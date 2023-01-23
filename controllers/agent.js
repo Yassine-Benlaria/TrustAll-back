@@ -145,7 +145,6 @@ exports.uploadProfilePicture = (req, res) => {
     });
 }
 
-
 //get agents by authagent
 exports.getAgentsNamesByAuthAgent = (req, res) => {
 
@@ -298,7 +297,6 @@ exports.resendConfirmEmail = (req, res) => {
 
 //uploading ID card or Driving license
 exports.uploadId = (req, res) => {
-
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
     agentUploadID(req, res, async(err) => {
 

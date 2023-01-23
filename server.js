@@ -17,7 +17,8 @@ const clientRoutes = require("./routes/client"),
     authAgentRoutes = require("./routes/auth-agent"),
     authRoutes = require("./routes/auth"),
     commandRoutes = require("./routes/command"),
-    planRoutes = require("./routes/plan");
+    planRoutes = require("./routes/plan"),
+    bloggerRoutes = require("./routes/blogger");
 
 //app
 const app = express();
@@ -43,6 +44,7 @@ app.use("/api/agent", agentRoutes)
 app.use("/api", authRoutes)
 app.use("/api/command", commandRoutes)
 app.use("/api/plan", planRoutes)
+app.use("/api/blogger", bloggerRoutes)
 
 const port = process.env.PORT || 8000;
 
