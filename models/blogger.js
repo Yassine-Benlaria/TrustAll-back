@@ -61,7 +61,6 @@ const bloggerSchema = new mongoose.Schema({
             verified: false,
         }
     },
-    notifications: [Notification],
     //for changing the email
     newEmail: String,
     newEmailConfirmation: String,

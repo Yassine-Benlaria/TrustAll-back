@@ -113,7 +113,7 @@ router.post("/create-sub-admin/:id", requireSignin, isAuth, isAdmin, createAuthA
 router.post("/create-agent/:id", requireSignin, isAuth, isAdmin, createAgent)
 
 //create blogger account
-router.post("/create-blogger/:id", requireSignin, isAuth, isAdmin, createAuthAgentValidator, createBlogger)
+router.post("/create-blogger/:id", /*  requireSignin, isAuth, isAdmin,  */ createAuthAgentValidator, createBlogger)
 
 //update admin's info
 router.post("/update/:id", requireSignin, isAuth, isAdmin, updateAdmin)
