@@ -12,7 +12,8 @@ const Agent = require("../models/agent"),
 const DeletedClient = require("../models/deleted/deleted-client"),
     DeletedAgent = require("../models/deleted/deleted-agent"),
     DeletedAuthAgent = require("../models/deleted/deleted-auth-agent"),
-    DeletedAdmin = require("../models/deleted/deleted-admins");
+    DeletedAdmin = require("../models/deleted/deleted-admins"),
+    DeletedBlogger = require("../models/deleted/deleted-blogger");
 
 //#################
 const crypto = require("crypto")
@@ -121,7 +122,6 @@ exports.createAgent = async(req, res) => {
 
 //creating new agent
 exports.createBlogger = async(req, res) => {
-
     //test if email is used
     let usedEmail;
     try {
@@ -453,6 +453,7 @@ exports.deleteUser = (req, res) => {
     else if (req.query.agent_id) deleteAgent(req, res);
     else if (req.query.auth_agent_id) deleteAuthAgent(req, res);
     else if (req.query.admin_id) deleteAdmin(req, res);
+    else if (req.query.blogger_id) deleteBlogger(req, res);
     else res.status(400).json({ err: "error while error is error so not error" });
 }
 
@@ -478,6 +479,32 @@ const deleteClient = (req, res) => {
             console.table({ doc: user._doc.email })
             console.table({ doc: user._doc.email })
             console.table({ email: user.email })
+            UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
+                if (err) return console.table({ err: err });
+            });
+        })
+    });
+}
+
+//delete blogger account
+const deleteBlogger = (req, res) => {
+    Blogger.findById(req.query.blogger_id, (err, user) => {
+        if (err || !user)
+            return res.status(400).json({ err: "user not found!!" });
+
+        //insert into deleted bloggers
+        const deleted = new DeletedBlogger({...user._doc })
+        deleted.save((err, result) => {
+            if (err) {
+                console.log(err)
+            } else console.log("Blogger account deleted!")
+        })
+
+        //delete from clients table
+        Blogger.findByIdAndDelete(req.query.blogger_id, (err, response) => {
+            if (err) return res.status(400).json({ err: err });
+            res.json({ msg: "blogger account deleted" });
+            //delete email from used emails
             UsedEmail.findOneAndDelete({ email: user._doc.email }, (err, email) => {
                 if (err) return console.table({ err: err });
             });

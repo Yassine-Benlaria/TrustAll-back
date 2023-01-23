@@ -56,6 +56,7 @@ const {
 const { createReport, getCompletedReport, getReport } = require("../controllers/report")
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
+const { getBloggersList } = require("../controllers/blogger")
 
 router.use(cors())
 
@@ -80,6 +81,9 @@ router.get("/sub-admin/all/:id/:lang", requireSignin, isAuth, isAdmin, isMainAdm
 //get auth agents list
 router.get("/auth-agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsList)
 
+//get bloggers list
+router.get("/blogger/all/:id/:lang", /* requireSignin, isAuth, isAdmin, */ getBloggersList)
+
 //get auth agents names
 router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAuthAgentsNames)
 
@@ -87,10 +91,10 @@ router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAut
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
 
 //get notifications list
-router.get("/notifications/:id", /*  requireSignin, isAuth, isAdmin, */ getNotificationList)
+router.get("/notifications/:id", requireSignin, isAuth, isAdmin, getNotificationList)
 
 //get notification by id
-router.get("/notification/:id/:notification_id", /* requireSignin, isAuth, isAdmin, */ getNotificationByID)
+router.get("/notification/:id/:notification_id", requireSignin, isAuth, isAdmin, getNotificationByID)
 
 //get report
 router.get("/report/:id", requireSignin, isAuth, isAdmin, getReport);
