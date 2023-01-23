@@ -14,10 +14,12 @@ router.post("/upload-ID/:id", requireSignin, isAuth, uploadId)
 //uploading passport
 router.post("/upload-passport/:id", requireSignin, isAuth, uploadPassport)
 
-//get blogger info
+//get Blogger by id
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
-    return res.json({ user: req.profile })
+    let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
+    return res.json({ user: {...req.profile, city } });
 });
+
 
 //BloggerByID middleware
 router.param("id", bloggerByID)

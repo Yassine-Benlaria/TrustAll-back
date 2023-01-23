@@ -84,7 +84,7 @@ router.get("/:id", requireSignin, isAuth, (req, res) => {
 //upload profile pic
 router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture)
 
-//get Authorized Agent by id
+//get  Agent by id
 router.get("/:id/:lang", requireSignin, isAuth, isAgent, (req, res) => {
     let city = getCitiesList(req.params.lang).find(e => e.wilaya_code == req.profile.city).wilaya_name
     return res.json({ user: {...req.profile, city } });
