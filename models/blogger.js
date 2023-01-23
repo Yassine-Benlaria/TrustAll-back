@@ -61,6 +61,13 @@ const bloggerSchema = new mongoose.Schema({
             verified: false,
         }
     },
+    id_uploaded: { type: Boolean, default: false },
+    identity_document: {
+        type: { type: String },
+        front_url: { type: String },
+        back_url: { type: String },
+        selfie_url: { type: String },
+    },
     //for changing the email
     newEmail: String,
     newEmailConfirmation: String,

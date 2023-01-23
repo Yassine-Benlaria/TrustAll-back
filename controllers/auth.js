@@ -3,6 +3,7 @@ const Client = require("../models/client")
 const Agent = require("../models/agent")
 const AuthAgent = require("../models/auth-agent")
 const Admin = require("../models/admin")
+const Blogger = require("../models/admin")
 const { v1: uuidv1 } = require("uuid");
 const { expressjwt: express_jwt } = require("express-jwt");
 const crypto = require("crypto")
@@ -10,104 +11,202 @@ const { requireMessages, sendResetPasswordEmail } = require("../helpers")
 const { getCommunesListByCity } = require("../validators/cities")
 
 
-//signin
-exports.signIn = (req, res) => {
+// //signin
+// exports.signIn = (req, res) => {
 
+//     const msg = requireMessages(req.body.lang);
+//     let { email, password } = req.body;
+
+//     //!admin
+//     Admin.findOne({ email }, (err, admin) => {
+//         if (err || !admin) {
+
+//             //!client
+//             let { email, password } = req.body;
+//             Client.findOne({ email }, (err, client) => {
+//                 if (err || !client) {
+//                     //!agent
+//                     let { email, password } = req.body
+//                     Agent.findOne({ email }, (err, agent) => {
+//                         if (err || !agent) {
+//                             //! authorized agent
+//                             let { email, password } = req.body
+//                             AuthAgent.findOne({ email }, (err, authAgent) => {
+//                                 if (err || !authAgent) {
+//                                     return res.status(400).json({ err: msg.loginFailed })
+//                                 }
+//                                 //: if authorized-agent exists
+//                                 if (!authAgent.authenticate(password)) {
+//                                     return res.status(401).json({ err: msg.loginFailed })
+//                                 }
+//                                 //generate signin token
+//                                 const token = jwt.sign({ _id: authAgent._id }, process.env.JWT_SECRET);
+
+//                                 //token in cookie with expiry date
+//                                 res.cookie("token", token, { expire: new Date() + 9999 });
+
+//                                 //return response
+//                                 const { _id, first_name, img, last_name, status, id_uploaded, email } = authAgent;
+//                                 return res.json({ token, user: { _id, first_name, img, last_name, status, id_uploaded, email, type: "auth-agent" } })
+//                             })
+//                         }
+
+//                         //: if agent exists
+//                         else {
+//                             if (!agent.authenticate(password)) {
+//                                 return res.status(401).json({ err: msg.loginFailed })
+//                             }
+//                             //generate signin token
+//                             const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
+
+//                             //token in cookie with expiry date
+//                             res.cookie("token", token, { expire: new Date() + 9999 });
+
+//                             //return response
+//                             const { _id, first_name, img, last_name, status, email } = agent;
+//                             return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "agent" } })
+
+//                         }
+//                     })
+
+//                 }
+
+//                 //: if client exists
+//                 else {
+//                     if (!client.authenticate(password)) {
+//                         return res.status(401).json({ err: msg.loginFailed })
+//                     }
+//                     //generate signin token
+//                     const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
+
+//                     //token in cookie with expiry date
+//                     res.cookie("token", token, { expire: new Date() + 9999 });
+
+//                     //return response
+//                     const { _id, first_name, last_name, img, status, email } = client;
+//                     if (client.status.active == true)
+//                         return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "client" } })
+//                     return res.status(400).json({ err: "your account is deactivated, please contact support!" })
+
+//                 }
+//             })
+
+//         }
+
+//         //: if admin exists
+//         else {
+//             if (!admin.authenticate(password)) {
+//                 return res.status(401).json({ err: msg.loginFailed })
+//             }
+//             //generate signin token
+//             const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
+
+//             //token in cookie with expiry date
+//             res.cookie("token", token, { expire: new Date() + 9999 });
+
+//             //return response
+//             const { _id, first_name, last_name, email, img, role } = admin;
+//             return res.json({ token, user: { _id, first_name, status: { verified: true }, img, last_name, email, type: "admin", role } })
+//         }
+//     })
+// }
+
+
+//signin
+exports.signIn = async(req, res) => {
     const msg = requireMessages(req.body.lang);
     let { email, password } = req.body;
 
     //!admin
-    Admin.findOne({ email }, (err, admin) => {
-        if (err || !admin) {
-
-            //!client
-            let { email, password } = req.body;
-            Client.findOne({ email }, (err, client) => {
-                if (err || !client) {
-                    //!agent
-                    let { email, password } = req.body
-                    Agent.findOne({ email }, (err, agent) => {
-                        if (err || !agent) {
-                            //! authorized agent
-                            let { email, password } = req.body
-                            AuthAgent.findOne({ email }, (err, authAgent) => {
-                                if (err || !authAgent) {
-                                    return res.status(400).json({ err: msg.loginFailed })
-                                }
-                                //: if authorized-agent exists
-                                if (!authAgent.authenticate(password)) {
-                                    return res.status(401).json({ err: msg.loginFailed })
-                                }
-                                //generate signin token
-                                const token = jwt.sign({ _id: authAgent._id }, process.env.JWT_SECRET);
-
-                                //token in cookie with expiry date
-                                res.cookie("token", token, { expire: new Date() + 9999 });
-
-                                //return response
-                                const { _id, first_name, img, last_name, status, id_uploaded, email } = authAgent;
-                                return res.json({ token, user: { _id, first_name, img, last_name, status, id_uploaded, email, type: "auth-agent" } })
-                            })
-                        }
-
-                        //: if agent exists
-                        else {
-                            if (!agent.authenticate(password)) {
-                                return res.status(401).json({ err: msg.loginFailed })
-                            }
-                            //generate signin token
-                            const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
-
-                            //token in cookie with expiry date
-                            res.cookie("token", token, { expire: new Date() + 9999 });
-
-                            //return response
-                            const { _id, first_name, img, last_name, status, email } = agent;
-                            return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "agent" } })
-
-                        }
-                    })
-
-                }
-
-                //: if client exists
-                else {
-                    if (!client.authenticate(password)) {
-                        return res.status(401).json({ err: msg.loginFailed })
-                    }
-                    //generate signin token
-                    const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
-
-                    //token in cookie with expiry date
-                    res.cookie("token", token, { expire: new Date() + 9999 });
-
-                    //return response
-                    const { _id, first_name, last_name, img, status, email } = client;
-                    if (client.status.active == true)
-                        return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "client" } })
-                    return res.status(400).json({ err: "your account is deactivated, please contact support!" })
-
-                }
-            })
-
+    let admin = await Admin.findOne({ email });
+    if (admin) {
+        if (!admin.authenticate(password)) {
+            return res.status(401).json({ err: msg.loginFailed })
         }
+        //generate signin token
+        const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
 
-        //: if admin exists
-        else {
-            if (!admin.authenticate(password)) {
-                return res.status(401).json({ err: msg.loginFailed })
-            }
-            //generate signin token
-            const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
+        //token in cookie with expiry date
+        res.cookie("token", token, { expire: new Date() + 9999 });
 
-            //token in cookie with expiry date
-            res.cookie("token", token, { expire: new Date() + 9999 });
+        //return response
+        const { _id, first_name, last_name, email, img, role } = admin;
+        return res.json({ token, user: { _id, first_name, status: { verified: true }, img, last_name, email, type: "admin", role } })
+    }
 
-            //return response
-            const { _id, first_name, last_name, email, img, role } = admin;
-            return res.json({ token, user: { _id, first_name, status: { verified: true }, img, last_name, email, type: "admin", role } })
+    //!client
+    let client = await Client.findOne({ email });
+    if (client) {
+        if (!client.authenticate(password)) {
+            return res.status(401).json({ err: msg.loginFailed })
         }
-    })
+        //generate signin token
+        const token = jwt.sign({ _id: client._id }, process.env.JWT_SECRET);
+
+        //token in cookie with expiry date
+        res.cookie("token", token, { expire: new Date() + 9999 });
+
+        //return response
+        const { _id, first_name, last_name, img, status, email } = client;
+        if (client.status.active == true)
+            return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "client" } })
+        return res.status(400).json({ err: "your account is deactivated, please contact support!" })
+    }
+
+    //!agent
+    let agent = await Agent.findOne({ email });
+    if (agent) {
+        if (!agent.authenticate(password)) {
+            return res.status(401).json({ err: msg.loginFailed })
+        }
+        //generate signin token
+        const token = jwt.sign({ _id: agent._id }, process.env.JWT_SECRET);
+
+        //token in cookie with expiry date
+        res.cookie("token", token, { expire: new Date() + 9999 });
+
+        //return response
+        const { _id, first_name, img, last_name, status, email } = agent;
+        return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "agent" } })
+    }
+
+    //!auth-agent
+    let authAgent = await AuthAgent.findOne({ email });
+    if (authAgent) {
+        if (!authAgent.authenticate(password)) {
+            return res.status(401).json({ err: msg.loginFailed })
+        }
+        //generate signin token
+        const token = jwt.sign({ _id: authAgent._id }, process.env.JWT_SECRET);
+
+        //token in cookie with expiry date
+        res.cookie("token", token, { expire: new Date() + 9999 });
+
+        //return response
+        const { _id, first_name, img, last_name, status, id_uploaded, email } = authAgent;
+        return res.json({ token, user: { _id, first_name, img, last_name, status, id_uploaded, email, type: "auth-agent" } })
+    }
+
+
+    //!blogger
+    let blogger = await Blogger.findOne({ email });
+    if (blogger) {
+        if (!blogger.authenticate(password)) {
+            return res.status(401).json({ err: msg.loginFailed })
+        }
+        //generate signin token
+        const token = jwt.sign({ _id: blogger._id }, process.env.JWT_SECRET);
+
+        //token in cookie with expiry date
+        res.cookie("token", token, { expire: new Date() + 9999 });
+
+        //return response
+        const { _id, first_name, img, last_name, status, email } = blogger;
+        return res.json({ token, user: { _id, first_name, img, last_name, status, email, type: "blogger" } })
+    }
+
+    ///no account found
+    return res.status(401).json({ err: msg.loginFailed })
 }
 
 //signout
@@ -223,7 +322,18 @@ exports.postReset = (req, res) => {
                             if (err || !user) {
                                 Admin.findOne({ email: req.body.email }, (err, user) => {
                                     if (err || !user) {
-                                        return res.status(400).json({ err: messages.noAccountFound });
+                                        Blogger.findOne({ email: req.body.email }, (err, user) => {
+                                            if (err || !user) {
+                                                return res.status(400).json({ err: messages.noAccountFound });
+                                            } else {
+                                                user.resetToken = token;
+                                                user.resetTokenExpiration = Date.now() + 3600000;
+                                                user.save();
+                                                //sending email to the user
+                                                sendResetPasswordEmail(req.body.email, token);
+                                                return res.json({ msg: messages.resetEmailSent })
+                                            }
+                                        })
                                     } else {
                                         user.resetToken = token;
                                         user.resetTokenExpiration = Date.now() + 3600000;
@@ -279,7 +389,12 @@ exports.checkPasswordToken = (req, res) => {
                                         Admin.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
                                             (err, user) => {
                                                 if (err || !user) {
-                                                    return res.json({ msg: "false" })
+                                                    Blogger.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } },
+                                                        (err, user) => {
+                                                            if (err || !user) {
+                                                                return res.json({ msg: "false" })
+                                                            } else return res.json({ msg: "true" })
+                                                        });
                                                 } else return res.json({ msg: "true" })
                                             });
                                     } else return res.json({ msg: "true" })
@@ -307,7 +422,18 @@ exports.resetPassword = (req, res) => {
                         if (err || !user) {
                             Admin.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
                                 if (err || !user) {
-                                    res.status(400).json({ err: "error occured while updating password!" })
+                                    Blogger.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }, (err, user) => {
+                                        if (err || !user) {
+                                            res.status(400).json({ err: "error occured while updating password!" })
+                                        } else {
+                                            user.salt = salt;
+                                            user.hashed_password = hashed_password;
+                                            user.resetToken = undefined;
+                                            user.resetTokenExpiration = undefined;
+                                            user.save();
+                                            return res.json({ msg: "user password have been updated successfully!" })
+                                        }
+                                    });
                                 } else {
                                     user.salt = salt;
                                     user.hashed_password = hashed_password;
