@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1: uuidv1 } = require("uuid");
-const Notification = require("./notification").schema
 
 //Status schema
-const agentStatusSchema = new mongoose.Schema({
+const bloggerStatusSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         default: false
@@ -14,9 +13,7 @@ const agentStatusSchema = new mongoose.Schema({
     },
 }, { timestamps: false, _id: false })
 
-//Agent schema
-const agentSchema = new mongoose.Schema({
-
+const bloggerSchema = new mongoose.Schema({
     first_name: {
         type: String,
         trim: true,
@@ -48,17 +45,6 @@ const agentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    auth_agent_ID: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
-    id_uploaded: { type: Boolean, default: false },
-    identity_document: {
-        type: { type: String },
-        front_url: { type: String },
-        back_url: { type: String },
-        selfie_url: { type: String },
-    },
     img: {
         type: String,
         default: ""
@@ -70,7 +56,7 @@ const agentSchema = new mongoose.Schema({
         type: String,
     },
     status: {
-        type: agentStatusSchema,
+        type: bloggerStatusSchema,
         default: {
             verified: false,
         }
@@ -88,7 +74,6 @@ const agentSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-
 // virtual field
 agentSchema
     .virtual('password')
@@ -102,7 +87,7 @@ agentSchema
     });
 
 // schema methods
-agentSchema.methods = {
+bloggerSchema.methods = {
     authenticate: function(plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
@@ -119,4 +104,5 @@ agentSchema.methods = {
         }
     }
 };
-module.exports = mongoose.model("Agent", agentSchema);
+
+module.exports = mongoose.model("Blogger", bloggerSchema);

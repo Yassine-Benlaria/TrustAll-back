@@ -5,7 +5,8 @@ const Agent = require("../models/agent"),
     AuthAgent = require("../models/auth-agent"),
     Client = require("../models/client"),
     UsedEmail = require("../models/used-email"),
-    Command = require("../models/command");
+    Command = require("../models/command"),
+    Blogger = require("../models/blogger");
 
 //deleted-models
 const DeletedClient = require("../models/deleted/deleted-client"),
@@ -112,6 +113,43 @@ exports.createAgent = async(req, res) => {
             //     city: 1,
             //     birth_date: 1
             // }))
+            //adding email to used emails
+        usedEmail = new UsedEmail({ email: req.body.email })
+        usedEmail.save();
+    })
+}
+
+//creating new agent
+exports.createBlogger = async(req, res) => {
+
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    });
+
+    // console.table(req.body)
+    let json = req.body;
+    //generating random password
+    json.password = generateRandomPassword();
+    const blogger = new Blogger(json)
+    blogger.save((err, createdBlogger) => {
+        if (err) {
+            console.log(err)
+            return res.status(400).json({
+                err: "Email already exists!"
+            })
+        }
+        //sending email to agent
+        sendConfirmationMail(json.email, json.password)
+        res.json({ msg: "Blogger created successfully!" })
             //adding email to used emails
         usedEmail = new UsedEmail({ email: req.body.email })
         usedEmail.save();

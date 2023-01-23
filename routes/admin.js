@@ -25,7 +25,8 @@ const {
     deletePlan,
     getNotificationByID,
     deleteNotification,
-    getStatistics
+    getStatistics,
+    createBlogger
 } = require("../controllers/admin")
 const {
     validator,
@@ -85,7 +86,6 @@ router.get("/auth-agent/names/:id/:lang", requireSignin, isAuth, isAdmin, getAut
 //get agents list
 router.get("/agent/all/:id/:lang", requireSignin, isAuth, isAdmin, getAgentsList)
 
-
 //get notifications list
 router.get("/notifications/:id", /*  requireSignin, isAuth, isAdmin, */ getNotificationList)
 
@@ -101,7 +101,7 @@ router.get("/get-report/:id", requireSignin, isAuth, isAdmin, getCompletedReport
 router.get("/client/all/:id/:lang", requireSignin, isAuth, isAdmin, getClientsList)
 
 //get statistics
-router.get("/statistics/:id", getStatistics)
+router.get("/statistics/:id", requireSignin, isAuth, isAdmin, getStatistics)
 
 //change password
 router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, changeAdminPassword);
@@ -111,6 +111,9 @@ router.post("/create-sub-admin/:id", requireSignin, isAuth, isAdmin, createAuthA
 
 //create agent account
 router.post("/create-agent/:id", requireSignin, isAuth, isAdmin, createAgent)
+
+//create blogger account
+router.post("/create-blogger/:id", requireSignin, isAuth, isAdmin, createAuthAgentValidator, createBlogger)
 
 //update admin's info
 router.post("/update/:id", requireSignin, isAuth, isAdmin, updateAdmin)
@@ -130,13 +133,7 @@ router.post("/deactivate-agent/:id", requireSignin, isAuth, isAdmin, deactivateA
 //activate agent
 router.post("/activate-agent/:id", requireSignin, isAuth, isAdmin, activateAgent)
 
-//deactivate client
-// router.post("/deactivate-client/:id", requireSignin, isAuth, isAdmin, deactivateClient)
-
-//activate client
-// router.post("/activate-client/:id", requireSignin, isAuth, isAdmin, activateClient)
 router.post("/confirm-command/:id", requireSignin, isAuth, isAdmin, confirmCommandByAuthAgent);
-
 
 //add new email address
 router.post("/new-email/:id", requireSignin, isAuth, addEmail)
@@ -156,7 +153,6 @@ router.post("/decline-auth-agent/:id", requireSignin, isAuth, isAdmin, declineAu
 
 //upload profile picture
 router.post("/photo/:id", requireSignin, isAuth, isAdmin, uploadProfilePicture);
-
 
 //accept and decline agent
 router.post("/accept-agent/:id", requireSignin, isAuth, isAdmin, acceptAgentID);
