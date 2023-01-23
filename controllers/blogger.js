@@ -1,5 +1,5 @@
 const { requireMessages, generateConfirmationCode, sendConfirmationMail } = require("../helpers");
-const { uploadID } = require("../helpers/imageUploader");
+const { uploadID, uploadProfilePic } = require("../helpers/imageUploader");
 const { agentUploadID, agentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
 const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
