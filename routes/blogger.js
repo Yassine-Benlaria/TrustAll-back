@@ -1,5 +1,6 @@
 const { requireSignin, isAuth } = require("../controllers/auth");
 const { bloggerByID, uploadId, uploadPassport, updateBlogger, changeBloggerPassword, addEmail, confirmNewEmail, resendConfirmEmail, uploadProfilePicture } = require("../controllers/blogger");
+const { passwordValidator } = require("../validators");
 const { getCitiesList } = require("../validators/cities");
 
 const express = require("express"),
