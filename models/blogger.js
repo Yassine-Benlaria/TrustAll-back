@@ -74,7 +74,7 @@ const bloggerSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // virtual field
-agentSchema
+bloggerSchema
     .virtual('password')
     .set(function(password) {
         this._password = password;
