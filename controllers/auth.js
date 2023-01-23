@@ -3,7 +3,7 @@ const Client = require("../models/client")
 const Agent = require("../models/agent")
 const AuthAgent = require("../models/auth-agent")
 const Admin = require("../models/admin")
-const Blogger = require("../models/admin")
+const Blogger = require("../models/blogger")
 const { v1: uuidv1 } = require("uuid");
 const { expressjwt: express_jwt } = require("express-jwt");
 const crypto = require("crypto")
@@ -324,6 +324,7 @@ exports.postReset = (req, res) => {
                                     if (err || !user) {
                                         Blogger.findOne({ email: req.body.email }, (err, user) => {
                                             if (err || !user) {
+                                                console.log(err)
                                                 return res.status(400).json({ err: messages.noAccountFound });
                                             } else {
                                                 user.resetToken = token;
