@@ -1,8 +1,10 @@
+const { requireMessages, generateConfirmationCode, sendConfirmationMail } = require("../helpers");
 const { uploadID } = require("../helpers/imageUploader");
-const { agentUploadID, agentUploadPassprt } = require("../helpers/uploader");
+const { agentUploadID, agentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
 const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
-    Notification = require("../models/notification");
+    Notification = require("../models/notification"),
+    UsedEmail = require("../models/used-email");
 const { getCitiesList } = require("../validators/cities");
 const projection = {
     salt: false,
@@ -28,6 +30,22 @@ exports.getBloggersList = (req, res) => {
     })
 }
 
+//update agent's info (first_name, last_name, birth_date)
+exports.updateBlogger = (req, res) => {
+    let json = {}
+
+    if (req.body.first_name) json.first_name = req.body.first_name
+    if (req.body.last_name) json.last_name = req.body.last_name
+    if (req.body.birth_date) json.birth_date = req.body.birth_date
+
+    Blogger.updateOne({ _id: req.params.id }, { $set: json }, (err, result) => {
+        if (err || !result) {
+            return res.status(400).json({ err })
+        }
+        return res.json({ msg: "Blogger updated successfully!" })
+    })
+}
+
 //blogger by id
 exports.bloggerByID = (req, res, next, id) => {
 
@@ -39,8 +57,6 @@ exports.bloggerByID = (req, res, next, id) => {
         next();
     })
 }
-
-
 
 //uploading passport
 exports.uploadPassport = (req, res) => {
@@ -134,5 +150,148 @@ exports.uploadId = (req, res) => {
         return Admin.updateMany({}, { $push: { notifications: notification } })
             .then(result => console.log("done"))
             .catch(err => console.log(err));
+    });
+}
+
+//change password
+exports.changeBloggerPassword = (req, res) => {
+    const { noAccountFound, passwordNotCorrect, updatedSuccess } = requireMessages(req.body.lang)
+    Blogger.findById(req.params.id, (err, blogger) => {
+        if (err || !blogger)
+            return res.status(400).json({ err: noAccountFound });
+        if (!blogger.authenticate(req.body.old_password))
+            return res.status(400).json({ err: passwordNotCorrect })
+        let salt = uuidv1(),
+            hashed_password = crypto
+            .createHmac('sha1', salt)
+            .update(req.body.password)
+            .digest("hex");
+        blogger.hashed_password = hashed_password;
+        blogger.salt = salt;
+        blogger.save();
+        return res.json({ msg: updatedSuccess });
+    })
+}
+
+
+//add new email
+exports.addEmail = async(req, res) => {
+    //test if email is used
+    let usedEmail;
+    try {
+        usedEmail = await UsedEmail.findOne({ email: req.body.email });
+    } catch (err) {
+        return res.status(400).json({
+            err: requireMessages(req.body.lang).emailAlreadyExist
+        })
+    }
+    if (usedEmail) return res.status(400).json({
+        err: requireMessages(req.body.lang).emailAlreadyExist
+    })
+
+    const code = generateConfirmationCode()
+    Blogger.findById(req.params.id, (err, blogger) => {
+        //if no account found
+        if (err || !blogger) return res.status(400).json({ err: requireMessages(req.body.lang).noAccountFound });
+        if (blogger.email == req.body.email) return res.status(400).json({ err: "You are already using this email!" })
+
+        //else
+        blogger.newEmail = req.body.email;
+        blogger.newEmailConfirmation = code;
+        blogger.newEmailConfirmationExpiration = Date.now() + 180000;
+        blogger.save()
+        sendConfirmationMail(req.body.email, code, req.body.lang);
+        return res.json({ msg: "confirmation code sent to email!" })
+    });
+}
+
+//confirm the new email
+exports.confirmNewEmail = (req, res) => {
+    Blogger.findOne({ _id: req.params.id, newEmailConfirmationExpiration: { $gt: Date.now() } })
+        .then(blogger => {
+            if (!blogger) return res.status(400).json({ msg: "This code have been expired, you can request a new one!" });
+            if (blogger.newEmailConfirmation != req.body.code) return res.status(400).json({ err: "Confirmation code is not correct!" });
+            ///////////////////////////////////////////
+            let newMail = blogger.newEmail,
+                oldMail = blogger.email;
+            ///////////////////////////////////////////
+            blogger.email = blogger.newEmail;
+            blogger.newEmail = undefined;
+            blogger.newEmailConfirmation = undefined;
+            blogger.newEmailConfirmationExpiration = undefined;
+            blogger.save().then(result => {
+                //adding email to used emails
+                usedEmail = new UsedEmail({ email: newMail })
+                usedEmail.save();
+                //delete old email from used emails
+                UsedEmail.findOneAndDelete({ email: oldMail }, (err, email) => {
+                    if (err) return console.table({ err: err });
+                });
+                return res.json({ msg: requireMessages(req.body.lang).emailModified })
+            }).catch(err => {
+                return res.status(400).json({ err: requireMessages(req.body.lang).emailAlreadyExist });
+            });
+        })
+}
+
+//resend confirmation code
+exports.resendConfirmEmail = (req, res) => {
+    Blogger.findById(req.params.id, (err, blogger) => {
+        if (err || !blogger) return res.status(400).json({ msg: requireMessages(req.body.lang).noAccountFound });
+
+        //if an account found
+        var code = generateConfirmationCode();
+
+        if (req.body.type == "new-email") {
+            if (blogger.newEmail) {
+                //if 60 seconds doesn't pass yet
+                if (Date.parse(blogger.newEmailConfirmationExpiration) - 120000 > (Date.now()))
+                    return res.status(400).json({ err: "you have to wait 60 seconds!" });
+                //else
+                blogger.newEmailConfirmation = code;
+                blogger.newEmailConfirmationExpiration = Date.now() + 180000;
+                blogger.save();
+                sendConfirmationMail(blogger.newEmail, code, req.body.lang);
+            } else return res.status(400).json({ err: "want to resend code, but no newEmail found!" });
+        } else {
+            blogger.confirmation_code = code;
+            blogger.save();
+            sendConfirmationMail(blogger.email, code, req.body.lang);
+        }
+        return res.json({ msg: requireMessages(req.body.lang).emailSent })
+    })
+}
+
+//uploading profile picture
+exports.uploadProfilePicture = (req, res) => {
+
+    profilePicUpload(req, res, async(err) => {
+
+        if (err) console.log(err)
+        console.log(req)
+            // let file = Buffer.from(req.files[0].buffer).toString("base64")
+            // console.log(file)
+        if (!req.file) {
+            return res.status(400).json({ err: "you have to upload a picture" })
+        }
+
+        let urls = await uploadProfilePic(req.file, req.params.id);
+
+        console.log(urls)
+        Blogger.updateOne({ _id: req.params.id }, {
+            $set: {
+                img: urls[0][1]
+
+                // {
+                //     type: "passport",
+                //     front_url: { photo: urls[0][1], key: urls[0][2] },
+                //     selfie_url: { photo: urls[1][1], key: urls[1][2] },
+                // }
+            }
+        }, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
+        return res.send({ msg: "picture uploaded successfully", img: urls[0][1] })
     });
 }
