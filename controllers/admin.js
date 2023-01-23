@@ -696,6 +696,7 @@ exports.getUnverifiedEmployees = async(req, res) => {
     return res.json(result);
 }
 
+//accept auth agent id
 exports.acceptAuthAgentID = (req, res) => {
 
     AuthAgent.findById(req.body.user_id, (err, authAgent) => {
@@ -707,7 +708,7 @@ exports.acceptAuthAgentID = (req, res) => {
     })
 }
 
-
+//accept agent id
 exports.acceptAgentID = (req, res) => {
     Agent.findById(req.body.user_id, (err, agent) => {
         if (err || !agent) return res.status(400).json({ err })
@@ -718,6 +719,18 @@ exports.acceptAgentID = (req, res) => {
     })
 }
 
+//accept blogger id
+exports.acceptBloggerID = (req, res) => {
+    Blogger.findById(req.body.user_id, (err, blogger) => {
+        if (err || !blogger) return res.status(400).json({ err })
+        sendEmailMessage(blogger.email, "ID Accepted", "Your Identity Document has been accepted by admin")
+        blogger.status.verified = true
+        blogger.save()
+        return res.send("blogger ID accepted");
+    })
+}
+
+//decline auth agent id
 exports.declineAuthAgentID = (req, res) => {
     AuthAgent.findById(req.body.user_id, (err, authAgent) => {
 
@@ -731,6 +744,7 @@ exports.declineAuthAgentID = (req, res) => {
     })
 }
 
+//decline agent id
 exports.declineAgentID = (req, res) => {
     Agent.findById(req.body.user_id, (err, agent) => {
 
@@ -741,6 +755,20 @@ exports.declineAgentID = (req, res) => {
         agent.identity_document = {}
         agent.save()
         return res.send("agent ID declined");
+    })
+}
+
+//decline blogger id
+exports.declineBloggerID = (req, res) => {
+    Blogger.findById(req.body.user_id, (err, blogger) => {
+
+        if (err) return res.status(400).json({ err })
+        sendEmailMessage(blogger.email, "ID declined", "Your Identity Document has been declined by admin, please try to upload it again, and make sure to make it more clear and readable.")
+        blogger.status.verified = false
+        blogger.id_uploaded = false
+        blogger.identity_document = {}
+        blogger.save()
+        return res.send("blogger ID declined");
     })
 }
 
