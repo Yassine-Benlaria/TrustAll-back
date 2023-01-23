@@ -158,8 +158,8 @@ router.post("/accept-auth-agent/:id", requireSignin, isAuth, isAdmin, acceptAuth
 router.post("/decline-auth-agent/:id", requireSignin, isAuth, isAdmin, declineAuthAgentID);
 
 //accept and decline blogger
-router.post("/accept-auth-agent/:id", requireSignin, isAuth, isAdmin, acceptBloggerID);
-router.post("/decline-auth-agent/:id", requireSignin, isAuth, isAdmin, declineBloggerID);
+router.post("/accept-blogger/:id", requireSignin, isAuth, isAdmin, acceptBloggerID);
+router.post("/decline-blogger/:id", requireSignin, isAuth, isAdmin, declineBloggerID);
 
 //upload profile picture
 router.post("/photo/:id", requireSignin, isAuth, isAdmin, uploadProfilePicture);
