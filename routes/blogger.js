@@ -1,5 +1,5 @@
 const { requireSignin, isAuth } = require("../controllers/auth");
-const { getBlogs } = require("../controllers/blog");
+const { getBlogs, getBlogById } = require("../controllers/blog");
 const {
     bloggerByID,
     uploadId,
@@ -22,11 +22,14 @@ router.use(cors());
 
 
 
+//get blog by id
+router.get("/blog/:id/:blog_id", getBlogById);
+
 //get blogs
 router.get("/blogs/:id", requireSignin, isAuth, getBlogs);
 
 //create blog
-router.post("/create-blog/:id", requireSignin, isAuth, createBlog)
+router.post("/create-blog/:id", /*  requireSignin, isAuth, */ createBlog)
 
 //upload profile pic
 router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture);

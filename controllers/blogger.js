@@ -300,24 +300,55 @@ exports.uploadProfilePicture = (req, res) => {
 
 //create blog
 exports.createBlog = (req, res) => {
-    imagesUpload(req, res, async(err) => {
+    imagesUpload(req, res, (err) => {
         if (err) {
             console.error(err);
             return res.status(400).json({ err: "err" });
         }
-        let json = {};
-        if (req.files.length > 0) {
-            let image = await uploadFilesToImageKit(req.files);
-            json.image = image[0][1]
-        }
-        json.title = req.body.title;
-        json.content = req.body.content;
-        let blog = new Blog(json)
-        blog.save().then(result => {
-            res.json({ msg: "Blog created successfully!" });
-        }).catch(err => {
-            console.log(err);
-            return res.status(400).json({ err: "err" });
+
+        Blog.findById(req.body.blog_id, (err, blog) => {
+            if (err || !blog) createNewBlog(req, res);
+            else {
+                console.log(blog)
+                updateBlog(req, res, blog);
+            }
         })
     });
+}
+
+//create new blog
+const createNewBlog = async(req, res) => {
+    let json = {};
+    if (req.files.length > 0) {
+        let image = await uploadFilesToImageKit(req.files);
+        json.image = image[0][1]
+    }
+    json.title = req.body.title;
+    json.content = req.body.content;
+    let blog = new Blog(json)
+    blog.save().then(result => {
+        res.json({ msg: "Blog created successfully!" });
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "err" });
+    })
+}
+
+
+//update blog
+const updateBlog = async(req, res, blog) => {
+    if (req.files.length > 0) {
+        let image = await uploadFilesToImageKit(req.files);
+        blog.image = image[0][1]
+    }
+    if (req.body.title)
+        blog.title = req.body.title;
+    if (req.body.content)
+        blog.content = req.body.content;
+    blog.save().then(result => {
+        res.json({ msg: "Blog updated successfully!" });
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json({ err: "Error while updating blog" });
+    })
 }
