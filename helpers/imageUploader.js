@@ -4,7 +4,7 @@ const config = require("../config").ImageKit
 
 var imagekit = new ImageKit(config);
 
-exports.uploadFilesToImageKit = async(files, command_id) => {
+exports.uploadFilesToImageKit = async(files = [], command_id) => {
     let urls = [];
     let count = 0;
 
@@ -23,7 +23,7 @@ exports.uploadFilesToImageKit = async(files, command_id) => {
         }, async function(error, result) {
             if (error) console.log("error: ", error);
             else {
-                console.log("result: ", result.url);
+                // console.log("result: ", result);
                 urls.push([file.originalname, result.url])
             }
             count++;

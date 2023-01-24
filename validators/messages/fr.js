@@ -26,6 +26,8 @@ msg.nothingToChange = "Rien à modifier!"
 msg.passwordNotCorrect = "L'ancien mot de passe n'est pass correct!"
 msg.emailSent = "Code envoyé, vérifiez votre email!"
 msg.carName = "Le nom du voiture n'est pas valid!"
+msg.title = "le titre ne doit pas être vide"
+msg.content = "le contenue ne doit pas être vide"
 msg.options = {
     car_information: {
         car_brand: "Marque de véhicule",

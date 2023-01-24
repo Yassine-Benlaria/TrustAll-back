@@ -1,5 +1,16 @@
 const { requireSignin, isAuth } = require("../controllers/auth");
-const { bloggerByID, uploadId, uploadPassport, updateBlogger, changeBloggerPassword, addEmail, confirmNewEmail, resendConfirmEmail, uploadProfilePicture } = require("../controllers/blogger");
+const {
+    bloggerByID,
+    uploadId,
+    uploadPassport,
+    updateBlogger,
+    changeBloggerPassword,
+    addEmail,
+    confirmNewEmail,
+    resendConfirmEmail,
+    uploadProfilePicture,
+    createBlog
+} = require("../controllers/blogger");
 const { passwordValidator } = require("../validators");
 const { getCitiesList } = require("../validators/cities");
 
@@ -7,6 +18,10 @@ const express = require("express"),
     router = express.Router(),
     cors = require("cors");
 router.use(cors());
+
+
+//create blog
+router.post("/create-blog/:id", createBlog)
 
 //upload profile pic
 router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture);

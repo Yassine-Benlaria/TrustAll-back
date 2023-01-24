@@ -2,3 +2,4 @@ node_modules/
 .rest
 public/documents/
 public/profile_pictures
+.env

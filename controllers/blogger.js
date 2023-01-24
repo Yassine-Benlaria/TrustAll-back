@@ -1,10 +1,11 @@
 const { requireMessages, generateConfirmationCode, sendConfirmationMail } = require("../helpers");
-const { uploadID, uploadProfilePic } = require("../helpers/imageUploader");
-const { agentUploadID, agentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
+const { uploadID, uploadProfilePic, uploadFilesToImageKit } = require("../helpers/imageUploader");
+const { agentUploadID, agentUploadPassprt, profilePicUpload, imagesUpload } = require("../helpers/uploader");
 const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
     Notification = require("../models/notification"),
-    UsedEmail = require("../models/used-email");
+    UsedEmail = require("../models/used-email"),
+    Blog = require("../models/blog");
 const { v1: uuidv1 } = require("uuid");
 const crypto = require("crypto")
 const { getCitiesList } = require("../validators/cities");
@@ -175,7 +176,6 @@ exports.changeBloggerPassword = (req, res) => {
     })
 }
 
-
 //add new email
 exports.addEmail = async(req, res) => {
     //test if email is used
@@ -295,5 +295,29 @@ exports.uploadProfilePicture = (req, res) => {
             else console.log(result)
         })
         return res.send({ msg: "picture uploaded successfully", img: urls[0][1] })
+    });
+}
+
+//create blog
+exports.createBlog = (req, res) => {
+    imagesUpload(req, res, async(err) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).json({ err: "err" });
+        }
+        let json = {};
+        if (req.files.length > 0) {
+            let image = await uploadFilesToImageKit(req.files);
+            json.image = image[0][1]
+        }
+        json.title = req.body.title;
+        json.content = req.body.content;
+        let blog = new Blog(json)
+        blog.save().then(result => {
+            res.json({ msg: "Blog created successfully!" });
+        }).catch(err => {
+            console.log(err);
+            return res.status(400).json({ err: "err" });
+        })
     });
 }

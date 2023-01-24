@@ -26,6 +26,9 @@ msg.nothingToChange = "لم تقم بتغيير معلوماتك!"
 msg.passwordNotCorrect = "كلمة السر القديمة غير صحيحة!"
 msg.emailSent = "تفقد حسابك، لقد تم إرسال رمز التأكيد!"
 msg.carName = "خطأ في اسم السيارة!"
+
+msg.title = "يجب أن لا يكون العنوان فارغا"
+msg.content = "يجب أن لا يكون المحتوى فارغا"
 msg.options = {
     car_information: {
         car_brand: "ماركة السيارة",

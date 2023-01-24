@@ -90,6 +90,29 @@ exports.passwordValidator = async(req, res, next) => {
     next()
 }
 
+exports.createBlogValidator = async(req, res, next) => {
+    const messages = requireMessages(req.body.lang)
+
+    //check title
+    req.check("title").trim().notEmpty().withMessage(messages.title)
+
+    //check content
+    req.check("content").trim().notEmpty().withMessage(messages.content)
+
+    //returning error
+    const errors = req.validationErrors();
+    // if (errors) {
+    //     const firstError = errors.map(error => error.msg)[0];
+    //     return res.status(400).json({ err: firstError })
+    // }
+    if (errors) {
+        let errList = [];
+        errors.map(error => errList.push(error.msg));
+        return res.status(400).json({ err: [...new Set(errList)] })
+    }
+    next()
+}
+
 exports.addCommandValidator = async(req, res, next) => {
     const messages = requireMessages(req.body.lang)
 

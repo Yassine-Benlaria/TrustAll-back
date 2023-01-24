@@ -10,7 +10,6 @@ const { requireMessages } = require("../helpers");
 
 exports.uploadImages = (req, res) => {
 
-
     imagesUpload(req, res, (err) => {
         if (err) return res.status(400).json({ err })
 
@@ -53,7 +52,6 @@ const createNewReport = (req, res) => {
     let error = false
 
     Command.findById(req.body.command_id, async(err, command) => {
-
 
         // return res.send("images uploaded successfully")
         //if command not found
