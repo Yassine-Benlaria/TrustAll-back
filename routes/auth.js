@@ -5,6 +5,7 @@ const { signIn, signout, postReset, checkPasswordToken, resetPassword, communesB
 router.use(cors());
 const { getCitiesList, getDirasList, getCommunesListByDaira, getCommunesListByCity } = require("../validators/cities");
 const { passwordValidator } = require("../validators");
+const { getBlogById, getBlogs } = require("../controllers/blog");
 
 
 //SignIn api
@@ -57,8 +58,15 @@ router.get("/communes-by-city/:city/:lang", communesByCity);
 
 //get logo
 router.get("/logo", (req, res) => {
-        let path = require('path');
-        res.sendFile(path.resolve('public/logo.png'))
-    })
-    //get communes list
+    let path = require('path');
+    res.sendFile(path.resolve('public/logo.png'))
+});
+
+//get blog by id
+router.get("/blog/:blog_id", getBlogById);
+
+//get blogs
+router.get("/blogs", getBlogs);
+
+//get communes list
 module.exports = router;
