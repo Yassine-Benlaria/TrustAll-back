@@ -20,3 +20,13 @@ exports.getBlogById = (req, res) => {
         return res.json(blog);
     })
 }
+
+//delete blog
+exports.deleteBlog = (req, res) => {
+    Blog.findByIdAndDelete(req.params.blog_id, (err, deleted) => {
+        if (err) {
+            console.log(err)
+        }
+        return res.json({ msg: "deleted succefully!!" })
+    })
+}

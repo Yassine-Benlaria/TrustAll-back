@@ -1,5 +1,5 @@
 const { requireSignin, isAuth } = require("../controllers/auth");
-const { getBlogs, getBlogById } = require("../controllers/blog");
+const { getBlogs, getBlogById, deleteBlog } = require("../controllers/blog");
 const {
     bloggerByID,
     uploadId,
@@ -29,7 +29,7 @@ router.get("/blog/:id/:blog_id", getBlogById);
 router.get("/blogs/:id", requireSignin, isAuth, getBlogs);
 
 //create blog
-router.post("/create-blog/:id", /*  requireSignin, isAuth, */ createBlog)
+router.post("/create-blog/:id", requireSignin, isAuth, createBlog)
 
 //upload profile pic
 router.post("/photo/:id", requireSignin, isAuth, uploadProfilePicture);
@@ -61,7 +61,10 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
     return res.json({ user: {...req.profile, city } });
 });
 
+//delete blog
+router.delete("/delete-blog/:id/:blog_id", requireSignin, isAuth, deleteBlog)
 
 //BloggerByID middleware
 router.param("id", bloggerByID)
+
 module.exports = router;
