@@ -13,11 +13,11 @@ const settingsSchema = new mongoose.Schema({
     about_us: { ar: String, fr: String, en: String },
     location: { ar: String, fr: String, en: String },
     phone: String,
-    FAQs: {
-        ar: [{ question: String, answer: String }],
-        fr: [{ question: String, answer: String }],
-        en: [{ question: String, answer: String }]
-    }
+    FAQs: [{
+        question: { ar: String, fr: String, en: String },
+        answer: { ar: String, fr: String, en: String }
+    }],
+
 }, { timestamps: true, unique: true });
 
 module.exports = mongoose.model("Settings", settingsSchema);

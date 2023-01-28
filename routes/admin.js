@@ -170,10 +170,10 @@ router.post("/decline-agent/:id", requireSignin, isAuth, isAdmin, declineAgentID
 
 
 //create settings
-router.post("/create-settigs/:id", requireSignin, isAuth, isMainAdmin, createSettings);
+router.post("/create-settings/:id", /* requireSignin, isAuth, */ isMainAdmin, createSettings);
 
 //update settings
-router.post("/update-settings/:id", requireSignin, isAuth, isMainAdmin, updateSettings);
+router.post("/update-settings/:id", /* requireSignin, isAuth, isMainAdmin,  */ updateSettings);
 
 //admin by id API
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {

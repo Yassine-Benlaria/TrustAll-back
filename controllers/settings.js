@@ -1,7 +1,10 @@
 const Settings = require("../models/settings");
 
 //create
-exports.createSettings = (req, res) => {
+exports.createSettings = async(req, res) => {
+    let nbr = await Settings.find().count();
+    if (nbr > 0) return res.status(400).json({ err: "settings have been already created before!" });
+
     let settings = new Settings(req.body);
     settings.save().then(result => { return res.json({ msg: "settings created successfully!" }) }).catch(err => {
         console.log(err);

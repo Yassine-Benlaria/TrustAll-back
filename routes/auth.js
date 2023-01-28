@@ -11,7 +11,7 @@ const { getSettings } = require("../controllers/settings");
 
 
 //getSettings
-router.get("/settings/:id", getSettings);
+router.get("/settings", getSettings);
 
 //SignIn api
 router.post("/signin", signIn);
