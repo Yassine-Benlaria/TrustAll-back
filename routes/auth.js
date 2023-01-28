@@ -6,7 +6,12 @@ router.use(cors());
 const { getCitiesList, getDirasList, getCommunesListByDaira, getCommunesListByCity } = require("../validators/cities");
 const { passwordValidator } = require("../validators");
 const { getBlogById, getBlogs } = require("../controllers/blog");
+const { getSettings } = require("../controllers/settings");
 
+
+
+//getSettings
+router.get("/settings/:id", getSettings);
 
 //SignIn api
 router.post("/signin", signIn);

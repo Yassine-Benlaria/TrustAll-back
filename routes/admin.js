@@ -31,7 +31,6 @@ const {
     declineBloggerID
 } = require("../controllers/admin")
 const {
-    validator,
     passwordValidator,
     createAuthAgentValidator
 } = require("../validators")
@@ -59,6 +58,7 @@ const { createReport, getCompletedReport, getReport } = require("../controllers/
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
 const { getBloggersList } = require("../controllers/blogger")
+const { createSettings, updateSettings } = require("../controllers/settings")
 
 router.use(cors())
 
@@ -167,6 +167,13 @@ router.post("/photo/:id", requireSignin, isAuth, isAdmin, uploadProfilePicture);
 //accept and decline agent
 router.post("/accept-agent/:id", requireSignin, isAuth, isAdmin, acceptAgentID);
 router.post("/decline-agent/:id", requireSignin, isAuth, isAdmin, declineAgentID);
+
+
+//create settings
+router.post("/create-settigs/:id", requireSignin, isAuth, isMainAdmin, createSettings);
+
+//update settings
+router.post("/update-settings/:id", requireSignin, isAuth, isMainAdmin, updateSettings);
 
 //admin by id API
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
