@@ -17,11 +17,11 @@ exports.updateSettings = (req, res) => {
     console.log(req.body)
 
     let json = {};
-    if (req.body.facebook != "") json.social_media.facebook = req.body.facebook;
-    if (req.body.instagram != "") json.social_media.instagram = req.body.instagram;
-    if (req.body.twitter != "") json.social_media.twitter = req.body.twitter;
-    if (req.body.whatsapp != "") json.social_media.whatsapp = req.body.whatsapp;
-    if (req.body.email != "") json.social_media.email = req.body.email;
+    if (req.body.facebook != "") json["social_media.facebook"] = req.body.facebook;
+    if (req.body.instagram != "") json["social_media.instagram"] = req.body.instagram;
+    if (req.body.twitter != "") json["social_media.twitter"] = req.body.twitter;
+    if (req.body.whatsapp != "") json["social_media.whatsapp"] = req.body.whatsapp;
+    if (req.body.email != "") json["social_media.email"] = req.body.email;
     if (req.body.terms) {
         if (req.body.terms.ar) json["terms.ar"] = req.body.terms.ar;
         if (req.body.terms.fr) json["terms.fr"] = req.body.terms.fr;
