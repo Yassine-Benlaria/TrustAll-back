@@ -184,7 +184,7 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 router.delete("/plan/:id/:plan_id", requireSignin, isAuth, isAdmin, deletePlan)
 
 //delete FAQ
-router.delete("/delete-faq/:id/:FAQ_id", requireSignin, isAuth, isAdmin, deleteFAQ)
+router.delete("/faq/:id/:FAQ_id", requireSignin, isAuth, isAdmin, deleteFAQ);
 
 //delete notification
 router.delete("/notification/:id/:notification_id", requireSignin, isAuth, deleteNotification)
