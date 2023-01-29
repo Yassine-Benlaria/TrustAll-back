@@ -17,7 +17,7 @@ exports.updateSettings = (req, res) => {
     console.log(req.body)
     let json = {
         social_media: {
-            facebook: req.body.facebook,
+            facebook: req.body.facebook == "" ? req.body.facebook : undefined,
             instagram: req.body.instagram,
             twitter: req.body.twitter,
             email: req.body.email,
