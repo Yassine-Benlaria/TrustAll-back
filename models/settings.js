@@ -17,6 +17,7 @@ const settingsSchema = new mongoose.Schema({
         question: { ar: String, fr: String, en: String },
         answer: { ar: String, fr: String, en: String }
     }],
+    SuggComp: String
 
 }, { timestamps: true, unique: true });
 
