@@ -15,20 +15,25 @@ exports.createSettings = async(req, res) => {
 //update settings
 exports.updateSettings = (req, res) => {
     console.log(req.body)
-    let json = {
-        social_media: {
-            facebook: req.body.facebook != "" ? req.body.facebook : undefined,
-            instagram: req.body.instagram,
-            twitter: req.body.twitter,
-            email: req.body.email,
-            whatsapp: req.body.whatsapp
-        },
-        terms: req.body.terms,
-        location: req.body.location,
-        phone: req.body.whatsapp,
-        FAQs: req.body.faqs,
-        sugg_comp: req.body.Sugg_comp
+
+    let json = { social_media: {}, location: {} };
+    if (req.body.facebook != "") json.social_media.facebook = req.body.facebook;
+    if (req.body.instagram != "") json.social_media.instagram = req.body.instagram;
+    if (req.body.twitter != "") json.social_media.twitter = req.body.twitter;
+    if (req.body.whatsapp != "") json.social_media.whatsapp = req.body.whatsapp;
+    if (req.body.email != "") json.social_media.email = req.body.email;
+    if (req.body.terms != "") json.terms = req.body.terms;
+
+    if (req.body.location) {
+        if (req.body.location.ar) json.location.ar = req.body.location.ar;
+        if (req.body.location.fr) json.location.fr = req.body.location.fr;
+        if (req.body.location.en) json.location.en = req.body.location.en;
     }
+
+    if (req.body.faqs) json.FAQs = req.body.faqs;
+    if (req.body.Sugg_comp) json.sugg_comp = req.body.Sugg_comp;
+
+    console.log(json);
     Settings.updateOne({}, json, (err, result) => {
         if (err || !result) {
             console.log(err);
