@@ -14,6 +14,7 @@ exports.createSettings = async(req, res) => {
 
 //update settings
 exports.updateSettings = (req, res) => {
+    console.log(req.body)
     Settings.updateOne({}, req.body, (err, result) => {
         if (err || !result) {
             console.log(err);

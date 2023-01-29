@@ -36,6 +36,7 @@ app.use(cookieParser())
 app.use(expressValidator())
 app.use(limiter)
 
+
 //routes middlware
 app.use("/api/client", clientRoutes)
 app.use("/api/admin", adminRoutes)
