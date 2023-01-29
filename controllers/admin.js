@@ -790,7 +790,6 @@ exports.getNotificationList = (req, res) => {
     })
 }
 
-
 //get notification by id
 exports.getNotificationByID = (req, res) => {
     Admin.findOne({
@@ -814,8 +813,6 @@ exports.getNotificationByID = (req, res) => {
         user.save()
     })
 }
-
-
 
 //delete notification
 exports.deleteNotification = (req, res) => {

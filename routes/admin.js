@@ -58,7 +58,7 @@ const { createReport, getCompletedReport, getReport } = require("../controllers/
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
 const { getBloggersList } = require("../controllers/blogger")
-const { createSettings, updateSettings } = require("../controllers/settings")
+const { createSettings, updateSettings, deleteFAQ } = require("../controllers/settings")
 
 router.use(cors())
 
@@ -182,6 +182,9 @@ router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {
 
 //delete a plan
 router.delete("/plan/:id/:plan_id", requireSignin, isAuth, isAdmin, deletePlan)
+
+//delete FAQ
+router.delete("/delete-faq/:id/:FAQ_id", requireSignin, isAuth, isAdmin, deleteFAQ)
 
 //delete notification
 router.delete("/notification/:id/:notification_id", requireSignin, isAuth, deleteNotification)

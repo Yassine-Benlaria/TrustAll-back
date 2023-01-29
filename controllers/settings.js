@@ -57,3 +57,19 @@ exports.getSettings = (req, res) => {
         return res.json(result);
     })
 }
+
+
+//delete FAQ
+exports.deleteFAQ = (req, res) => {
+    Settings.findOne({}, { FAQs: true }, (err, settings) => {
+        if (err || !settings) {
+            console.log(err);
+            res.status(400).json({ err: "err" });
+        }
+
+        settings.FAQs = settings.FAQs.filter(({ _id }) => _id != req.params.FAQ_id)
+        settings.save()
+            .then(response => { res.json({ msg: "FAQ deleted!" }) })
+            .catch(err => { return res.status(400).json({ err: "err" }) })
+    })
+}
