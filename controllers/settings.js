@@ -15,7 +15,21 @@ exports.createSettings = async(req, res) => {
 //update settings
 exports.updateSettings = (req, res) => {
     console.log(req.body)
-    Settings.updateOne({}, req.body, (err, result) => {
+    let json = {
+        social_media: {
+            facebook: req.body.facebook,
+            instagram: req.body.instagram,
+            twitter: req.body.twitter,
+            email: req.body.email,
+            whatsapp: req.body.whatsapp
+        },
+        terms: req.body.terms,
+        location: req.body.location,
+        phone: req.body.whatsapp,
+        FAQs: req.body.faqs,
+        sugg_comp: req.body.Sugg_comp
+    }
+    Settings.updateOne({}, json, (err, result) => {
         if (err || !result) {
             console.log(err);
             return res.status(400).json({ err: "err while updating settings!" });
