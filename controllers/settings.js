@@ -35,7 +35,7 @@ exports.updateSettings = (req, res) => {
     }
 
     if (req.body.faqs) json.FAQs = req.body.faqs;
-    if (req.body.Sugg_comp) json.sugg_comp = req.body.Sugg_comp;
+    if (req.body.sugg_comp != "") json.sugg_comp = req.body.sugg_comp;
 
     console.log(json);
     Settings.updateOne({}, json, (err, result) => {
