@@ -62,13 +62,18 @@ msg.options = {
         differential: "الدفرنس / الدبل",
         engine_cooling_system: "نظام تبريد المحرك",
         fluid_leaks: "تسرب السائل",
-        Brake_Arms_Shock_absorbs: "الفرامل / الاذرعه / المساعدات",
+        Brake_Arms_Shock_absorbs: "الفرامل / الأذرعة / المساعدات",
         AC_system: "نظام المكيف",
         electricity_system: "نظام الكهرباء",
         computer_system_scanned: "نتيجة فحص نظام الكمبيوتر"
     }
-
 }
+msg.command = {
+    not_available_in_region: "الخدمة غير متاحة في هذا المنطقة",
+    not_available_in_your_city: "الخدمة غير متاحة في مدينتك!",
+    created_successfully: "تم إنشاء طلبيتك بنجاح"
+}
+
 
 
 module.exports = msg

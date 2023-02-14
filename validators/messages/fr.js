@@ -57,16 +57,21 @@ msg.options = {
         Dents: "Rayures"
     },
     mechanical: {
-        engine_transmission: "Transmission moteur",
-        differential: "Différentiel",
+        engine_transmission: "Moteur / Transmission",
+        differential: "Différentiel / Boite-Vitesse",
         engine_cooling_system: "Système de refroidissement moteur",
         fluid_leaks: "Fuites de liquide",
-        Brake_Arms_Shock_absorbs: "Frein / Bras / Absorbe les chocs",
-        AC_system: "Système de climatisation",
-        electricity_system: "Système élictricité",
-        computer_system_scanned: "Résultat de l'analyse de l'ordinateur"
+        Brake_Arms_Shock_absorbs: "Frein / Bras / Les Amortisseurs",
+        AC_system: "Système de Climatisation",
+        electricity_system: "Système d'Elictricité",
+        computer_system_scanned: "Résultat de l'Analyse de l'Ordinateur"
     }
+}
 
+msg.command = {
+    not_available_in_region: "Le service n'est pas disponible dans cette région !",
+    not_available_in_your_city: "Le service n'est pas disponible dans votre ville !",
+    created_successfully: "Votre commande a été créée avec succès"
 }
 
 

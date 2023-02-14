@@ -27,6 +27,22 @@ var transporter = nodemailer.createTransport({
     },
     logger: true
 });
+// var transporter = nodemailer.createTransport({
+//     // host: 'smtp.mail.yahoo.com',
+//     host: 'mail.trustall.net',
+//     port: 465,
+//     // service: 'yahoo',
+//     service: 'gmail',
+//     secure: true,
+//     auth: {
+//         // user: 'ehealth.company@yahoo.com',
+//         // pass: 'gvsvivhhitrnipzz',
+//         user: 'trusta41',
+//         pass: 'C6N0lpku77Lk',
+//         // pass: 'xuffgztyealbmeri'
+//     },
+//     logger: true
+// });
 
 //confirmation email
 exports.sendConfirmationMail = async(receiver, code, lang) => {
@@ -449,7 +465,7 @@ exports.sendResetPasswordEmail = async(receiver, token) => {
 
 
     var mailOptions = {
-        from: 'ehealth.company@yahoo.com',
+        from: 'support@trustall.net',
         to: receiver,
         subject: "Password Reset",
         html: `

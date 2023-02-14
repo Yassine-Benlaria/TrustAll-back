@@ -30,12 +30,12 @@ mongoose.connect(process.env.DATABASE, {
 
 //middlwares
 app.use(cors());
-app.use(morgan("dev"))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(morgan('combined', { stream: { write: (message) => console.log(message) } }));
 app.use(expressValidator())
-app.use(limiter)
-
+    // app.use(limiter)
 
 //routes middlware
 app.use("/api/client", clientRoutes)

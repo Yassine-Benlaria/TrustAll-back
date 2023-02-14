@@ -5,13 +5,15 @@ const Command = require("../models/command"),
     Agent = require("../models/agent");
 const mongoose = require("mongoose");
 const { getCommuneByID } = require("../validators/cities");
-const axios = require('axios')
+const axios = require('axios');
+const { requireMessages } = require("../helpers");
 require("dotenv").config();
 
 //add new command
 exports.addCommand = async(req, res) => {
 
     let plan;
+    let msg = requireMessages(req.body.lang).command;
     //check if plan exists
     try {
         plan = await Plan.findById(req.body.plan_id);
@@ -35,7 +37,7 @@ exports.addCommand = async(req, res) => {
     }
 
     //if auth_agent_seller does not exist
-    if (!auth_agent_seller) return res.status(400).json({ err: "Service is not available in this region!" });
+    if (!auth_agent_seller) return res.status(400).json({ err: msg.not_available_in_region });
 
     //finding authagents of client's wilaya
     let auth_agent_client;
@@ -49,7 +51,7 @@ exports.addCommand = async(req, res) => {
         return res.status(400).json({ err: "Could not find client's authagents!" })
     }
     //if auth_agent_client does not exist
-    if (!auth_agent_client) return res.status(400).json({ err: "Service is not available in your city!" });
+    if (!auth_agent_client) return res.status(400).json({ err: msg.not_available_in_your_city });
 
     let json = {...req.body,
         client_id: req.params.id,
@@ -63,7 +65,7 @@ exports.addCommand = async(req, res) => {
             console.log(err)
             return res.status(400).json({ err: "Error occured while creating command!" });
         }
-        return res.json({ msg: "Created successfully!!!" });
+        return res.json({ msg: msg.created_successfully });
     });
 
     //notifications

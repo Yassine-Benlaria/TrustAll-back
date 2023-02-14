@@ -7,8 +7,23 @@ const { getCitiesList, getDirasList, getCommunesListByDaira, getCommunesListByCi
 const { passwordValidator } = require("../validators");
 const { getBlogById, getBlogs } = require("../controllers/blog");
 const { getSettings } = require("../controllers/settings");
+const { exec } = require("child_process");
 
-
+//testing python
+router.get("/python", (req, res) => {
+    exec("ls", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return res.status(400).json({ err: "err" });
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return res.status(400).json({ err: "stderr" });
+        }
+        console.log(`stdout: ${stdout}`);
+        return res.json({ msg: stdout });
+    });
+})
 
 //getSettings
 router.get("/settings", getSettings);

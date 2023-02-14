@@ -62,7 +62,7 @@ exports.createAdmin = async(req, res) => {
             console.table({ err })
             return res.status(400).json({ err })
         }
-        sendConfirmationMail(json.email, json.password)
+        sendConfirmationMail(json.email, password)
         res.json({ msg: "Sub-Admin created successfully!" });
         //adding email to used emails
         usedEmail = new UsedEmail({ email: req.body.email })

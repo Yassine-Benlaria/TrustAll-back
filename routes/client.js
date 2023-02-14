@@ -48,7 +48,7 @@ router.post("/confirm-payment/:id", requireSignin, isAuth, isVerified, confirmPa
 router.post("/e-payment/:id", clientE_Payment)
 
 //add new command
-router.post("/add-command/:id", /* requireSignin, isAuth, isVerified, */ addCommandValidator, addCommand)
+router.post("/add-command/:id", requireSignin, isAuth, isVerified, addCommandValidator, addCommand)
 
 //get client info
 router.get("/:id/:lang", requireSignin, isAuth, isVerified, (req, res) => {
