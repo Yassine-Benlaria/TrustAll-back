@@ -903,4 +903,19 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
 // }
 
 //client cancel command
-exports.clientCancelCommand = (req, res) => {}
+exports.clientCancelCommand = (req, res) => {
+    Command.findOne({
+        _id: req.body.command_id,
+        client_id: req.profile._id,
+        status: { $in: ["01", "02"] }
+    }, (err, command) => {
+        if (err || !command) {
+            console.log(err);
+            return res.status(400).json({ err: "can not find command" });
+        }
+        command.status = "canceled";
+        command.save()
+            .then(result => { return res.json("Command canceled successfully!") })
+            .catch(err => { return res.status(400).json({ err: "error while canceling command" }) });
+    });
+}

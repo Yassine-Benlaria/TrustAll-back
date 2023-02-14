@@ -4,7 +4,14 @@ const cors = require("cors")
 const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail, deleteClient } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
-const { addCommand, getCommandsByClientID, confirmPaymentByClient, getClientCommandByID /* , clientE_Payment */ } = require("../controllers/command")
+const {
+    addCommand,
+    getCommandsByClientID,
+    confirmPaymentByClient,
+    getClientCommandByID,
+    /* , clientE_Payment */
+    clientCancelCommand
+} = require("../controllers/command")
 const { getCompletedReport } = require("../controllers/report")
 router.use(cors())
 
@@ -19,6 +26,9 @@ router.get("/commands/:id", requireSignin, isAuth, isVerified, isActive, getComm
 
 //get command
 router.get("/command/:id", requireSignin, isAuth, isVerified, getClientCommandByID);
+
+//cancel command
+router.post("/cancel-command/:id", requireSignin, isAuth, isVerified, clientCancelCommand);
 
 //change password
 router.post("/change-password/:id", requireSignin, isAuth, isVerified, passwordValidator, changeClientPassword);
