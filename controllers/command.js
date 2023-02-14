@@ -904,6 +904,7 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
 
 //client cancel command
 exports.clientCancelCommand = (req, res) => {
+    console.log(req.body)
     Command.findOne({
         _id: req.body.command_id,
         client_id: req.profile._id,
