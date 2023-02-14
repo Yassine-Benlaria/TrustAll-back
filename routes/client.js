@@ -4,7 +4,7 @@ const cors = require("cors")
 const { signup, confirmEmail, clientByID, addEmail, getClientsList, updateClient, uploadProfilePicture, changeClientPassword, confirmNewEmail, resendConfirmEmail, deleteClient } = require("../controllers/client")
 const { validator, clientUpdateValidator, passwordValidator, addCommandValidator } = require("../validators")
 const { isAuth, requireSignin, isActive, isVerified } = require("../controllers/auth")
-const { addCommand, getCommandsByClientID, confirmPaymentByClient, getClientCommandByID, clientE_Payment } = require("../controllers/command")
+const { addCommand, getCommandsByClientID, confirmPaymentByClient, getClientCommandByID /* , clientE_Payment */ } = require("../controllers/command")
 const { getCompletedReport } = require("../controllers/report")
 router.use(cors())
 
@@ -45,7 +45,7 @@ router.post("/resend-confirm/:id", requireSignin, isAuth, resendConfirmEmail);
 router.post("/confirm-payment/:id", requireSignin, isAuth, isVerified, confirmPaymentByClient);
 
 //client e-payment
-router.post("/e-payment/:id", clientE_Payment)
+// router.post("/e-payment/:id", clientE_Payment)
 
 //add new command
 router.post("/add-command/:id", requireSignin, isAuth, isVerified, addCommandValidator, addCommand)

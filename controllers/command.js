@@ -417,7 +417,7 @@ exports.getMoneyCommandsByAgent = (req, res) => {
 exports.getCommandsByClientID = (req, res) => {
     // console.log(req.params)
     Command.aggregate([
-        { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1, car_name: 1, commune_id: 1 } },
+        { $project: { _id: 1, createdAt: 1, plan_id: 1, client_id: 1, car_name: 1, commune_id: 1, status: 1 } },
         {
             $lookup: {
                 from: 'plans',
@@ -855,49 +855,52 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
 }
 
 //client epay
-exports.clientE_Payment = async(req, res) => {
+// exports.clientE_Payment = async(req, res) => {
 
-    let plan = await Command.aggregate([{
-            $project: {
-                plan_id: 1,
-                _id: 1
-            }
-        }, {
-            $lookup: {
-                from: "plans",
-                localField: "plan_id",
-                foreignField: "_id",
-                as: "price"
-            }
-        },
-        {
-            $set: { price: { $arrayElemAt: ["$price.price_baridi_mob", 0] } }
-        },
-        {
-            $match: { _id: mongoose.Types.ObjectId(req.body.command_id) }
-        }
-    ]);
+//     let plan = await Command.aggregate([{
+//             $project: {
+//                 plan_id: 1,
+//                 _id: 1
+//             }
+//         }, {
+//             $lookup: {
+//                 from: "plans",
+//                 localField: "plan_id",
+//                 foreignField: "_id",
+//                 as: "price"
+//             }
+//         },
+//         {
+//             $set: { price: { $arrayElemAt: ["$price.price_baridi_mob", 0] } }
+//         },
+//         {
+//             $match: { _id: mongoose.Types.ObjectId(req.body.command_id) }
+//         }
+//     ]);
 
-    axios
-        .post(process.env.PYTHON_SERVER, {
-            API_KEY: process.env.CHARGILY_APP_KEY,
-            client: req.profile.first_name + " " + req.profile.last_name,
-            email: req.profile.email,
-            invoice_number: req.body.command_id,
-            mode: req.body.mode,
-            amount: parseFloat(plan[0].price),
-            discount: 0,
-            comment: `paying for command N: ${req.body.command_id}`,
-            back_url: `https://trust-all.vercel.app/client/commands/request-status/${req.body.command_id}`,
-            webhook_url: "https://iffhass-back.vercel.app/api/test"
-        })
-        .then(response => {
-            console.log(`statusCode: ${response.statusCode}`)
-            console.log(response.data)
-            res.send({ msg: response.data.checkout_url })
-        })
-        .catch(error => {
-            console.error(error)
-            res.status(400).json({ err: "error occured when requesting payment" })
-        })
-}
+//     axios
+//         .post(process.env.PYTHON_SERVER, {
+//             API_KEY: process.env.CHARGILY_APP_KEY,
+//             client: req.profile.first_name + " " + req.profile.last_name,
+//             email: req.profile.email,
+//             invoice_number: req.body.command_id,
+//             mode: req.body.mode,
+//             amount: parseFloat(plan[0].price),
+//             discount: 0,
+//             comment: `paying for command N: ${req.body.command_id}`,
+//             back_url: `https://trust-all.vercel.app/client/commands/request-status/${req.body.command_id}`,
+//             webhook_url: "https://iffhass-back.vercel.app/api/test"
+//         })
+//         .then(response => {
+//             console.log(`statusCode: ${response.statusCode}`)
+//             console.log(response.data)
+//             res.send({ msg: response.data.checkout_url })
+//         })
+//         .catch(error => {
+//             console.error(error)
+//             res.status(400).json({ err: "error occured when requesting payment" })
+//         })
+// }
+
+//client cancel command
+exports.clientCancelCommand = (req, res) => {}
