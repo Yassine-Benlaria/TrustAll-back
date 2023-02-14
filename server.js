@@ -7,7 +7,6 @@ const expressValidator = require("express-validator")
 const cors = require("cors");
 const limiter = require("./middleware/rate-limiter")
 
-
 require("dotenv").config();
 
 //import routes
@@ -35,7 +34,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(morgan('combined', { stream: { write: (message) => console.log(message) } }));
 app.use(expressValidator())
-    // app.use(limiter)
+app.use(limiter)
 
 //routes middlware
 app.use("/api/client", clientRoutes)
