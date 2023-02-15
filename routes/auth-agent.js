@@ -35,7 +35,8 @@ const {
     assignSellerAgent,
     assignClientAgent,
     confirmPaymentByAuthAgent,
-    cancelCommand
+    cancelCommand,
+    recoverCommand
 } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
 const { createReport, getReport, getCompletedReport } = require("../controllers/report")
@@ -53,6 +54,9 @@ router.get("/car-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, 
 
 //cancel command
 router.post("/cancel-command/:id", requireSignin, isAuth, isVerified, cancelCommand);
+
+//recover command
+router.post("/cancel-command/:id", requireSignin, isAuth, isVerified, recoverCommand);
 
 //get money commands by auth_agent
 router.get("/money-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getMoneyCommandsByAuthAgent);

@@ -65,6 +65,7 @@ const commandSchema = new mongoose.Schema({
         */
         default: "01"
     },
+    previous_status: String,
     payed: {
         type: payedSchema,
         default: {

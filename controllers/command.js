@@ -980,10 +980,30 @@ exports.cancelCommand = (req, res) => {
             console.log(err);
             return res.status(400).json({ err: "can not find command" });
         }
+        command.previous_status = command.status;
         command.status = "canceled_by_admin";
         command.save()
             .then(result => { return res.json("Command canceled successfully!") })
             .catch(err => { return res.status(400).json({ err: "error while canceling command" }) });
+    });
+}
+
+//authagent/admin recover command
+exports.recoverCommand = (req, res) => {
+    console.log(req.body)
+    Command.findOne({
+        _id: req.body.command_id,
+        status: { $ne: "canceled_by_admin" }
+    }, (err, command) => {
+        if (err || !command || (command.auth_agent_seller != req.profile._id && req.profile.type != "admin")) {
+            console.log(err);
+            return res.status(400).json({ err: "can not find command" });
+        }
+        command.status = command.previous_status;
+        command.previous_status = undefined;
+        command.save()
+            .then(result => { return res.json("Command recovered successfully!") })
+            .catch(err => { return res.status(400).json({ err: "error while recovering command" }) });
     });
 }
 
