@@ -993,7 +993,7 @@ exports.recoverCommand = (req, res) => {
     console.log(req.body)
     Command.findOne({
         _id: req.body.command_id,
-        status: { $ne: "canceled_by_admin" }
+        status: "canceled_by_admin"
     }, (err, command) => {
         if (err || !command || (command.auth_agent_seller != req.profile._id && req.profile.type != "admin")) {
             console.log(err);
