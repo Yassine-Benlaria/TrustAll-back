@@ -731,7 +731,7 @@ exports.getCarCommandsByAdmin = (req, res) => {
         }
         let finalResult = result.map(command => {
             let commune = getCommuneByID(command.commune_id);
-            if (req.body.lang == "ar")
+            if (req.query.lang == "ar")
                 return {...command,
                     address: `${commune.wilaya_name}, ${commune.commune_name}`
                 }
@@ -860,7 +860,7 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
             }
             let finalResult = result.map(command => {
                 let commune = getCommuneByID(command.commune_id);
-                if (req.body.lang == "ar")
+                if (req.query.lang == "ar")
                     return {...command,
                         address: `${commune.wilaya_name}, ${commune.commune_name}`
                     }
