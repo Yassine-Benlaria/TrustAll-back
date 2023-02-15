@@ -34,7 +34,8 @@ const {
     confirmCommandByAuthAgent,
     assignSellerAgent,
     assignClientAgent,
-    confirmPaymentByAuthAgent
+    confirmPaymentByAuthAgent,
+    cancelCommand
 } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
 const { createReport, getReport, getCompletedReport } = require("../controllers/report")
@@ -49,6 +50,9 @@ router.get("/agents/names/:id", requireSignin, isAuth, isAuthAgent, isVerified, 
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getCarCommandsByAuthAgent);
+
+//cancel command
+router.post("/cancel-command/:id", requireSignin, isAuth, isVerified, cancelCommand);
 
 //get money commands by auth_agent
 router.get("/money-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getMoneyCommandsByAuthAgent);

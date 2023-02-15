@@ -112,6 +112,7 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
                 _id: 1,
                 payed: 1,
                 car_name: 1,
+                commune_id: 1,
                 seller_name: 1,
                 seller_phone: 1,
                 createdAt: 1,
@@ -175,7 +176,18 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
             console.log(err);
             return res.json({ msg: [] })
         }
-        return res.json(result)
+        let finalResult = result.map(command => {
+            let commune = getCommuneByID(command.commune_id);
+            if (req.query.lang == "ar")
+                return {...command,
+                    address: `${commune.wilaya_name}, ${commune.commune_name}`
+                }
+            return {...command,
+                address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+            }
+
+        })
+        return res.json(finalResult)
     })
 
     // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
@@ -193,6 +205,7 @@ exports.getMoneyCommandsByAuthAgent = (req, res) => {
                     payed: 1,
                     _id: 1,
                     seller_name: 1,
+                    commune_id: 1,
                     seller_phone: 1,
                     createdAt: 1,
                     plan_id: 1,
@@ -272,7 +285,18 @@ exports.getMoneyCommandsByAuthAgent = (req, res) => {
                 console.log(err);
                 return res.json({ msg: [] })
             }
-            return res.json(result)
+            let finalResult = result.map(command => {
+                let commune = getCommuneByID(command.commune_id);
+                if (req.query.lang == "ar")
+                    return {...command,
+                        address: `${commune.wilaya_name}, ${commune.commune_name}`
+                    }
+                return {...command,
+                    address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+                }
+
+            })
+            return res.json(finalResult)
         })
 
     // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
@@ -939,6 +963,24 @@ exports.clientCancelCommand = (req, res) => {
             return res.status(400).json({ err: "can not find command" });
         }
         command.status = "canceled";
+        command.save()
+            .then(result => { return res.json("Command canceled successfully!") })
+            .catch(err => { return res.status(400).json({ err: "error while canceling command" }) });
+    });
+}
+
+//authagent/admin cancel command
+exports.cancelCommand = (req, res) => {
+    console.log(req.body)
+    Command.findOne({
+        _id: req.body.command_id,
+        status: { $ne: "08" }
+    }, (err, command) => {
+        if (err || !command || (command.auth_agent_seller != req.profile._id && req.profile.type != "admin")) {
+            console.log(err);
+            return res.status(400).json({ err: "can not find command" });
+        }
+        command.status = "canceled_by_admin";
         command.save()
             .then(result => { return res.json("Command canceled successfully!") })
             .catch(err => { return res.status(400).json({ err: "error while canceling command" }) });

@@ -71,6 +71,9 @@ router.get("/plan-options/:id/:lang", requireSignin, isAuth, isAdmin, getPlanOpt
 //get car commands by auth_agent
 router.get("/car-commands/:id", requireSignin, isAuth, isAdmin, getCarCommandsByAdmin);
 
+//cancel command
+router.post("/cancel-command/:id", requireSignin, isAuth, isAdmin, cancelCommand);
+
 //get money commands by auth_agent
 router.get("/money-commands/:id", requireSignin, isAuth, isAdmin, getMoneyCommandsByAdmin);
 
