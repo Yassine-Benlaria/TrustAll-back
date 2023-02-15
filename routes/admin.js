@@ -55,7 +55,7 @@ const {
     getClientsList
 } = require("../controllers/client")
 const { createReport, getCompletedReport, getReport } = require("../controllers/report")
-const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent, cancelCommand } = require("../controllers/command")
+const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent, cancelCommand, getCanceledCommandsByAdmin } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
 const { getBloggersList } = require("../controllers/blogger")
 const { createSettings, updateSettings, deleteFAQ } = require("../controllers/settings")
@@ -76,6 +76,9 @@ router.post("/cancel-command/:id", requireSignin, isAuth, isAdmin, cancelCommand
 
 //get money commands by auth_agent
 router.get("/money-commands/:id", requireSignin, isAuth, isAdmin, getMoneyCommandsByAdmin);
+
+//get canceled commands by admin
+router.get("/canceled-commands/:id", requireSignin, isAuth, isAdmin, getCanceledCommandsByAdmin);
 
 //get unverified employees
 router.get("/unverified/:id/:lang", requireSignin, isAuth, isAdmin, getUnverifiedEmployees)

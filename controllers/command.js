@@ -986,3 +986,116 @@ exports.cancelCommand = (req, res) => {
             .catch(err => { return res.status(400).json({ err: "error while canceling command" }) });
     });
 }
+
+//get canceled command by admin
+exports.getCanceledCommandsByAdmin = (req, res) => {
+    console.log(req.profile)
+    if (req.profile.type != "admin") return res.status(400).json({ err: "not authorized" })
+
+    Command.aggregate([{
+            $project: {
+                status: 1,
+                _id: 1,
+                payed: 1,
+                commune_id: 1,
+                car_name: 1,
+                seller_name: 1,
+                seller_phone: 1,
+                createdAt: 1,
+                plan_id: 1,
+                client_id: 1,
+                auth_agent_client: 1,
+                auth_agent_seller: 1,
+                agent_client: 1,
+                agent_seller: 1
+            }
+        },
+        {
+            $match: { status: "canceled_by_admin" }
+        },
+        // getting full name of seller-side agent
+        {
+            $lookup: {
+                from: 'agents',
+                localField: 'agent_seller',
+                foreignField: '_id',
+                as: 'agent_seller'
+            }
+        }, {
+            $set: {
+                agent_seller: {
+                    $concat: [{ $arrayElemAt: ["$agent_seller.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$agent_seller.last_name", 0] }
+                    ]
+                }
+                // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+            }
+        },
+
+        // getting full name of seller-side auth agent
+        {
+            $lookup: {
+                from: 'authagents',
+                localField: 'auth_agent_seller',
+                foreignField: '_id',
+                as: 'auth_agent_seller'
+            }
+        }, {
+            $set: {
+                auth_agent_seller: {
+                    $concat: [{ $arrayElemAt: ["$auth_agent_seller.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$auth_agent_seller.last_name", 0] }
+                    ]
+                }
+            }
+        },
+
+
+        // getting full name and phone number of client
+        {
+            $lookup: {
+                from: 'clients',
+                localField: 'client_id',
+                foreignField: '_id',
+                as: 'client'
+            }
+        }, {
+            $set: {
+                client_name: {
+                    $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
+                        " ",
+                        { $arrayElemAt: ["$client.last_name", 0] }
+                    ]
+                },
+                client_phone: {
+                    $arrayElemAt: ["$client.phone", 0]
+                },
+                client: undefined
+            },
+        }
+    ], (err, result) => {
+        if (err || !result) {
+            console.log(err);
+            return res.json({ msg: [] })
+        }
+        let finalResult = result.map(command => {
+            let commune = getCommuneByID(command.commune_id);
+            if (req.query.lang == "ar")
+                return {...command,
+                    address: `${commune.wilaya_name}, ${commune.commune_name}`
+                }
+            return {...command,
+                address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+            }
+
+        })
+        return res.json(finalResult)
+    })
+
+    // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
+    //     if (err || !result) { return res.json({ msg: [] }) }
+    //     return res.json(result)
+    // })
+}
