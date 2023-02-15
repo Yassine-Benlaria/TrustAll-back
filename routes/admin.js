@@ -55,7 +55,7 @@ const {
     getClientsList
 } = require("../controllers/client")
 const { createReport, getCompletedReport, getReport } = require("../controllers/report")
-const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent } = require("../controllers/command")
+const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent, cancelCommand } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
 const { getBloggersList } = require("../controllers/blogger")
 const { createSettings, updateSettings, deleteFAQ } = require("../controllers/settings")
