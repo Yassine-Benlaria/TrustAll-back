@@ -1,8 +1,8 @@
 // rate-limiter.js
 const rateLimiter = require("express-rate-limit");
 const limiter = rateLimiter({
-    max: 10,
-    windowMS: 1000, // 1 second
+    max: 50,
+    windowMS: 10000, // 10 seconds
     message: "You can't make any more requests at the moment. Try again later",
 });
 module.exports = limiter
