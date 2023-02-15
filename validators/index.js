@@ -17,7 +17,7 @@ exports.validator = async(req, res, next) => {
     req.check("email").isEmail().withMessage(msg.email)
 
     //checking phone
-    req.check("phone").isMobilePhone().isLength({ min: 10, max: 10 }).withMessage(msg.phone)
+    req.check("phone").isMobilePhone().withMessage(msg.phone).isLength({ min: 10, max: 10 }).withMessage(msg.phone)
 
     //checking birth date
     if (req.body.birth_date)

@@ -649,6 +649,7 @@ exports.getCarCommandsByAdmin = (req, res) => {
                 status: 1,
                 _id: 1,
                 payed: 1,
+                commune_id: 1,
                 car_name: 1,
                 seller_name: 1,
                 seller_phone: 1,
@@ -728,7 +729,18 @@ exports.getCarCommandsByAdmin = (req, res) => {
             console.log(err);
             return res.json({ msg: [] })
         }
-        return res.json(result)
+        let finalResult = result.map(command => {
+            let commune = getCommuneByID(command.commune_id);
+            if (req.body.lang == "ar")
+                return {...command,
+                    address: `${commune.wilaya_name}, ${commune.commune_name}`
+                }
+            return {...command,
+                address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+            }
+
+        })
+        return res.json(finalResult)
     })
 
     // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
@@ -751,6 +763,7 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
                     seller_phone: 1,
                     createdAt: 1,
                     plan_id: 1,
+                    commune_id: 1,
                     client_id: 1,
                     car_name: 1,
                     auth_agent_client: 1,
@@ -845,7 +858,18 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
                 console.log(err);
                 return res.json({ msg: [] })
             }
-            return res.json(result)
+            let finalResult = result.map(command => {
+                let commune = getCommuneByID(command.commune_id);
+                if (req.body.lang == "ar")
+                    return {...command,
+                        address: `${commune.wilaya_name}, ${commune.commune_name}`
+                    }
+                return {...command,
+                    address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+                }
+
+            })
+            return res.json(finalResult)
         })
 
     // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
