@@ -106,7 +106,111 @@ exports.getAllCommands = (req, res) => {
 
 //get car commands by auth_agent ID
 exports.getCarCommandsByAuthAgent = (req, res) => {
-    Command.aggregate([{
+        Command.aggregate([{
+                $match: {
+                    auth_agent_seller: mongoose.Types.ObjectId(req.params.id),
+                    status: { $nin: ["canceled", "canceled_by_admin"] }
+                }
+            },
+            {
+                $project: {
+                    status: 1,
+                    _id: 1,
+                    payed: 1,
+                    car_name: 1,
+                    commune_id: 1,
+                    seller_name: 1,
+                    seller_phone: 1,
+                    createdAt: 1,
+                    plan_id: 1,
+                    client_id: 1,
+                    auth_agent_client: 1,
+                    auth_agent_seller: 1,
+                    agent_client: 1,
+                    agent_seller: 1
+                }
+            },
+            // getting full name of seller-side agent
+            {
+                $lookup: {
+                    from: 'agents',
+                    localField: 'agent_seller',
+                    foreignField: '_id',
+                    as: 'agent_seller'
+                }
+            }, {
+                $set: {
+                    agent_seller: {
+                        $concat: [{ $arrayElemAt: ["$agent_seller.first_name", 0] },
+                            " ",
+                            { $arrayElemAt: ["$agent_seller.last_name", 0] }
+                        ]
+                    }
+                    // agent_client: { $arrayElemAt: ["$agent_client.first_name", 0] }
+                }
+            },
+
+            // getting full name and phone number of client
+            {
+                $lookup: {
+                    from: 'clients',
+                    localField: 'client_id',
+                    foreignField: '_id',
+                    as: 'client'
+                }
+            }, {
+                $set: {
+                    client_name: {
+                        $concat: [{ $arrayElemAt: ["$client.first_name", 0] },
+                            " ",
+                            { $arrayElemAt: ["$client.last_name", 0] }
+                        ]
+                    },
+                    client_phone: {
+                        $arrayElemAt: ["$client.phone", 0]
+                    },
+                    client: undefined
+                },
+            }
+
+            // {
+            //     client_id: req.params.id
+            // }
+        ], (err, result) => {
+            if (err || !result) {
+                console.log(err);
+                return res.json({ msg: [] })
+            }
+            let finalResult = result.map(command => {
+                let commune = getCommuneByID(command.commune_id);
+                if (req.query.lang == "ar")
+                    return {...command,
+                        address: `${commune.wilaya_name}, ${commune.commune_name}`
+                    }
+                return {...command,
+                    address: `${commune.wilaya_name_ascii}, ${commune.commune_name_ascii}`
+                }
+
+            })
+            return res.json(finalResult)
+        })
+
+        // Command.find({ $or: [{ auth_agent_client: req.params.id }, { auth_agent_seller: req.params.id }] }, (err, result) => {
+        //     if (err || !result) { return res.json({ msg: [] }) }
+        //     return res.json(result)
+        // })
+    }
+    //get canceled commands by auth_agent ID
+exports.getCanceledCommandsByAuthAgent = (req, res) => {
+    Command.aggregate([
+        //
+        {
+            $match: {
+                auth_agent_seller: mongoose.Types.ObjectId(req.params.id),
+                status: { $in: ["canceled", "canceled_by_admin"] }
+            }
+        },
+        {
             $project: {
                 status: 1,
                 _id: 1,
@@ -165,9 +269,7 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
                 },
                 client: undefined
             },
-        },
-        //
-        { $match: { auth_agent_seller: mongoose.Types.ObjectId(req.params.id) } }
+        }
         // {
         //     client_id: req.params.id
         // }
@@ -200,6 +302,11 @@ exports.getCarCommandsByAuthAgent = (req, res) => {
 exports.getMoneyCommandsByAuthAgent = (req, res) => {
     Command.aggregate(
         [{
+                $match: {
+                    auth_agent_client: mongoose.Types.ObjectId(req.params.id),
+                    status: { $nin: ["canceled", "canceled_by_admin"] }
+                }
+            }, {
                 $project: {
                     status: 1,
                     payed: 1,
@@ -237,7 +344,6 @@ exports.getMoneyCommandsByAuthAgent = (req, res) => {
                 }
             },
 
-
             // getting full name and phone number of client
             {
                 $lookup: {
@@ -274,9 +380,9 @@ exports.getMoneyCommandsByAuthAgent = (req, res) => {
                     price: { $arrayElemAt: ["$price.price", 0] }
 
                 }
-            },
+            }
             //
-            { $match: { auth_agent_client: mongoose.Types.ObjectId(req.params.id) } }
+
             // {
             //     client_id: req.params.id
             // }
@@ -345,7 +451,12 @@ exports.getCarCommandsByAgent = (req, res) => {
             },
         },
         //
-        { $match: { agent_seller: mongoose.Types.ObjectId(req.params.id), status: { $in: ["06", "07", "08"] } } }
+        {
+            $match: {
+                agent_seller: mongoose.Types.ObjectId(req.params.id),
+                status: { $in: ["06", "07", "08"] }
+            }
+        }
         // {
         //     client_id: req.params.id
         // }
@@ -669,6 +780,9 @@ exports.getCarCommandsByAdmin = (req, res) => {
     if (req.profile.type != "admin") return res.status(400).json({ err: "not authorized" })
 
     Command.aggregate([{
+            $match: { status: { $nin: ["canceled", "canceled_by_admin"] } }
+        },
+        {
             $project: {
                 status: 1,
                 _id: 1,
@@ -778,7 +892,9 @@ exports.getMoneyCommandsByAdmin = (req, res) => {
     if (req.profile.type != "admin") return res.status(400).json({ err: "not authorized" })
 
     Command.aggregate(
-        [{
+        [
+            { $match: { status: { $nin: ["canceled", "canceled_by_admin"] } } },
+            {
                 $project: {
                     status: 1,
                     payed: 1,
@@ -1031,7 +1147,7 @@ exports.getCanceledCommandsByAdmin = (req, res) => {
             }
         },
         {
-            $match: { status: "canceled_by_admin" }
+            $match: { status: { $in: ["canceled_by_admin", "canceled"] } }
         },
         // getting full name of seller-side agent
         {

@@ -75,7 +75,7 @@ router.get("/car-commands/:id", requireSignin, isAuth, isAdmin, getCarCommandsBy
 router.post("/cancel-command/:id", requireSignin, isAuth, isAdmin, cancelCommand);
 
 //recover command
-router.post("/recover-command/:id", /* requireSignin, isAuth, isAdmin,  */ recoverCommand);
+router.post("/recover-command/:id", requireSignin, isAuth, isAdmin, recoverCommand);
 
 //get money commands by auth_agent
 router.get("/money-commands/:id", requireSignin, isAuth, isAdmin, getMoneyCommandsByAdmin);
