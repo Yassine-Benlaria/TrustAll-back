@@ -57,7 +57,7 @@ router.get("/car-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, 
 router.get("/canceled-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getCanceledCommandsByAuthAgent);
 
 //cancel command
-router.post("/cancel-command/:id", requireSignin, isAuth, isVerified, cancelCommand);
+router.post("/cancel-command/:id", /* requireSignin, isAuth, isVerified,  */ cancelCommand);
 
 //recover command
 router.post("/recover-command/:id", requireSignin, isAuth, isVerified, recoverCommand);

@@ -1093,7 +1093,7 @@ exports.cancelCommand = (req, res) => {
         status: { $ne: "08" }
     }, (err, command) => {
 
-        if (err || !command || (req.profile._id.equals(command.auth_agent_seller) && req.profile.type != "admin")) {
+        if (err || !command || (!req.profile._id.equals(command.auth_agent_seller) && req.profile.type != "admin")) {
             console.log(err);
             return res.status(400).json({ err: "can not find command" });
         }
@@ -1112,7 +1112,7 @@ exports.recoverCommand = (req, res) => {
         _id: req.body.command_id,
         status: "canceled_by_admin"
     }, (err, command) => {
-        if (err || !command || (req.profile._id.equals(command.auth_agent_seller) && req.profile.type != "admin")) {
+        if (err || !command || (!req.profile._id.equals(command.auth_agent_seller) && req.profile.type != "admin")) {
             console.log(err);
             return res.status(400).json({ err: "can not find command" });
         }
