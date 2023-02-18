@@ -40,7 +40,7 @@ const {
     getCanceledCommandsByAuthAgent
 } = require("../controllers/command")
 const { getAgentsNamesByAuthAgent, deleteAgent } = require("../controllers/agent")
-const { createReport, getReport, getCompletedReport } = require("../controllers/report")
+const { createReport, getReport, getCompletedReport, getCarsListByAuthAgent } = require("../controllers/report")
 const { passwordValidator } = require("../validators")
 router.use(cors())
 
@@ -52,6 +52,9 @@ router.get("/agents/names/:id", requireSignin, isAuth, isAuthAgent, isVerified, 
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getCarCommandsByAuthAgent);
+
+//get cars by auth-agent
+router.get("/cars/:id", requireSignin, isAuth, isAuthAgent, isVerified, getCarsListByAuthAgent);
 
 //get canceled commands by auth_agent
 router.get("/canceled-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified, getCanceledCommandsByAuthAgent);

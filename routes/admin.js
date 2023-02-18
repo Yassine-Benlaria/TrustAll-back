@@ -54,7 +54,7 @@ const {
 const {
     getClientsList
 } = require("../controllers/client")
-const { createReport, getCompletedReport, getReport } = require("../controllers/report")
+const { createReport, getCompletedReport, getReport, getCarsListByAdmin } = require("../controllers/report")
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent, cancelCommand, getCanceledCommandsByAdmin, recoverCommand } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
 const { getBloggersList } = require("../controllers/blogger")
@@ -70,6 +70,9 @@ router.get("/plan-options/:id/:lang", requireSignin, isAuth, isAdmin, getPlanOpt
 
 //get car commands by auth_agent
 router.get("/car-commands/:id", requireSignin, isAuth, isAdmin, getCarCommandsByAdmin);
+
+//get cars list
+router.get("/cars/:id", requireSignin, isAuth, isAdmin, getCarsListByAdmin);
 
 //cancel command
 router.post("/cancel-command/:id", requireSignin, isAuth, isAdmin, cancelCommand);

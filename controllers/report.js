@@ -399,3 +399,44 @@ exports.getCompletedReport = (req, res) => {
         })
     })
 }
+
+
+//get cars list by admin
+exports.getCarsListByAdmin = (req, res) => {
+    Report.find({}, { _id: true, car_information: true }, (err, result) => {
+        if (err || !result) {
+            console.log(err);
+            return res.status(400).json({ err: "err" });
+        }
+        return res.json(result);
+    });
+}
+
+//get cars list by authagent
+exports.getCarsListByAuthAgent = (req, res) => {
+    Report.aggregate([{
+            $project: {
+                command_id: 1,
+                _id: 1,
+                status: 1,
+                car_information: 1
+            }
+        },
+        {
+            $lookup: {
+                from: "commands",
+                localField: "command_id",
+                foreignField: "_id",
+                as: "auth_agent"
+            }
+        },
+        { $set: { auth_agent: { $arrayElemAt: ["$auth_agent.auth_agent_seller", 0] } } },
+        { $match: { auth_agent: req.profile._id } }
+    ], (err, result) => {
+        if (err || !result) {
+            console.log(err);
+            return res.status(400).json({ err: err });
+        }
+        return res.json(result);
+    });
+}
