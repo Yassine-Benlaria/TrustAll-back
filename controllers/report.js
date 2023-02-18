@@ -403,7 +403,7 @@ exports.getCompletedReport = (req, res) => {
 
 //get cars list by admin
 exports.getCarsListByAdmin = (req, res) => {
-    Report.find({}, { _id: true, car_information: true }, (err, result) => {
+    Report.find({}, { _id: true, car_information: true, command_id: true }, (err, result) => {
         if (err || !result) {
             console.log(err);
             return res.status(400).json({ err: "err" });
