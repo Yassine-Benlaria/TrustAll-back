@@ -7,7 +7,8 @@ const settingsSchema = new mongoose.Schema({
         instagram: String,
         twitter: String,
         email: String,
-        whatsapp: String
+        whatsapp: String,
+        linked_in: String
     },
     terms: { ar: String, fr: String, en: String },
     about_us: { ar: String, fr: String, en: String },

@@ -21,6 +21,7 @@ exports.updateSettings = (req, res) => {
     if (req.body.instagram != "") json["social_media.instagram"] = req.body.instagram;
     if (req.body.twitter != "") json["social_media.twitter"] = req.body.twitter;
     if (req.body.whatsapp != "") json["social_media.whatsapp"] = req.body.whatsapp;
+    if (req.body.linked_in != "") json["social_media.linked_in"] = req.body.linked_in;
     if (req.body.email != "") json["social_media.email"] = req.body.email;
     if (req.body.terms) {
         if (req.body.terms.ar) json["terms.ar"] = req.body.terms.ar;
