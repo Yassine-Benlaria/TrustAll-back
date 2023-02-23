@@ -307,17 +307,17 @@ exports.uploadId = (req, res) => {
             return res.status(400).json({ err: "you have to upload 3 pictures" })
         }
 
-        let urls = await uploadID(req.files, req.params.id);
+        // let urls = await uploadID(req.files, req.params.id);
 
-        console.log(urls)
+        // console.log(urls)
         Agent.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {
                     type: "ID",
-                    [urls[0][0]]: urls[0][1],
-                    [urls[1][0]]: urls[1][1],
-                    [urls[2][0]]: urls[2][1],
+                    // [urls[0][0]]: urls[0][1],
+                    // [urls[1][0]]: urls[1][1],
+                    // [urls[2][0]]: urls[2][1],
                 }
             }
         }, (err, result) => {
@@ -352,16 +352,16 @@ exports.uploadPassport = (req, res) => {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
 
-        let urls = await uploadID(req.files, req.params.id);
+        // let urls = await uploadID(req.files, req.params.id);
 
-        console.log(urls)
+        // console.log(urls)
         Agent.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {
                     type: "passport",
-                    [urls[0][0]]: urls[0][1],
-                    [urls[1][0]]: urls[1][1],
+                    // [urls[0][0]]: urls[0][1],
+                    // [urls[1][0]]: urls[1][1],
                 }
                 // {
                 //     type: "passport",

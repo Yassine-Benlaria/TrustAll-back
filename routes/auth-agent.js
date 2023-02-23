@@ -72,7 +72,7 @@ router.get("/money-commands/:id", requireSignin, isAuth, isAuthAgent, isVerified
 router.post("/upload-report/:id", requireSignin, isAuth, isAuthAgent, isVerified, createReport);
 
 //upload id
-router.post("/upload-ID/:id", requireSignin, isAuth, uploadId)
+router.post("/upload-ID/:id", requireSignin, isAuth, uploadId);
 
 //upload passport
 router.post("/upload-passport/:id", requireSignin, isAuth, uploadPassport)

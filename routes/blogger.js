@@ -50,10 +50,10 @@ router.post("/change-password/:id", passwordValidator, requireSignin, isAuth, ch
 router.post("/update/:id", requireSignin, isAuth, updateBlogger)
 
 //uploading id card / driving license
-router.post("/upload-ID/:id", requireSignin, isAuth, uploadId)
+router.post("/upload-ID/:id", /*  requireSignin, isAuth, */ uploadId)
 
 //uploading passport
-router.post("/upload-passport/:id", requireSignin, isAuth, uploadPassport)
+router.post("/upload-passport/:id", /*  requireSignin, isAuth, */ uploadPassport)
 
 //get Blogger by id
 router.get("/:id/:lang", requireSignin, isAuth, (req, res) => {

@@ -1,6 +1,6 @@
 const { requireMessages, generateConfirmationCode, sendConfirmationMail } = require("../helpers");
 const { uploadID, uploadProfilePic, uploadFilesToImageKit } = require("../helpers/imageUploader");
-const { agentUploadID, agentUploadPassprt, profilePicUpload, imagesUpload } = require("../helpers/uploader");
+const { agentUploadID, agentUploadPassprt, profilePicUpload, imagesUpload, bloggerUploadID, bloggerUploadPassport } = require("../helpers/uploader");
 const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
     Notification = require("../models/notification"),
@@ -65,7 +65,7 @@ exports.bloggerByID = (req, res, next, id) => {
 exports.uploadPassport = (req, res) => {
 
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
-    agentUploadPassprt(req, res, async(err) => {
+    bloggerUploadPassport(req, res, async(err) => {
 
         if (err) console.log(err)
         console.log(req)
@@ -75,16 +75,16 @@ exports.uploadPassport = (req, res) => {
             return res.status(400).json({ err: "you have to upload 2 pictures" })
         }
 
-        let urls = await uploadID(req.files, req.params.id);
+        // let urls = await uploadID(req.files, req.params.id);
 
-        console.log(urls)
+        // console.log(urls)
         Blogger.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {
                     type: "passport",
-                    [urls[0][0]]: urls[0][1],
-                    [urls[1][0]]: urls[1][1],
+                    // [urls[0][0]]: urls[0][1],
+                    // [urls[1][0]]: urls[1][1],
                 }
                 // {
                 //     type: "passport",
@@ -114,7 +114,7 @@ exports.uploadPassport = (req, res) => {
 exports.uploadId = (req, res) => {
 
     if (req.profile.id_uploaded) return res.status(400).json({ err: "ID already uploaded" })
-    agentUploadID(req, res, async(err) => {
+    bloggerUploadID(req, res, async(err) => {
 
         if (err)
             return res.status(400).json({ err })
@@ -125,17 +125,17 @@ exports.uploadId = (req, res) => {
             return res.status(400).json({ err: "you have to upload 3 pictures" })
         }
 
-        let urls = await uploadID(req.files, req.params.id);
+        // let urls = await uploadID(req.files, req.params.id);
 
-        console.log(urls)
+        // console.log(urls)
         Blogger.updateOne({ _id: req.params.id }, {
             $set: {
                 id_uploaded: true,
                 identity_document: {
                     type: "ID",
-                    [urls[0][0]]: urls[0][1],
-                    [urls[1][0]]: urls[1][1],
-                    [urls[2][0]]: urls[2][1],
+                    // [urls[0][0]]: urls[0][1],
+                    // [urls[1][0]]: urls[1][1],
+                    // [urls[2][0]]: urls[2][1],
                 }
             }
         }, (err, result) => {
