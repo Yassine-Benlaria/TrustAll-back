@@ -1,4 +1,6 @@
 const fs = require('fs')
+const path = require('path');
+
 const { generateRandomPassword, sendConfirmationMail, requireMessages, generateConfirmationCode } = require("../helpers");
 const AuthAgent = require("../models/auth-agent"),
     UsedEmail = require("../models/used-email"),
@@ -471,4 +473,40 @@ exports.deleteNotification = (req, res) => {
             .then(response => { res.json({ msg: "Notification deleted!" }) })
             .catch(err => { return res.status(400).json({ err: "err" }) })
     })
+}
+
+//get ID documents
+exports.getAuthAgentIDPhotos = (req, res) => {
+
+    const id = req.query.id;
+
+    AuthAgent.findById(id, (err, authAgent) => {
+        if (err || !authAgent) {
+            return res.status(400).json({ err: "err" });
+        }
+        if (authAgent.id_uploaded == false)
+            return res.status(400).json({ err: "ID not found" });
+
+
+        const photosPath = `public/documents/auth-agent/${id}/`;
+
+        let json = { type: authAgent.identity_document.type }
+        fs.readdir(photosPath, function(err, files) {
+            //handling error
+            if (err) {
+                return res.status(400).json({ err: "Can not find images!" });
+            }
+            //listing all files using forEach
+            files.forEach(function(file) {
+                let photo = fs.readFileSync(photosPath + file);
+                let photoBase64 = photo.toString('base64');
+                json[file.split('.')[0]] = photoBase64;
+            });
+            if (json.type == "passport")
+                return res.json({ type: json.type, front: json.front, selfie: json.selfie });
+            else if (json.type == "ID")
+                return res.json({ type: json.type, front: json.front, back: json.back, selfie: json.selfie });
+        });
+    });
+
 }

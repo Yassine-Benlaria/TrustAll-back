@@ -16,7 +16,8 @@ const {
     uploadPassport,
     getNotificationList,
     getNotificationByID,
-    deleteNotification
+    deleteNotification,
+    getIDPhotos
 } = require("../controllers/auth-agent")
 const {
     requireSignin,

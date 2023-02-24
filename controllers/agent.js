@@ -3,7 +3,8 @@ const Agent = require("../models/agent"),
     UsedEmail = require("../models/used-email"),
     Command = require("../models/command"),
     Admin = require("../models/admin"),
-    Notification = require("../models/notification");
+    Notification = require("../models/notification"),
+    fs = require("fs");
 const crypto = require("crypto")
 const { v1: uuidv1 } = require("uuid");
 const { agentUploadID, agentUploadPassprt, profilePicUpload } = require("../helpers/uploader");
@@ -443,4 +444,41 @@ exports.deleteNotification = (req, res) => {
             .then(response => { res.json({ msg: "Notification deleted!" }) })
             .catch(err => { return res.status(400).json({ err: "err" }) })
     })
+}
+
+
+//get ID documents
+exports.getAgentIDPhotos = (req, res) => {
+
+    const id = req.query.id;
+
+    Agent.findById(id, (err, agent) => {
+        if (err || !agent) {
+            return res.status(400).json({ err: "err" });
+        }
+        if (agent.id_uploaded == false)
+            return res.status(400).json({ err: "ID not found" });
+
+
+        const photosPath = `public/documents/agent/${id}/`;
+
+        let json = { type: agent.identity_document.type }
+        fs.readdir(photosPath, function(err, files) {
+            //handling error
+            if (err) {
+                return res.status(400).json({ err: "Can not find images!" });
+            }
+            //listing all files using forEach
+            files.forEach(function(file) {
+                let photo = fs.readFileSync(photosPath + file);
+                let photoBase64 = photo.toString('base64');
+                json[file.split('.')[0]] = photoBase64;
+            });
+            if (json.type == "passport")
+                return res.json({ type: json.type, front: json.front, selfie: json.selfie });
+            else if (json.type == "ID")
+                return res.json({ type: json.type, front: json.front, back: json.back, selfie: json.selfie });
+        });
+    });
+
 }

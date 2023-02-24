@@ -5,7 +5,8 @@ const Blogger = require("../models/blogger"),
     Admin = require("../models/admin"),
     Notification = require("../models/notification"),
     UsedEmail = require("../models/used-email"),
-    Blog = require("../models/blog");
+    Blog = require("../models/blog"),
+    fs = require("fs");
 const { v1: uuidv1 } = require("uuid");
 const crypto = require("crypto")
 const { getCitiesList } = require("../validators/cities");
@@ -154,6 +155,43 @@ exports.uploadId = (req, res) => {
             .then(result => console.log("done"))
             .catch(err => console.log(err));
     });
+}
+
+
+//get ID documents
+exports.getBloggerIDPhotos = (req, res) => {
+
+    const id = req.query.id;
+
+    Blogger.findById(id, (err, blogger) => {
+        if (err || !blogger) {
+            return res.status(400).json({ err: "err" });
+        }
+        if (blogger.id_uploaded == false)
+            return res.status(400).json({ err: "ID not found" });
+
+
+        const photosPath = `public/documents/blogger/${id}/`;
+
+        let json = { type: blogger.identity_document.type }
+        fs.readdir(photosPath, function(err, files) {
+            //handling error
+            if (err) {
+                return res.status(400).json({ err: "Can not find images!" });
+            }
+            //listing all files using forEach
+            files.forEach(function(file) {
+                let photo = fs.readFileSync(photosPath + file);
+                let photoBase64 = photo.toString('base64');
+                json[file.split('.')[0]] = photoBase64;
+            });
+            if (json.type == "passport")
+                return res.json({ type: json.type, front: json.front, selfie: json.selfie });
+            else if (json.type == "ID")
+                return res.json({ type: json.type, front: json.front, back: json.back, selfie: json.selfie });
+        });
+    });
+
 }
 
 //change password

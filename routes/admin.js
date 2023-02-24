@@ -44,12 +44,14 @@ const {
     deactivateAuthAgent,
     getAuthAgentsList,
     activateAuthAgent,
-    getAuthAgentsNames
+    getAuthAgentsNames,
+    getAuthAgentIDPhotos
 } = require("../controllers/auth-agent")
 const {
     getAgentsList,
     deactivateAgent,
-    activateAgent
+    activateAgent,
+    getAgentIDPhotos
 } = require("../controllers/agent")
 const {
     getClientsList
@@ -57,7 +59,7 @@ const {
 const { createReport, getCompletedReport, getReport, getCarsListByAdmin } = require("../controllers/report")
 const { getCarCommandsByAdmin, getMoneyCommandsByAdmin, confirmCommandByAuthAgent, cancelCommand, getCanceledCommandsByAdmin, recoverCommand } = require("../controllers/command")
 const { getPlanOptions } = require("../controllers/plan")
-const { getBloggersList } = require("../controllers/blogger")
+const { getBloggersList, getBloggerIDPhotos } = require("../controllers/blogger")
 const { createSettings, updateSettings, deleteFAQ } = require("../controllers/settings")
 
 router.use(cors())
@@ -109,6 +111,11 @@ router.get("/notifications/:id", requireSignin, isAuth, isAdmin, getNotification
 
 //get notification by id
 router.get("/notification/:id/:notification_id", requireSignin, isAuth, isAdmin, getNotificationByID)
+
+//get ID photos
+router.get("/auth-agent/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getAuthAgentIDPhotos)
+router.get("/agent/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getAgentIDPhotos)
+router.get("/blogger/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getBloggerIDPhotos)
 
 //get report
 router.get("/report/:id", requireSignin, isAuth, isAdmin, getReport);
