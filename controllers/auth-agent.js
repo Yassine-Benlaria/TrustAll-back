@@ -488,6 +488,7 @@ exports.getAuthAgentIDPhotos = (req, res) => {
         fs.readdir(photosPath, function(err, files) {
             //handling error
             if (err) {
+                console.log(err);
                 return res.status(400).json({ err: "Can not find images!" });
             }
             let file = files.find((file) => file.includes(type));
