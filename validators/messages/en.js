@@ -37,34 +37,57 @@ msg.options = {
         car_plate: "Car Plate",
         vin: "Vehicule Identification Number",
         gazoline_type: "Gazoline Type",
-        car_color: "Car Color"
+        car_color: "Car Color",
+        ///////////////
+        gearbox: "Gearbox",
+        documents: "Documents",
+        chassis_matching: "Chassis matching with documents",
+        nbr_seats: "Number of seats",
+        drive_type: "Type of drive",
+        km_after_inspection: "Kilometers after inspection"
     },
     interior: {
         internal_order: "Internal Order",
-        seats: "Seats",
         airBags: "AirBags",
         floorMats: "FloorMats",
         windows: "Windows",
         AC: "AC",
         Radio: "Radio",
-        Screen: "Screen"
+        Screen: "Screen",
+        /////////////////////////
+        control_buttons: "Condition of control buttons(lights - air conditioning - windshield wiper)",
+        warning_signs: "Warning signs on the car dashboard",
+        window_buttons: "Window handles/buttons",
+        door_handles: "Interior door handles",
+        surface: "Interior surface",
+        seats: "Condition of seats"
+
     },
     exterior: {
         external_structure: "External Structure",
         exterior_lights: "Exterior Lights",
         Tires: "Tires",
         Wiper_Blades: "Wiper Blades",
-        Dents: "Dents"
+        Dents: "Dents",
+        ///////////////////
+        insode_trunk: "Inside the car trunk",
+        sill: "Under the car(sill)",
+        window_glasses: "Window glasses",
+        upper_window_glass: "Upper window glass",
+        front_rear_glass: "Condition of front and rear glass",
+        side_mirror: "Side mirror",
+        door_handle: "Exterior door handle"
     },
     mechanical: {
         engine_transmission: "Engine / Transmission",
         differential: "Differential / Gearbox",
         engine_cooling_system: "Engine Cooling-System",
         fluid_leaks: "Fluid Leaks",
-        Brake_Arms_Shock_absorbs: "Brake / Arms / Shock-absorbs",
         AC_system: "AC system",
         electricity_system: "electricity system",
-        computer_system_scanned: "Computer Scan Result"
+        computer_system_scanned: "Computer Scan Result",
+        ////////////////////////////////
+        Brake_Arms_Shock_absorbs: "Brakes / Suspension arms / Shock absorbers"
     }
 }
 msg.command = {

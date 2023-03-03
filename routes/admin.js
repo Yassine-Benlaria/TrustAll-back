@@ -113,9 +113,9 @@ router.get("/notifications/:id", requireSignin, isAuth, isAdmin, getNotification
 router.get("/notification/:id/:notification_id", requireSignin, isAuth, isAdmin, getNotificationByID)
 
 //get ID photos
-router.get("/auth-agent/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getAuthAgentIDPhotos)
-router.get("/agent/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getAgentIDPhotos)
-router.get("/blogger/get-ID/:id", /*  requireSignin, isAuth, isAdmin,  */ getBloggerIDPhotos)
+router.get("/auth-agent/get-ID/:id", requireSignin, isAuth, isAdmin, getAuthAgentIDPhotos)
+router.get("/agent/get-ID/:id", requireSignin, isAuth, isAdmin, getAgentIDPhotos)
+router.get("/blogger/get-ID/:id", requireSignin, isAuth, isAdmin, getBloggerIDPhotos)
 
 //get report
 router.get("/report/:id", requireSignin, isAuth, isAdmin, getReport);

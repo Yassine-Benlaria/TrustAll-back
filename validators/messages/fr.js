@@ -37,34 +37,56 @@ msg.options = {
         car_plate: "plaque de véhicule",
         vin: "Numéro d'identification de véhicule",
         gazoline_type: "Type d'essence",
-        car_color: "Couleur de véhicule"
+        car_color: "Couleur de véhicule",
+        //////////////////////////////
+        gearbox: "Boîte de vitesses",
+        documents: "Documents",
+        chassis_matching: "Correspondance du châssis avec les documents",
+        nbr_seats: "Nombre de sièges",
+        drive_type: "Type de transmission",
+        km_after_inspection: "Kilomètres après inspection"
     },
     interior: {
         internal_order: "Décoration interne",
-        seats: "Sièges",
         airBags: "AirBags",
         floorMats: "Tapis de sol",
         windows: "Fenêtres",
         AC: "Climatiseur",
         Radio: "Radio",
-        Screen: "Ecran"
+        Screen: "Ecran",
+        //////////////////////////
+        control_buttons: "État des boutons de commande (lumières - climatisation - essuie-glace)",
+        warning_signs: "Signaux d'avertissement sur le tableau de bord",
+        window_buttons: "Poignées/boutons de fenêtre",
+        door_handles: "Poignées de porte intérieures",
+        surface: "Surface intérieure",
+        seats: "État des sièges"
     },
     exterior: {
         external_structure: "Structure externe",
         exterior_lights: "Lumières extérieures",
         Tires: "Pneus",
         Wiper_Blades: "Balais d'essuie-glace",
-        Dents: "Rayures"
+        Dents: "Rayures",
+        //////////////////////////
+        insode_trunk: "À l'intérieur du coffre de la voiture",
+        sill: "Sous la voiture (bas de caisse)",
+        window_glasses: "Vitres",
+        upper_window_glass: "Vitre supérieure",
+        front_rear_glass: "État des vitres avant et arrière",
+        side_mirror: "Rétroviseur latéral",
+        door_handle: "Poignée de porte extérieure"
     },
     mechanical: {
         engine_transmission: "Moteur / Transmission",
         differential: "Différentiel / Boite-Vitesse",
         engine_cooling_system: "Système de refroidissement moteur",
         fluid_leaks: "Fuites de liquide",
-        Brake_Arms_Shock_absorbs: "Frein / Bras / Les Amortisseurs",
         AC_system: "Système de Climatisation",
         electricity_system: "Système d'Elictricité",
-        computer_system_scanned: "Résultat de l'Analyse de l'Ordinateur"
+        computer_system_scanned: "Résultat de l'Analyse de l'Ordinateur",
+        //////////////////////
+        Brake_Arms_Shock_absorbs: "Freins / Bras de suspension / Amortisseurs"
     }
 }
 

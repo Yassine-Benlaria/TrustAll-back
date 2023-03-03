@@ -8,7 +8,13 @@ exports.scanOptions = {
         "car_plate",
         "vin",
         "gazoline_type",
-        "car_color"
+        "car_color",
+        "gearbox",
+        "documents",
+        "chassis_matching",
+        "nbr_seats",
+        "drive_type",
+        "km_after_inspection"
     ],
     interior: [
         "internal_order",
@@ -18,14 +24,26 @@ exports.scanOptions = {
         "windows",
         "AC",
         "Radio",
-        "Screen"
+        "Screen",
+        "control_buttons",
+        "warning_signs",
+        "window_buttons",
+        "door_handles",
+        "surface",
     ],
     exterior: [
         "external_structure",
         "exterior_lights",
         "Tires",
         "Wiper_Blades",
-        "Dents"
+        "Dents",
+        "insode_trunk",
+        "sill",
+        "window_glasses",
+        "upper_window_glass",
+        "front_rear_glass",
+        "side_mirror",
+        "door_handle"
     ],
     mechanical: [
         "engine_transmission",

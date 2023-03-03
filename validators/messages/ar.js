@@ -38,34 +38,56 @@ msg.options = {
         car_plate: "لوحة السيارة",
         vin: "رقم الشاسيه",
         gazoline_type: "نوع الوقود",
-        car_color: "لون السيارة"
+        car_color: "لون السيارة",
+        ////////////////////
+        gearbox: "علبة السرعة",
+        documents: "الوثائق",
+        chassis_matching: "تطابق الشاسيه مع الوثائق",
+        nbr_seats: "عدد المقاعد",
+        drive_type: "نوع الدفع",
+        km_after_inspection: "عدد الكيلومترات بعد الفحص"
     },
     interior: {
         internal_order: "الديكورات",
-        seats: "المقاعد",
         airBags: "الوسائد الهوائية (الايرباق)",
         floorMats: "سجاد الأرضية",
         windows: "النوافذ",
         AC: "التكييف",
         Radio: "الراديو",
-        Screen: "الشاشة"
+        Screen: "الشاشة",
+        /////////////////////
+        control_buttons: "حالة ك ازرار التحكم ( اضواء - مكيف - ماء الزجاج )",
+        warning_signs: "علامات التحذير في طابلو السيارة",
+        window_buttons: "ازرار او مقابض النوافد",
+        door_handles: "مقابض الابواب من الداخل",
+        surface: "سطح الداخلي",
+        seats: "حالة الكراسي"
     },
     exterior: {
         external_structure: "الهيكل الخارجي",
         exterior_lights: "الأضواء الخارجية",
         Tires: "الاطارات",
         Wiper_Blades: "شفرات المسّاحات",
-        Dents: "الخدوش"
+        Dents: "الخدوش",
+        /////////////////////
+        insode_trunk: "داخل صندوق السيارة",
+        sill: "اسفل الصندوق (bas de caisse)",
+        window_glasses: "زجاج النوافد",
+        upper_window_glass: "زجاج النافدة العلوية",
+        front_rear_glass: "حالة زجاج الامامي و الخلفي",
+        side_mirror: "المرآة الجانبية",
+        door_handle: "مقبض الأبواب من الخارج"
     },
     mechanical: {
         engine_transmission: "المحرك / ناقل الحركة",
         differential: "الدفرنس / الدبل",
         engine_cooling_system: "نظام تبريد المحرك",
         fluid_leaks: "تسرب السائل",
-        Brake_Arms_Shock_absorbs: "الفرامل / الأذرعة / المساعدات",
         AC_system: "نظام المكيف",
         electricity_system: "نظام الكهرباء",
-        computer_system_scanned: "نتيجة فحص نظام الكمبيوتر"
+        computer_system_scanned: "نتيجة فحص نظام الكمبيوتر",
+        ////////////////////////
+        Brake_Arms_Shock_absorbs: "مكابح  / الاذرعه/ المساعدات = مكابح / مضاذ الصدمات ( amortisseur ) / ذراع تعليق السيارة (bras de suspension)"
     }
 }
 msg.command = {
