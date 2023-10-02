@@ -46,7 +46,11 @@ To set up the TrustAll Backend on your local machine, follow these steps:
 5. Start the application.
 
     ```bash
-    npm start
+    npm run dev
+    ```
+    or
+   ```bash
+    nodemon server
     ```
 
 The backend server will now be running on `http://localhost:8000`.
